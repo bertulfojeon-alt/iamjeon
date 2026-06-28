@@ -125,9 +125,11 @@ header.nav.scrolled .nav-inner{background:rgba(10,14,21,.72);backdrop-filter:blu
 .about p{color:var(--text-2);margin-bottom:1rem}
 .about strong{color:var(--accent-2);font-weight:600}
 .about-meta{font-family:var(--mono);font-size:.72rem;color:var(--text-3);letter-spacing:.04em;margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:.4rem 1.2rem}
-.timeline{margin-top:2.5rem;border-left:1px solid var(--border);padding-left:1.5rem;display:flex;flex-direction:column;gap:1.5rem}
-.tl-item{position:relative}
-.tl-item::before{content:"";position:absolute;left:calc(-1.5rem - 5px);top:.4rem;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--bg)}
+.exp{margin-top:clamp(2.5rem,5vw,4rem)}
+.exp-title{font-family:var(--display);font-weight:600;font-size:1.4rem;margin-bottom:1.25rem;color:var(--text)}
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.tl-item{background:var(--surface);padding:1.5rem 1.6rem;border-left:2px solid transparent;transition:background .25s,border-color .3s}
+.tl-item:hover{background:var(--surface-2);border-left-color:var(--accent)}
 .tl-top{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:baseline}
 .tl-role{font-weight:600;color:var(--text)}
 .tl-year{font-family:var(--mono);font-size:.68rem;color:var(--text-3);white-space:nowrap}
@@ -186,7 +188,7 @@ header.nav.scrolled .nav-inner{background:rgba(10,14,21,.72);backdrop-filter:blu
 .pcard:hover{border-color:var(--border-2)}
 .pcard.flip .pshot{order:2}
 .pshot{position:relative;display:block;overflow:hidden;background:#05070b;min-height:280px}
-.pshot img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .6s var(--ease)}
+.pshot img{width:100%;height:100%;object-fit:contain;object-position:center;padding:.85rem;transition:transform .6s var(--ease)}
 .pshot:hover img{transform:scale(1.04)}
 .pshot::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 55%,rgba(17,24,36,.55))}
 .live-badge{position:absolute;top:.8rem;left:.8rem;z-index:2;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(--live);background:rgba(5,7,11,.8);border:1px solid rgba(52,211,153,.35);padding:.35em .65em;border-radius:7px;display:inline-flex;align-items:center;gap:.4em}
@@ -227,6 +229,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
   .hero-badge.a{left:auto;right:-6%}
   .about-grid{grid-template-columns:1fr}
   .about-photo{position:static;max-width:340px}
+  .exp-grid{grid-template-columns:1fr}
   .skills-grid{grid-template-columns:repeat(2,1fr)}
   .showcase{grid-template-columns:1fr}
   .sc-list{max-height:none}
@@ -313,7 +316,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
     <div class="stat rv"><div class="stat-num">6</div><div class="stat-label">Production Apps</div></div>
     <div class="stat rv d1"><div class="stat-num">20+</div><div class="stat-label">Dashboard Pages</div></div>
     <div class="stat rv d2"><div class="stat-num">100%</div><div class="stat-label">Self-Built</div></div>
-    <div class="stat rv d3"><div class="stat-num">5+</div><div class="stat-label">Years Building</div></div>
+    <div class="stat rv d3"><div class="stat-num">Solo</div><div class="stat-label">Designer + Developer</div></div>
   </div>
 </div>
 
@@ -335,31 +338,34 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
         <div class="about-meta">
           <span>bertulfojeon@gmail.com</span><span>+63 968 4333 479</span><span>Lapu-Lapu City, Cebu, PH</span>
         </div>
+      </div>
+    </div>
 
-        <div class="timeline">
-          <div class="tl-item">
-            <div class="tl-top"><span class="tl-role">Freelance Full-Stack Developer</span><span class="tl-year">2020 — Present</span></div>
-            <div class="tl-org">Independent · SaaS &amp; Automation</div>
-            <ul>
-              <li>Design, build &amp; deploy production web/SaaS apps end-to-end for trading, e-commerce &amp; education.</li>
-              <li>Own UI/UX, frontend, backend, database, auth, payments, automation &amp; Vercel deployment.</li>
-            </ul>
-          </div>
-          <div class="tl-item">
-            <div class="tl-top"><span class="tl-role">Customer Service Representative</span><span class="tl-year">2017 — 2019</span></div>
-            <div class="tl-org">Teleperformance</div>
-            <ul><li>Resolved issues while meeting handling-time, resolution &amp; CSAT targets — skills now applied to user support.</li></ul>
-          </div>
-          <div class="tl-item">
-            <div class="tl-top"><span class="tl-role">Data Entry Specialist</span><span class="tl-year">2015 — 2017</span></div>
-            <div class="tl-org">Bureau of Customs, Sub-Port Mactan</div>
-            <ul><li>Maintained large record volumes &amp; built reports — the data-accuracy foundation behind my database work.</li></ul>
-          </div>
-          <div class="tl-item">
-            <div class="tl-top"><span class="tl-role">Graphic Designer (Part-time)</span><span class="tl-year">2015 — 2017</span></div>
-            <div class="tl-org">Kwayyu Tailoring &amp; Printing Shop</div>
-            <ul><li>Vector graphics &amp; logos on tight deadlines — the design foundation behind my product UI/UX.</li></ul>
-          </div>
+    <div class="exp rv">
+      <h3 class="exp-title">Experience</h3>
+      <div class="exp-grid">
+        <div class="tl-item">
+          <div class="tl-top"><span class="tl-role">Freelance Full-Stack Developer</span><span class="tl-year">2020 — Present</span></div>
+          <div class="tl-org">Independent · SaaS &amp; Automation</div>
+          <ul>
+            <li>Design, build &amp; deploy production web/SaaS apps end-to-end for trading, e-commerce &amp; education.</li>
+            <li>Own UI/UX, frontend, backend, database, auth, payments, automation &amp; Vercel deployment.</li>
+          </ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-top"><span class="tl-role">Customer Service Representative</span><span class="tl-year">2017 — 2019</span></div>
+          <div class="tl-org">Teleperformance</div>
+          <ul><li>Resolved issues while meeting handling-time, resolution &amp; CSAT targets — skills now applied to user support.</li></ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-top"><span class="tl-role">Data Entry Specialist</span><span class="tl-year">2015 — 2017</span></div>
+          <div class="tl-org">Bureau of Customs, Sub-Port Mactan</div>
+          <ul><li>Maintained large record volumes &amp; built reports — the data-accuracy foundation behind my database work.</li></ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-top"><span class="tl-role">Graphic Designer (Part-time)</span><span class="tl-year">2015 — 2017</span></div>
+          <div class="tl-org">Kwayyu Tailoring &amp; Printing Shop</div>
+          <ul><li>Vector graphics &amp; logos on tight deadlines — the design foundation behind my product UI/UX.</li></ul>
         </div>
       </div>
     </div>
@@ -564,7 +570,6 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:1
   <footer>
     <div class="wrap">
       <span>© <span id="yr"></span> Loreto Saquilabon Jr.</span>
-      <span>Designed &amp; built from scratch — no templates.</span>
     </div>
   </footer>
 </section>
