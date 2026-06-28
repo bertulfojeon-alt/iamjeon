@@ -1,0 +1,10 @@
+# Local backups & working files (not part of the deployed site)
+_archive/
+*.psd
+*.zip
+
+# OS / editor junk
+Thumbs.db
+.DS_Store
+desktop.ini
+node_modules/
