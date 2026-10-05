@@ -112,6 +112,6 @@ export default {
       source: `grep of it(/test( across 13 Vitest files, ${SRC} (own-saas.md §2F)`,
     },
   ],
-  links: [],
+  links: [{ label: "ezvibe.vercel.app — join the waitlist", href: "https://ezvibe.vercel.app", kind: "waitlist" }],
   order: 1,
 } satisfies ProjectInput;
