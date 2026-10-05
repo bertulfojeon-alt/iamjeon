@@ -33,7 +33,7 @@ const browser = await chromium.launch({ channel: "msedge" });
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, recordVideo: { dir: raw, size: { width: 1280, height: 800 } } });
 const page = await ctx.newPage();
 await page.goto(`http://localhost:3742/showcase/${id}`, { waitUntil: "networkidle" });
-await page.waitForTimeout((LOOP * 2 + 2) * 1000);
+await page.waitForTimeout((LOOP * 2.8) * 1000);
 await ctx.close();
 await browser.close();
 
@@ -43,9 +43,9 @@ const meanAt = async (t) => {
   const { data } = await sharp(buf).greyscale().raw().toBuffer({ resolveWithObject: true });
   return data.reduce((a, b) => a + b, 0) / data.length;
 };
-// Darkest frame between the first and second loop ends ≈ the wrap point.
+// Darkest frame around the first loop end ≈ the wrap point (leaves a full loop after it).
 let best = [0, Infinity];
-for (let t = LOOP * 0.8; t <= LOOP * 2; t += 0.05) {
+for (let t = LOOP * 0.9; t <= LOOP * 1.6; t += 0.05) {
   const m = await meanAt(t);
   if (m < best[1]) best = [t, m];
 }

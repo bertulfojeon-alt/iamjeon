@@ -77,7 +77,7 @@ export const projectSchema = z
     /** The opening shot of the case study. */
     coldOpen: media.optional(),
     /** A coded, demo-data presentation shown instead of the cold open (components/showcase). */
-    showcase: z.enum(["ainalytics-presenter", "support-call-desk"]).optional(),
+    showcase: z.enum(["ainalytics-presenter", "support-call-desk", "ezvibe-terminal"]).optional(),
     features: z.array(z.string().min(6)).default([]),
     beats: z.array(beat).default([]),
     metrics: z.array(metric).default([]),

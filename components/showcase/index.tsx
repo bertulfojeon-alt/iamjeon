@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import { AinalyticsPresenter } from "./AinalyticsPresenter";
 import { SupportCallDesk } from "./SupportCallDesk";
+import { EZVibeTerminal } from "./EZVibeTerminal";
 
 /**
  * Coded presentations used instead of screenshots when a product cannot be shown
@@ -9,6 +10,7 @@ import { SupportCallDesk } from "./SupportCallDesk";
 export const SHOWCASES = {
   "ainalytics-presenter": AinalyticsPresenter,
   "support-call-desk": SupportCallDesk,
+  "ezvibe-terminal": EZVibeTerminal,
 } satisfies Record<string, ComponentType>;
 
 export type ShowcaseId = keyof typeof SHOWCASES;

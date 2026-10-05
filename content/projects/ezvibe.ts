@@ -25,7 +25,8 @@ export default {
     "Ed25519",
     "GitHub Actions",
   ],
-  screen: { poster: "/media/screens/ezvibe.webp" },
+  screen: { poster: "/media/projects/ezvibe/screen.webp", loop: "/media/projects/ezvibe/loop.mp4" },
+  showcase: "ezvibe-terminal",
   features: [
     "One profile per tab: Claude Code, GitHub, git author, Vercel, Supabase and browser",
     "Folders pinned to profiles, with a warning bar when a tab wanders into another's folder",
