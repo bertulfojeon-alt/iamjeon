@@ -6,6 +6,8 @@
  */
 
 import { createHash } from "node:crypto";
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import denylist from "../scripts/leak-denylist.json";
 import { projects } from "./index";
@@ -118,7 +120,12 @@ describe("project content", () => {
     }
   });
 
-  it("uses the screen-poster convention", () => {
-    for (const p of projects) expect(p.screen.poster).toBe(`/media/screens/${p.slug}.webp`);
+  it("points every screen, loop and media item at a file that exists", () => {
+    const missing: string[] = [];
+    for (const p of projects) {
+      const refs = [p.screen.poster, p.screen.loop, p.coldOpen?.src, p.coldOpen?.poster, ...p.beats.flatMap((b) => (b.media ?? []).flatMap((m) => [m.src, m.poster]))];
+      for (const r of refs) if (r && !existsSync(path.join(process.cwd(), "public", r))) missing.push(`${p.slug}: ${r}`);
+    }
+    expect(missing).toEqual([]);
   });
 });

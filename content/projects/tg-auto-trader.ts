@@ -27,7 +27,7 @@ export default {
     "Electron",
     "PayPal",
   ],
-  screen: { poster: "/media/screens/tg-auto-trader.webp" },
+  screen: { poster: "/media/projects/tg-auto-trader/screen.webp" },
   coldOpen: {
     type: "image",
     src: "/media/projects/tg-auto-trader/slide-02.png",

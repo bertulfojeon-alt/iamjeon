@@ -26,7 +26,7 @@ export default {
     "MetaTrader 5",
     "Node.js",
   ],
-  screen: { poster: "/media/screens/smc-classroom-to-algorithm.webp" },
+  screen: { poster: "/media/projects/smc-classroom-to-algorithm/screen.webp", loop: "/media/projects/smc-classroom-to-algorithm/loop.mp4" },
   coldOpen: {
     type: "image",
     src: "/media/projects/smc-course/cover.png",

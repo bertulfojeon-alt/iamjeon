@@ -25,7 +25,7 @@ export default {
     "Cloudflare",
     "Turnstile",
   ],
-  screen: { poster: "/media/screens/247aisupports.webp" },
+  screen: { poster: "/media/projects/247aisupports/screen.webp", loop: "/media/projects/247aisupports/loop.mp4" },
   features: [
     "Browser voice calls relayed through the server's own WebSocket",
     "Per-tenant call queue with a visible position; calls in progress are never cut",

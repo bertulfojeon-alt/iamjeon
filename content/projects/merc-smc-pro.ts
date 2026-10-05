@@ -15,7 +15,15 @@ export default {
   role: "MQL5 developer — detection engine, renderer, licensing, tests",
   client: "TradesByMerc",
   stack: ["MQL5", "MetaTrader 5", "SHA-256", "PowerShell", "Python", "TypeScript"],
-  screen: { poster: "/media/screens/merc-smc-pro.webp" },
+  screen: { poster: "/media/projects/merc-smc-pro/screen.webp" },
+  coldOpen: {
+    type: "image",
+    src: "/media/projects/merc-smc-pro/chart-gold-m15.webp",
+    alt: "Gold, 15-minute chart with Merc SMC Pro: market structure labels, order blocks, session ranges and a three-timeframe bias panel",
+    width: 1350,
+    height: 460,
+    caption: "GOLD M15 with every feature enabled — structure, order blocks, sessions, premium/discount and the bias panel.",
+  },
   features: [
     "Major and minor market structure with BOS/CHoCH and swing labels",
     "Order blocks scored 0–100 on displacement, gap and volume",

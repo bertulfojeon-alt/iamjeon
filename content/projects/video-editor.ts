@@ -25,7 +25,16 @@ export default {
     "FFmpeg",
     "Gemini",
   ],
-  screen: { poster: "/media/screens/video-editor.webp" },
+  screen: { poster: "/media/projects/video-editor/screen.webp", loop: "/media/projects/video-editor/loop.mp4" },
+  coldOpen: {
+    type: "video",
+    src: "/media/projects/video-editor/loop.mp4",
+    poster: "/media/projects/video-editor/screen.webp",
+    alt: "A finished vertical short from the editor: chart breakdown with word-pop Taglish captions and a hook title",
+    width: 960,
+    height: 600,
+    caption: "Raw recording in, finished 9:16 edit out — captions, punch-ins and sound design are automatic.",
+  },
   features: [
     "Word-timed Taglish transcription and glossary-corrected word-pop captions",
     "Emphasis detection that drives face-tracked punch-ins",

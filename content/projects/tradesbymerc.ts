@@ -28,7 +28,7 @@ export default {
     "Cloudinary",
     "Framer Motion",
   ],
-  screen: { poster: "/media/screens/tradesbymerc.webp" },
+  screen: { poster: "/media/projects/tradesbymerc/screen.webp", loop: "/media/projects/tradesbymerc/loop.mp4" },
   coldOpen: {
     type: "image",
     src: "/media/projects/tradesbymerc/cover.png",

@@ -91,7 +91,9 @@ export function useScrollSequence({
       if (section.classList.contains("scene--chained")) {
         ScrollTrigger.create({
           trigger: section,
-          start: "top top",
+          // Inclusive of the exact boundary, so landing on the section (e.g. a
+      // "#work" link) shows it rather than the previous shot.
+      start: "top top+=1",
           end: "bottom top",
           toggleClass: { targets: section, className: "is-on" },
         });

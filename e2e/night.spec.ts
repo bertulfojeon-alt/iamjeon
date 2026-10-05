@@ -19,9 +19,12 @@ test.describe("the night", () => {
     expect(mode).toBe(info.project.name === "phone" ? "lite" : "full");
   });
 
-  test("every case study is reachable from the work index", async ({ page }) => {
+  test("every case study is reachable from the work index", async ({ page }, info) => {
     await page.goto("/");
-    await page.locator("#work").scrollIntoViewIfNeeded();
+    // The index renders as a list first and becomes the monitor wall once the
+    // desktop mode is known — wait for the final layout before using it.
+    if (info.project.name === "desktop") await page.locator("#work.scene--chained").waitFor();
+    await page.evaluate(() => document.querySelector("#work")?.scrollIntoView());
     const tabs = page.getByRole("group", { name: "Chapters" }).getByRole("button");
     const hrefs = new Set<string>();
     if ((await tabs.count()) > 0) {

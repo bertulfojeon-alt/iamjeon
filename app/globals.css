@@ -209,6 +209,8 @@ a {
 /* Chained shots tuck under the previous scene and appear exactly as it ends. */
 .scene--chained {
   margin-top: -100svh;
+  /* Anchor jumps land just inside the section, past the hand-over point. */
+  scroll-margin-top: -2px;
 }
 .scene--chained .scene-stage {
   visibility: hidden;
