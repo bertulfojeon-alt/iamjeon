@@ -25,7 +25,8 @@ export default {
     "Tailwind CSS",
     "Vitest",
   ],
-  screen: { poster: "/media/screens/unified-cx.webp" },
+  screen: { poster: "/media/projects/unified-cx/screen.webp", loop: "/media/projects/unified-cx/loop.mp4" },
+  showcase: "voice-router",
   features: [
     "Universal front desk that hands the caller to a company's own agent on the same call",
     "Tagalog, Bisaya and English, including code-switching mid-sentence",

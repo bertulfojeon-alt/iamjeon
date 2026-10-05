@@ -25,7 +25,8 @@ export default {
     "shadcn/ui",
     "Vitest",
   ],
-  screen: { poster: "/media/screens/smm-system.webp" },
+  screen: { poster: "/media/projects/smm-system/screen.webp", loop: "/media/projects/smm-system/loop.mp4" },
+  showcase: "content-pipeline",
   features: [
     "Trend radar pulling from four sources, deduplicated by content hash",
     "Free deterministic pre-filter before any AI scoring",

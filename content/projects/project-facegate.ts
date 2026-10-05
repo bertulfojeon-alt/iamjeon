@@ -14,7 +14,8 @@ export default {
   status: "r-and-d",
   role: "Engineer — computer vision and security design",
   stack: ["TypeScript", "React", "Vite", "MediaPipe", "ONNX Runtime", "SCRFD", "AuraFace-v1", "Node.js"],
-  screen: { poster: "/media/screens/project-facegate.webp" },
+  screen: { poster: "/media/projects/project-facegate/screen.webp", loop: "/media/projects/project-facegate/loop.mp4" },
+  showcase: "liveness-bench",
   redacted: true,
   features: [
     "Challenge-response liveness: blink twice, turn left or turn right",

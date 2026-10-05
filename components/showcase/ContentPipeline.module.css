@@ -1,0 +1,224 @@
+/* Product palette (SMM System): navy #0a0f1e, gold #f0b429. */
+.stage {
+  --bg: #0a0f1e;
+  --panel: #111829;
+  --line: rgba(240, 180, 41, 0.14);
+  --text: #eef1f8;
+  --muted: #8a93ab;
+  --gold: #f0b429;
+  --ok: #4ade80;
+  --bad: #f87171;
+  container-type: inline-size;
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 1.6cqw;
+  padding: 2.4cqw;
+  background: radial-gradient(60% 50% at 90% 0%, rgba(240, 180, 41, 0.1), transparent 60%), var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow: hidden;
+  transition: opacity 0.6s;
+}
+.stage[data-fading="true"] {
+  opacity: 0.15;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2cqw;
+}
+.title {
+  font-weight: 700;
+  font-size: 1.8cqw;
+}
+.rail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.6cqw;
+}
+.rail li {
+  font-size: 1.05cqw;
+  padding: 0.35cqw 0.9cqw;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  transition: all 0.35s;
+}
+.rail li[data-on="true"] {
+  color: var(--text);
+  border-color: rgba(240, 180, 41, 0.45);
+}
+.rail li[data-now="true"] {
+  background: var(--gold);
+  color: var(--bg);
+  font-weight: 700;
+}
+.body {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 1.4cqw;
+}
+.trends,
+.script,
+.critic,
+.schedule {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 1.2cqw;
+  padding: 1.5cqw;
+}
+.trends {
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1cqw;
+}
+.colTitle {
+  font-size: 1.05cqw;
+  color: var(--muted);
+  margin-bottom: 0.6cqw;
+}
+.trend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4cqw;
+  padding: 1cqw 1.1cqw;
+  border-radius: 0.9cqw;
+  border: 1px solid var(--line);
+  font-size: 1.2cqw;
+  transition:
+    opacity 0.4s,
+    border-color 0.4s;
+}
+.trendName {
+  line-height: 1.35;
+}
+.score {
+  font-size: 1.05cqw;
+  font-weight: 700;
+  color: var(--muted);
+}
+.trend[data-score="high"] {
+  border-color: var(--gold);
+  box-shadow: 0 0 1.6cqw rgba(240, 180, 41, 0.2);
+}
+.trend[data-score="high"] .score {
+  color: var(--gold);
+}
+.trend[data-score="low"] {
+  opacity: 0.45;
+}
+.trend[data-score="low"] .score {
+  color: var(--bad);
+}
+.trend[data-score="mid"] .score {
+  color: #93c5fd;
+}
+.script,
+.critic,
+.schedule {
+  opacity: 0;
+  transform: translateY(1cqw);
+  transition:
+    opacity 0.45s,
+    transform 0.55s cubic-bezier(0.22, 0.61, 0.18, 1);
+}
+.script[data-in="true"],
+.critic[data-in="true"],
+.schedule[data-in="true"] {
+  opacity: 1;
+  transform: none;
+}
+.script ul,
+.critic ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7cqw;
+  font-size: 1.15cqw;
+  line-height: 1.4;
+}
+.script li:first-child {
+  color: var(--gold);
+  font-weight: 600;
+}
+.critic li {
+  color: var(--muted);
+  transition: color 0.3s;
+}
+.critic li i {
+  display: inline-block;
+  width: 1.4cqw;
+  font-style: normal;
+  font-weight: 700;
+}
+.critic li[data-ok="true"] {
+  color: var(--text);
+}
+.critic li[data-ok="true"] i {
+  color: var(--ok);
+}
+.approved {
+  display: inline-block;
+  margin-top: 1cqw;
+  font-size: 1.05cqw;
+  font-weight: 700;
+  color: var(--bg);
+  background: var(--ok);
+  border-radius: 99px;
+  padding: 0.3cqw 0.9cqw;
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.approved[data-in="true"] {
+  opacity: 1;
+}
+.schedule {
+  grid-column: 2 / span 2;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1cqw 1.4cqw;
+}
+.schedule .colTitle {
+  margin: 0;
+}
+.platforms {
+  display: flex;
+  gap: 0.7cqw;
+}
+.platforms span {
+  font-size: 1.1cqw;
+  font-weight: 600;
+  padding: 0.45cqw 1cqw;
+  border-radius: 0.7cqw;
+  border: 1px solid rgba(240, 180, 41, 0.45);
+  color: var(--gold);
+  opacity: 0;
+  transform: scale(0.9);
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+}
+.platforms span[data-in="true"] {
+  opacity: 1;
+  transform: none;
+}
+.note {
+  font-size: 0.95cqw;
+  color: var(--muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .stage * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
