@@ -32,6 +32,8 @@ export interface DeskChapter {
 export interface DesktopProps {
   chapters: DeskChapter[];
   sideCount: number;
+  /** Load tile images (false until the visitor heads for the desk). */
+  ready?: boolean;
 }
 
 function useLocalTime() {
@@ -48,7 +50,7 @@ function useLocalTime() {
 
 const open = (what: string) => window.dispatchEvent(new CustomEvent("ns:open", { detail: what }));
 
-export function Desktop({ chapters, sideCount }: DesktopProps) {
+export function Desktop({ chapters, sideCount, ready = true }: DesktopProps) {
   const [active, setActive] = useState(0);
   const time = useLocalTime();
   const chapter = chapters[active];
@@ -79,7 +81,7 @@ export function Desktop({ chapters, sideCount }: DesktopProps) {
 
       <div className={styles.grid} role="tabpanel" aria-label={chapter.title} data-lenis-prevent>
         {chapter.items.map((item) => (
-          <Tile key={`${chapter.id}-${item.slug}`} item={item} />
+          <Tile key={`${chapter.id}-${item.slug}`} item={item} ready={ready} />
         ))}
       </div>
 
@@ -113,7 +115,7 @@ export function Desktop({ chapters, sideCount }: DesktopProps) {
   );
 }
 
-function Tile({ item }: { item: DeskItem }) {
+function Tile({ item, ready }: { item: DeskItem; ready: boolean }) {
   const [hot, setHot] = useState(false);
   return (
     <Link
@@ -131,9 +133,9 @@ function Tile({ item }: { item: DeskItem }) {
         <div className={styles.thumb}>
           {hot && item.loop && !item.classified ? (
             <video src={item.loop} poster={item.poster} muted loop playsInline autoPlay aria-hidden="true" />
-          ) : (
+          ) : ready ? (
             <img src={item.poster} alt="" loading="lazy" decoding="async" />
-          )}
+          ) : null}
           {item.classified && <span className={styles.privacy} aria-hidden="true" />}
         </div>
       </ViewTransition>

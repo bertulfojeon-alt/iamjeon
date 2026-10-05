@@ -21,7 +21,7 @@ export function Hud() {
   return (
     <header className={styles.hud}>
       <Link href="/" className={styles.brand} aria-label="Jeon — back to the start">
-        <img src="/media/me/avatar.png" alt="" width={32} height={32} className={styles.avatar} />
+        <img src="/media/me/avatar-64.webp" alt="" width={32} height={32} className={styles.avatar} />
         <span>Jeon</span>
       </Link>
       <nav aria-label="Site" className={styles.nav}>

@@ -37,6 +37,10 @@ export function Theatre(props: DesktopProps) {
   const filmRef = useRef<HTMLVideoElement>(null);
   const [phase, setPhase] = useState<Phase>("welcome");
   const [desk, setDesk] = useState<{ fit: "mapped" | "panel"; matrix: string }>({ fit: "panel", matrix: "none" });
+  // Heavy media waits until the page has painted: the poster (same frame) shows
+  // first, so the video and desk images never compete with the fonts and LCP.
+  const [mediaReady, setMediaReady] = useState(false);
+  const [deskReady, setDeskReady] = useState(false);
   const phaseRef = useRef<Phase>("welcome");
   phaseRef.current = phase;
 
@@ -129,7 +133,7 @@ export function Theatre(props: DesktopProps) {
     };
     // The keyboard skip link targets #desk.
     const onHash = () => {
-      if (location.hash === "#desk") onGo();
+      if (location.hash === "#desk" || location.hash === "#main-content") onGo();
     };
     window.addEventListener("keydown", onKey);
     window.addEventListener("ns:work", onGo);
@@ -140,6 +144,27 @@ export function Theatre(props: DesktopProps) {
       window.removeEventListener("hashchange", onHash);
     };
   }, [lenis, toDesk]);
+
+  useEffect(() => {
+    const go = () => {
+      const idle = (window as typeof window & { requestIdleCallback?: (cb: () => void, o?: object) => number }).requestIdleCallback;
+      if (idle) idle(() => setMediaReady(true), { timeout: 2500 });
+      else window.setTimeout(() => setMediaReady(true), 600);
+    };
+    if (document.readyState === "complete") go();
+    else window.addEventListener("load", go, { once: true });
+    return () => window.removeEventListener("load", go);
+  }, []);
+
+  // Desk images load once the visitor heads there (or the page is idle long after load).
+  useEffect(() => {
+    if (phase !== "welcome") setDeskReady(true);
+  }, [phase]);
+  useEffect(() => {
+    if (!mediaReady) return;
+    const id = window.setTimeout(() => setDeskReady(true), 6000);
+    return () => window.clearTimeout(id);
+  }, [mediaReady]);
 
   // ── Sound follows the toggle ──
   useEffect(() => {
@@ -155,18 +180,19 @@ export function Theatre(props: DesktopProps) {
     else v.pause();
   }, [phase, animated]);
 
-  // Start fetching the film once the page is idle, so it is ready by the first scroll.
+  // Start fetching the film once the page has loaded and gone idle, so it is
+  // ready by the first scroll without competing with first paint.
   useEffect(() => {
-    if (!animated) return;
+    if (!animated || !mediaReady) return;
     const id = window.setTimeout(() => {
       const film = filmRef.current;
       // Only kick off loading if nothing has started it yet — load() aborts a pending play().
       if (!film || phaseRef.current !== "welcome" || film.readyState > 0) return;
       film.preload = "auto";
       film.load();
-    }, 1200);
+    }, 800);
     return () => window.clearTimeout(id);
-  }, [animated]);
+  }, [animated, mediaReady]);
 
   // ── Project the desktop onto the monitor, or show it as a panel on tall screens ──
   useLayoutEffect(() => {
@@ -198,7 +224,7 @@ export function Theatre(props: DesktopProps) {
           <source media="(max-width: 899px)" srcSet={theatre.welcome.posterMobile} />
           <img className={`${styles.layer} ${styles.welcome}`} src={theatre.welcome.poster} alt="" fetchPriority="high" />
         </picture>
-        {animated && (
+        {animated && mediaReady && (
           <video
             ref={welcomeRef}
             className={`${styles.layer} ${styles.welcome}`}
@@ -238,7 +264,7 @@ export function Theatre(props: DesktopProps) {
           style={(desk.fit === "mapped" ? { width: DESK_W, height: DESK_H, transform: desk.matrix } : {}) as CSSProperties}
           inert={phase !== "desk"}
         >
-          <Desktop {...props} />
+          <Desktop {...props} ready={deskReady} />
         </div>
 
         {phase === "film" && (
@@ -247,6 +273,9 @@ export function Theatre(props: DesktopProps) {
           </button>
         )}
       </div>
+
+      {/* Target of the "Skip to the work" link; the hash handler takes it to the desk. */}
+      <span id="main-content" className="sr-only" tabIndex={-1} />
 
       {/* The welcome copy scrolls away over the sticky picture. */}
       <div className={styles.copy}>

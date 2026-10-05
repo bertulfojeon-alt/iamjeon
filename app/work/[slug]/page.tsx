@@ -26,7 +26,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
       exit={{ "nav-forward": "nav-forward", "nav-back": "nav-back", default: "none" }}
       default="none"
     >
-      <main>
+      <main id="main-content">
         <CaseStudy project={p} />
       </main>
     </ViewTransition>

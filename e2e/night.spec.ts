@@ -140,5 +140,7 @@ test.describe("case pages", () => {
   test("archive projects have no case page", async ({ page }) => {
     const res = await page.goto("/work/karaoke");
     expect(res?.status()).toBe(404);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nothing on this screen");
+    await expect(page.getByRole("main").getByRole("link", { name: "Back to the desk" })).toHaveAttribute("href", "/");
   });
 });

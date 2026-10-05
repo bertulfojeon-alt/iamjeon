@@ -12,7 +12,8 @@ const bigShoulders = Big_Shoulders({
   display: "swap",
 });
 const hanken = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken", display: "swap" });
-const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap" });
+// Only case-study code uses it, so it is not preloaded on every page.
+const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap", preload: false });
 
 const SITE = "https://iamjeon.vercel.app";
 
@@ -37,8 +38,9 @@ export const metadata: Metadata = {
     type: "website",
     title: "Jeon — Night Shift",
     description: "Systems for businesses everywhere, built in Cebu after dark.",
-    images: ["/media/night/c1/poster-desktop.webp"],
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Jeon on a seawall bench at night, typing on a laptop" }],
   },
+  twitter: { card: "summary_large_image", images: ["/og.jpg"] },
 };
 
 export const viewport: Viewport = {
@@ -60,7 +62,7 @@ export default function RootLayout({ children, modal }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: modeScript }} />
       </head>
       <body>
-        <a href="#desk" className="skip-link">
+        <a href="#main-content" className="skip-link">
           Skip to the work
         </a>
         <CinematicProvider>
