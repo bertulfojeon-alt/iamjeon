@@ -1,0 +1,61 @@
+.title {
+  text-align: center;
+  max-width: 1100px;
+}
+.name {
+  font-size: clamp(3.2rem, 11vw, 10.5rem);
+  display: flex;
+  flex-direction: column;
+  color: var(--screen);
+  text-shadow: 0 0 60px rgba(5, 7, 12, 0.9);
+}
+.name span:last-child {
+  color: var(--sodium);
+}
+.role {
+  margin: 1.4rem auto 0;
+  color: var(--dim);
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  letter-spacing: 0.01em;
+}
+.line {
+  font-size: clamp(1.4rem, 3.2vw, 2.6rem);
+  line-height: 1.2;
+  max-width: 22ch;
+  text-align: center;
+  margin: 0;
+  text-wrap: balance;
+}
+.proof {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.6rem;
+  max-width: 640px;
+}
+.proof li {
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  color: var(--dim);
+  border-left: 1px solid var(--sodium);
+  padding-left: 1.1rem;
+}
+.proof strong {
+  display: block;
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1;
+  color: var(--screen);
+  margin-bottom: 0.3rem;
+}
+.inside {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  margin: 0;
+  max-width: 30ch;
+  text-align: center;
+  color: var(--screen);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.8);
+}

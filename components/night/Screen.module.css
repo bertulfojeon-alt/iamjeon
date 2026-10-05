@@ -1,0 +1,48 @@
+.content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #020305;
+}
+.media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  filter: brightness(0.82) saturate(0.95);
+  transition: filter 0.35s;
+}
+/* Glass: faint reflection + edge halation, the monitor's own light bleeding. */
+.glass {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.07) 0%, transparent 35%),
+    radial-gradient(130% 120% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.55) 100%);
+  box-shadow: inset 0 0 40px rgba(223, 232, 242, 0.06);
+}
+/* Privacy filter: louvres that black the panel out unless faced straight on. */
+.privacy {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.92) 0 3px, rgba(0, 0, 0, 0.7) 3px 5px),
+    linear-gradient(rgba(5, 7, 12, 0.6), rgba(5, 7, 12, 0.6));
+  box-shadow: inset 0 0 0 2px rgba(255, 154, 60, 0.35);
+  transition: opacity 0.45s var(--ease-camera);
+}
+.content[data-classified="true"] .media {
+  filter: blur(6px) brightness(0.6);
+}
+:global(a:hover) .content:not([data-classified="true"]) .media,
+:global(a:focus-visible) .content:not([data-classified="true"]) .media {
+  filter: brightness(1.05) saturate(1);
+}
+/* Facing a classified screen lifts the filter only partly — it stays redacted. */
+:global(a:hover) .privacy,
+:global(a:focus-visible) .privacy {
+  opacity: 0.55;
+}

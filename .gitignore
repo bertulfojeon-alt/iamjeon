@@ -3,8 +3,22 @@ _archive/
 *.psd
 *.zip
 
+# Build / deps
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+test-results/
+playwright-report/
+
+# Raw generated footage stays out of git; only encoded frames/loops are committed
+media-src/
+
+# Env
+.env*
+
 # OS / editor junk
 Thumbs.db
 .DS_Store
 desktop.ini
-node_modules/

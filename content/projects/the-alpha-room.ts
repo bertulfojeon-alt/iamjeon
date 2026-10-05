@@ -1,0 +1,94 @@
+import type { ProjectInput } from "../schema";
+
+const SRC = "F:\\The Alpha Room";
+
+export default {
+  slug: "the-alpha-room",
+  title: "The Alpha Room",
+  tier: "commission",
+  chapter: "trading",
+  logline:
+    "A free journal and charting desk for a coach's students, fed by a self-hosted MT5 sync fleet and an edge quote relay.",
+  industry: "Trading education",
+  year: 2026,
+  status: "live",
+  role: "Full-stack developer — app, sync fleet, edge relay",
+  client: "A trading coach",
+  stack: [
+    "Next.js",
+    "TypeScript",
+    "Supabase",
+    "Cloudflare Workers",
+    "Durable Objects",
+    "Cloudflare R2",
+    "Python",
+    "MetaTrader 5",
+    "cTrader Open API",
+    "Recharts",
+  ],
+  screen: { poster: "/media/screens/the-alpha-room.webp" },
+  features: [
+    "Automatic MT5 and cTrader sync with read-only credentials, encrypted at rest",
+    "32 dashboard widgets, tick-accurate MAE/MFE and per-minute equity",
+    "Canvas chart with 60 indicators, 63 drawing tools, paper trading and bar replay",
+    "Seven analytics sections, 13 calculators and a risk-adjusted leaderboard",
+    "Coach console: needs-attention triage, rules engine, cohorts and reviews",
+    "TOTP 2FA enforced in the proxy and in row-level security",
+  ],
+  beats: [
+    {
+      kind: "context",
+      heading: "Pro tools, no bill",
+      body: [
+        "A forex coach wanted every student to have a professional journal, analytics and charting desk without paying for it. Students unlock access through the coach's affiliate programme, and the coach approves each one by hand.",
+        "Trades had to sync from MT5 on their own, using read-only investor passwords, because most students trade on their phones and can't run an expert advisor. That single constraint shaped everything else: something had to log in to broker accounts on the students' behalf, around the clock, at close to zero cost.",
+      ].join("\n\n"),
+    },
+    {
+      kind: "decision",
+      heading: "Make free possible",
+      body: [
+        "The answer is a self-hosted Python fleet on a Windows VPS: 13 workers for sync, quote harvesting, streaming, history, alerts, an economic calendar and more, run from one deploy, verify and pause control plane, and watched by 14 health checks every five minutes that page Telegram when state changes.",
+        "Live quotes travel through a single Cloudflare Durable Object. Idle hibernating sockets cost nothing, the relay tells the harvester which symbols have viewers, and sharing one socket per symbol cut an eight-symbol watchlist from 11 sockets to 2. Chart history pages from Postgres into cold gzip chunks on R2, and the harvester writes only bars that actually changed.",
+      ].join("\n\n"),
+    },
+    {
+      kind: "resolution",
+      heading: "A desk students use daily",
+      body: [
+        "Students get a 32-widget dashboard, tick-accurate excursion analysis and per-minute equity rebuilt from real ticks, seven analytics sections, 13 calculators, a leaderboard ranked by risk-adjusted score rather than raw gain, and a canvas chart with 60 indicators, 63 drawing tools, paper trading and bar-replay backtests.",
+        "The coach gets a console that ranks who needs attention — rule breaches, losing runs, missing journal entries, silence — plus a rules engine and cohorts. Two-factor sign-in is enforced in the proxy and again in row-level security on every table.",
+        "It shipped in 654 commits over about twelve weeks.",
+      ].join("\n\n"),
+    },
+  ],
+  metrics: [
+    {
+      value: "13",
+      label: "VPS worker processes",
+      source: `worker inventory in docs/ENGINE.md (plus one Node audit), ${SRC} (client-trading.md §1F)`,
+    },
+    {
+      value: "14",
+      label: "health checks every 5 minutes",
+      source: `checks listed in docs/ENGINE.md §5 and alpha_engine/workers/monitor.py, ${SRC} (client-trading.md §1E.3, §1F)`,
+    },
+    {
+      value: "11 → 2",
+      label: "sockets for an 8-symbol watchlist",
+      source: `measured after moving to one shared socket per symbol in use-live-quote.ts, ${SRC} (client-trading.md §1E.1)`,
+    },
+    {
+      value: "60 / 63",
+      label: "chart indicators / drawing tools",
+      source: `indicator unions and DrawingTool union (minus cursor, crosshair, eraser) in src/lib/chart/types.ts, ${SRC} (client-trading.md §1F)`,
+    },
+    {
+      value: "654",
+      label: "commits in about 12 weeks",
+      source: `git log, 2026-07-04 to 2026-09-28, ${SRC} (client-trading.md §1F)`,
+    },
+  ],
+  links: [],
+  order: 10,
+} satisfies ProjectInput;

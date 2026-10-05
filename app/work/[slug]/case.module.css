@@ -1,0 +1,247 @@
+.page {
+  padding-top: 6rem;
+  background: var(--room);
+  min-height: 100svh;
+}
+.back {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  color: var(--dim);
+  font-size: 0.92rem;
+}
+.back:hover {
+  color: var(--screen);
+}
+.head {
+  padding: 2rem 0 2.5rem;
+  display: grid;
+  gap: 1rem;
+}
+.kicker {
+  margin: 0;
+  color: var(--sodium);
+  font-size: 0.95rem;
+}
+.title {
+  font-size: clamp(3rem, 10vw, 8.5rem);
+}
+.logline {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+  line-height: 1.35;
+  max-width: 40ch;
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 3rem;
+  margin: 1rem 0 0;
+}
+.meta dt {
+  font-size: 0.82rem;
+  color: var(--dim);
+}
+.meta dd {
+  margin: 0.15rem 0 0;
+}
+.meta dd[data-status="live"] {
+  color: var(--sodium);
+}
+
+/* The screen — same named element as the monitor on the wall, so it match-cuts here. */
+.screenWrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+.screen {
+  position: relative;
+  margin: 0;
+  border: 10px solid #0d121a;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #020305;
+  box-shadow: 0 0 0 1px var(--line), 0 40px 120px rgba(0, 0, 0, 0.6), 0 0 80px rgba(223, 232, 242, 0.05);
+}
+.screen img {
+  width: 100%;
+  height: auto;
+}
+.privacy {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0 3px, rgba(0, 0, 0, 0.25) 3px 5px);
+  pointer-events: none;
+}
+.caption {
+  color: var(--dim);
+  font-size: 0.88rem;
+  margin: 0.8rem 0 0;
+}
+
+/* Beats */
+.beat {
+  display: grid;
+  grid-template-columns: 12rem 1fr;
+  gap: 1rem 3rem;
+  padding: clamp(3rem, 7vw, 5.5rem) 0 0;
+}
+.beatKind {
+  margin: 0.35rem 0 0;
+  color: var(--sodium);
+  font-size: 0.95rem;
+}
+.beatBody {
+  max-width: 66ch;
+}
+.beatHeading {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.15;
+  margin: 0 0 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.beatBody p {
+  color: #c4cfdc;
+  margin: 0 0 1rem;
+}
+.figure {
+  grid-column: 1 / -1;
+  margin: 1.5rem 0 0;
+}
+.figure img,
+.figure video {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.figure figcaption {
+  color: var(--dim);
+  font-size: 0.88rem;
+  margin-top: 0.6rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1;
+  margin: 0 0 1.5rem;
+}
+.features {
+  padding-top: clamp(3.5rem, 8vw, 6rem);
+}
+.features ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 0.9rem 2.5rem;
+}
+.features li {
+  border-top: 1px solid var(--line);
+  padding-top: 0.8rem;
+  color: #c4cfdc;
+}
+.metrics {
+  padding-top: clamp(3.5rem, 8vw, 6rem);
+}
+.metrics dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+  margin: 0;
+}
+.metrics dl > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.3rem;
+}
+.metrics dt {
+  color: var(--dim);
+  font-size: 0.92rem;
+}
+.metrics dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72;
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  line-height: 1;
+  color: var(--screen);
+}
+.credits {
+  padding: clamp(3.5rem, 8vw, 6rem) 0 clamp(4rem, 9vw, 7rem);
+}
+.stack {
+  color: var(--dim);
+  max-width: 80ch;
+  margin: 0 0 1.6rem;
+}
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+.linkPrimary,
+.linkGhost {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.linkPrimary {
+  background: var(--sodium);
+  color: var(--night);
+}
+.linkPrimary:hover {
+  background: #ffb36a;
+}
+.linkGhost {
+  border: 1px solid var(--line);
+  color: var(--screen);
+}
+.linkGhost:hover {
+  border-color: var(--sodium);
+}
+
+.next {
+  display: block;
+  border-top: 1px solid var(--line);
+  padding: clamp(3rem, 8vw, 6rem) 0;
+  background: var(--night);
+  transition: background 0.3s;
+}
+.next:hover {
+  background: #080b12;
+}
+.next :global(.wrap) {
+  display: grid;
+  gap: 0.6rem;
+}
+.nextLabel {
+  color: var(--sodium);
+  font-size: 0.95rem;
+}
+.nextTitle {
+  font-size: clamp(2.6rem, 8vw, 6rem);
+}
+.next:hover .nextTitle {
+  color: var(--sodium);
+}
+.nextLine {
+  color: var(--dim);
+  max-width: 60ch;
+}
+@media (max-width: 860px) {
+  .beat {
+    grid-template-columns: 1fr;
+  }
+}

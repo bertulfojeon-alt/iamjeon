@@ -1,0 +1,71 @@
+.archive {
+  position: relative;
+  padding: clamp(5rem, 10vw, 8rem) 0;
+  background: var(--room);
+  border-top: 1px solid var(--line);
+}
+.head {
+  display: grid;
+  gap: 0.8rem;
+  margin-bottom: 2.5rem;
+  max-width: 52ch;
+}
+.title {
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+}
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.1fr) 2fr 1.2fr auto;
+  gap: 0.6rem 2rem;
+  align-items: baseline;
+  padding: 1.3rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.name {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.name h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+.status {
+  font-size: 0.78rem;
+  color: var(--dim);
+}
+.status[data-status="live"] {
+  color: var(--sodium);
+}
+.logline {
+  margin: 0;
+  color: var(--screen);
+}
+.stack {
+  margin: 0;
+  color: var(--dim);
+  font-size: 0.88rem;
+}
+.links {
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+.link {
+  color: var(--sodium);
+}
+.link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (max-width: 860px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,199 @@
+/* ── Full mode: the wall ── */
+.wall {
+  position: relative;
+  height: calc((var(--chapters, 4) * 0.85 + 1) * 100svh);
+}
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--room);
+}
+.plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.screens {
+  position: absolute;
+  inset: 0;
+}
+.slot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  backface-visibility: hidden;
+}
+.screenLink {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline-offset: 6px;
+}
+.screenLink:hover,
+.screenLink:focus-visible {
+  filter: drop-shadow(0 0 24px rgba(223, 232, 242, 0.18));
+}
+.screenLink:hover :global(img),
+.screenLink:focus-visible :global(img),
+.screenLink:hover :global(video),
+.screenLink:focus-visible :global(video) {
+  filter: brightness(1.08);
+}
+.off {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, #06080c, #020305);
+}
+/* Changing channel: each screen powers on when its chapter becomes active. */
+.powerOn {
+  width: 100%;
+  height: 100%;
+  animation: power-on 0.55s var(--ease-camera) both;
+}
+@keyframes power-on {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.02);
+    filter: brightness(3);
+  }
+  35% {
+    opacity: 1;
+    transform: scaleY(0.04);
+    filter: brightness(2.5);
+  }
+  100% {
+    transform: none;
+    filter: none;
+  }
+}
+:global(html[data-mode="still"]) .powerOn {
+  animation: none;
+}
+
+.chrome {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5.5rem var(--gutter) 2rem;
+  background:
+    linear-gradient(to bottom, rgba(5, 7, 12, 0.85), transparent 26%),
+    linear-gradient(to top, rgba(5, 7, 12, 0.85), transparent 22%);
+}
+.chrome > * {
+  pointer-events: auto;
+}
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.chapterTitle {
+  font-size: clamp(2.6rem, 6vw, 5.5rem);
+}
+.tabs {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+.tab {
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--dim);
+  background: rgba(11, 16, 24, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.5rem 0.95rem;
+  min-height: 40px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tab:hover {
+  color: var(--screen);
+}
+.tab[aria-pressed="true"] {
+  color: var(--screen);
+  border-color: var(--sodium);
+}
+.count {
+  font-size: 0.75rem;
+  color: var(--faint);
+}
+.tab[aria-pressed="true"] .count {
+  color: var(--sodium);
+}
+.caption {
+  align-self: center;
+  text-align: center;
+  margin: 0;
+  max-width: 60ch;
+  min-height: 3.3em;
+  font-size: clamp(0.98rem, 1.4vw, 1.12rem);
+  color: var(--screen);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9);
+}
+.caption strong {
+  color: var(--sodium);
+  font-weight: 600;
+}
+
+/* ── Lite / still: stacked ── */
+.stacked {
+  padding: 8rem 0 4rem;
+  background: var(--room);
+}
+.stackChapter + .stackChapter {
+  margin-top: 5rem;
+}
+.stackTitle {
+  font-size: clamp(2.4rem, 9vw, 4.5rem);
+  margin-bottom: 1.6rem;
+}
+.stackGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 2rem 1.5rem;
+}
+.card {
+  display: block;
+}
+.cardScreen {
+  aspect-ratio: 16 / 10;
+  border: 6px solid #10151e;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #020305;
+  box-shadow: 0 0 0 1px var(--line), 0 20px 40px rgba(0, 0, 0, 0.45);
+}
+.cardTitle {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1;
+  margin: 1rem 0 0.35rem;
+}
+.cardLine {
+  margin: 0;
+  color: var(--dim);
+  font-size: 0.95rem;
+}
+.card:hover .cardTitle {
+  color: var(--sodium);
+}
