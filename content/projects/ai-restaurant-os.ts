@@ -27,12 +27,17 @@ export default {
   screen: { poster: "/media/screens/ai-restaurant-os.webp" },
   features: [
     "Guest QR ordering with modifiers, allergen warnings and live order status",
-    "POS terminal, floor plan with table states, reservations and waitlist",
-    "Realtime kitchen display with per-station fan-out and late warnings",
-    "Append-only inventory ledger with recipe deduction and purchase receiving",
-    "Split and partial payments, refunds and cash-drawer sessions",
-    "AI menu concierge that only recommends real items",
-    "Forecasting microservice with walk-forward backtesting",
+    "Realtime kitchen display that splits each order into station tickets, with late warnings",
+    "POS terminal with table picker, modifiers and order types",
+    "Inventory ledger that deducts recipe ingredients when an order starts cooking",
+    "Floor view with table states, reservations, waitlist and walk-ins",
+    "Multiple and partial payments, refunds and cash-drawer sessions with variance",
+    "AI menu concierge that suggests only real items and prices, with a rules fallback",
+    "Menu management with sold-out toggles and dietary and allergen catalogues",
+    "Stock counts with variance, suppliers and purchase-order receiving",
+    "Manager overview: sales, top items, low stock and a daily brief built from the data",
+    "Organisation, brand and branch hierarchy with role-based permissions",
+    "Forecasting service with walk-forward backtesting, built but not yet wired into the UI",
   ],
   beats: [
     {

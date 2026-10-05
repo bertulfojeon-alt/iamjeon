@@ -28,7 +28,16 @@ export function Archive({ projects }: { projects: Project[] }) {
                     {STATUS_LABEL[p.status]}
                   </span>
                 </div>
-                <p className={styles.logline}>{p.logline}</p>
+                <div className={styles.what}>
+                  <p className={styles.logline}>{p.logline}</p>
+                  {p.features.length > 0 && (
+                    <ul className={styles.features}>
+                      {p.features.slice(0, 4).map((f) => (
+                        <li key={f}>{f}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
                 <p className={styles.stack}>{p.stack.slice(0, 5).join(" · ")}</p>
                 <div className={styles.links}>
                   {primary ? (

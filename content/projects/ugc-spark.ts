@@ -16,9 +16,12 @@ export default {
   stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS v4"],
   screen: { poster: "/media/screens/ugc-spark.webp" },
   features: [
-    "Video and image studios with duration, aspect ratio and quality settings",
+    "Video studio: prompt or image to clip, with duration, aspect ratio and quality settings",
     "Nine camera presets, from push-in to orbit",
+    "Credit cost shown on the Generate button before anything runs",
     "Credit ledger with an automatic, exactly-once refund on failure",
+    "Image studio whose stills hand off to the video studio in one click",
+    "Explore feed with one-click prompt remix, and a searchable library",
     "One provider interface; generation is simulated in this prototype",
   ],
   beats: [],

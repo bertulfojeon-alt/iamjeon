@@ -29,12 +29,16 @@ export default {
   features: [
     "Universal front desk that hands the caller to a company's own agent on the same call",
     "Tagalog, Bisaya and English, including code-switching mid-sentence",
-    "Caller verification, billing, outages, tickets and callbacks through 35 tools",
-    "Grounding ledger that walks back claims no tool supported",
-    "Phone layer: Twilio prototype, then a SIP-trunk worker in production",
-    "Live calls with listen-in and caller-mood badges",
-    "Second-model QA scorecard, CSAT and SLA tracking",
-    "Nine-tab agent workspace with versioned publishing",
+    "Caller verification, billing, outages, tickets and callbacks through account tools",
+    "Grounding ledger that walks back any claim no tool supported",
+    "Real phone calls: a Twilio prototype, then a SIP-trunk worker in production",
+    "Live calls board with listen-in audio and caller-mood badges",
+    "Second-model QA scorecard that checks spoken figures against the tool audit",
+    "CSAT surveys, follow-up texts, repeat-call detection and SLA tracking",
+    "Knowledge base from CSV, Google Sheets or PDF, plus a queue of unanswered questions",
+    "Area outages synced from a shared sheet and checked before anything else",
+    "Desks for collections, reconnections and service tickets, scoped by city",
+    "Agent workspace with tabbed settings and versioned publishing",
   ],
   beats: [
     {

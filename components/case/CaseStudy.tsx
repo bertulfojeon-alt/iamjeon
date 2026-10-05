@@ -12,6 +12,7 @@ import type { Project } from "@/content/schema";
 import { STATUS_LABEL } from "@/components/case/labels";
 import { RedactionStrip } from "@/components/case/RedactionStrip";
 import { screenTransitionName } from "@/lib/transition";
+import { SHOWCASES } from "@/components/showcase";
 import styles from "./CaseStudy.module.css";
 
 const BEAT_LABEL = {
@@ -26,6 +27,7 @@ const EMAIL = "bertulfojeon@gmail.com";
 export function CaseStudy({ project: p, inModal = false }: { project: Project; inModal?: boolean }) {
   const next = nextProject(p.slug);
   const hero = p.coldOpen;
+  const Showcase = p.showcase ? SHOWCASES[p.showcase] : null;
   return (
     <article className={styles.page} data-classified={p.redacted} data-in-modal={inModal}>
       <div className="wrap">
@@ -63,7 +65,9 @@ export function CaseStudy({ project: p, inModal = false }: { project: Project; i
       <div className={styles.screenWrap}>
         <ViewTransition name={screenTransitionName(p.slug)} share="screen-morph" default="none">
           <figure className={styles.screen}>
-            {hero ? (
+            {Showcase ? (
+              <Showcase />
+            ) : hero ? (
               <Image
                 src={hero.src}
                 alt={hero.alt}

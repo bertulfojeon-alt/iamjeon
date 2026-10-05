@@ -16,11 +16,13 @@ export default {
   stack: ["Expo", "React Native", "TypeScript", "math.js"],
   screen: { poster: "/media/screens/jelai.webp" },
   features: [
-    "Built: a correctness core that checks spoken math with math.js",
-    "Built: handles Unicode minus and times signs and filler words from transcripts",
-    "Built: names the specific mistake from pre-generated patterns",
-    "Built: returns “unparseable” instead of guessing",
-    "Designed, not yet built: the realtime voice tutor, homework capture and hint ladder",
+    "Correctness core that checks spoken math with math.js, never the model",
+    "Handles Unicode minus and times signs and filler words from transcripts",
+    "Names the specific mistake from pre-generated patterns",
+    "Returns “unparseable” instead of guessing",
+    "Exact matching for multiple-choice and short answers",
+    "Static prototype of the live session screen",
+    "Design tokens with a test that fails on any hard-coded colour",
   ],
   beats: [],
   metrics: [

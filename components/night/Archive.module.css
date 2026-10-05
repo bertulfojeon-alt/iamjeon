@@ -48,6 +48,29 @@
   margin: 0;
   color: var(--screen);
 }
+.features {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.25rem;
+}
+.features li {
+  position: relative;
+  padding-left: 0.95rem;
+  color: var(--dim);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+.features li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 0.35rem;
+  height: 1px;
+  background: var(--sodium);
+}
 .stack {
   margin: 0;
   color: var(--dim);

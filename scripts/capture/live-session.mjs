@@ -1,8 +1,9 @@
 /**
  * Capture from dashboards the owner has logged into in a real Edge window.
  *
- *   1. Edge is started with --remote-debugging-port=9333 and a profile kept in
- *      F:\ME\portfolio-private (outside this repo); the owner logs in by hand.
+ *   1. Chrome (or Edge) is started with --remote-debugging-port=9334 and a
+ *      dedicated profile kept in F:\ME\portfolio-private (outside this repo);
+ *      the owner logs in by hand. CDP_PORT overrides the port.
  *   2. node scripts/capture/live-session.mjs [slug…]
  *
  * This attaches to the open tabs — it never sees or stores a password — sets a
@@ -94,7 +95,7 @@ async function mask(page, r) {
   );
 }
 
-const browser = await chromium.connectOverCDP("http://localhost:9333");
+const browser = await chromium.connectOverCDP(`http://localhost:${process.env.CDP_PORT ?? 9334}`);
 const pages = browser.contexts().flatMap((c) => c.pages());
 for (const r of SESSION) {
   if (only.size && !only.has(r.slug)) continue;

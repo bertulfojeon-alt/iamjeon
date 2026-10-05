@@ -28,10 +28,14 @@ export default {
     "Major and minor market structure with BOS/CHoCH and swing labels",
     "Order blocks scored 0–100 on displacement, gap and volume",
     "Percentile-adaptive fair value gaps that shrink as they fill",
-    "Liquidity pools, sweeps, premium/discount and previous day/week/month levels",
-    "Asia, London and New York session ranges and a multi-timeframe bias panel",
-    "Alert presets with optional push to the MT5 mobile app",
     "Offline licence bound to one MT5 account, one product and an expiry date",
+    "Liquidity pools and sweeps, with strong and weak highs and lows",
+    "Premium, discount and equilibrium zones plus previous day, week and month levels",
+    "Asia, London and New York session ranges in broker server time",
+    "Multi-timeframe bias panel with trend, last event and zone",
+    "Alert presets with optional push to the MT5 mobile app",
+    "Translucent zones painted on one canvas that repaints only when something changes",
+    "Optional trend-coloured candles",
   ],
   beats: [
     {

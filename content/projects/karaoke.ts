@@ -17,10 +17,13 @@ export default {
   screen: { poster: "/media/screens/karaoke.webp" },
   features: [
     "Opens ready to sing: mic, routing and songs set up on the first click",
-    "Live pitch ribbon and videoke-style scoring",
+    "Hand-built vocal chain with no added latency and automatic mic profiles",
+    "Live pitch ribbon and videoke-style scoring with a timed score reveal",
+    "Phones join a room by QR code and queue songs for the host to approve",
     "Key change, piano, acoustic and duet versions found by search",
-    "Phones join a room by QR code and queue songs",
     "Battle mode for two singers",
+    "Blocked videos skipped automatically, trying other takes of the song first",
+    "Voice presets and a mixer with reverb, echo and three-band tone",
   ],
   beats: [
     {

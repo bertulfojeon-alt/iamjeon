@@ -17,11 +17,14 @@ export default {
   screen: { poster: "/media/screens/project-facegate.webp" },
   redacted: true,
   features: [
-    "Challenge-response liveness: blink twice, turn left, turn right",
+    "Challenge-response liveness: blink twice, turn left or turn right",
     "Five-point alignment to a 112×112 template and 512-dimension embeddings",
+    "Deterministic recognition: the same crop always yields the same embedding",
     "Embeddings versioned by model, quantisation and runtime",
-    "Server-decides design: the client never sees a score",
-    "Licence-clean model selection",
+    "Licence-clean model selection, checked against training-data provenance",
+    "Liveness bench that logs each trial as a live face or a photo, so pass rates are measured",
+    "Face detection with keypoints and cosine scoring against several templates",
+    "Checksum-pinned model download and a latency, memory and determinism benchmark",
   ],
   beats: [
     {

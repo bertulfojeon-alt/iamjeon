@@ -16,9 +16,12 @@ export default {
   stack: ["Electron", "Node.js", "SQLite", "Cheerio", "Vitest", "WebGL"],
   screen: { poster: "/media/screens/jeonscraper.webp" },
   features: [
+    "Scrapers for 9 e-commerce platforms with automatic platform detection",
     "Three fetch tiers: JSON API, HTML and JSON-LD, then a real Chromium window",
     "War Room briefing with price, category, brand and opportunity views",
     "Hourly watchlist with price, stock and new-product alerts",
+    "Fuzzy product matching across stores by name, handle and similarity",
+    "Multi-currency prices with live exchange rates",
     "Excel, CSV and Shopify-ready import exports",
     "Marketing site with a WebGL fluid hero adapted from PavelDoGreat/WebGL-Fluid-Simulation (MIT)",
   ],

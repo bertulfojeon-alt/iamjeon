@@ -16,11 +16,14 @@ export default {
   stack: ["Next.js 16", "GSAP ScrollTrigger", "Lenis", "Motion", "Canvas 2D", "sharp"],
   screen: { poster: "/media/screens/project-genesis.webp" },
   features: [
+    "Scroll-scrubbed image sequences on one canvas, with text overlays on the same timeline",
     "Scenes authored as data: frame pattern, scroll length, overlays",
     "One GSAP ticker drives Lenis and ScrollTrigger together",
     "Frames drawn imperatively, with no React render per frame",
     "Windowed ImageBitmap cache that flips direction when scroll reverses",
+    "Nearest-frame fallback, so fast scrubbing never shows a blank frame",
     "Smaller budgets on low-power devices and a static reduced-motion mode",
+    "Overlays are real, crawlable text; the canvas carries an accessible label",
   ],
   beats: [],
   metrics: [

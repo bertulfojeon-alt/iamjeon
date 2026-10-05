@@ -47,7 +47,9 @@ export function Hud() {
         </a>
         <button type="button" className={styles.toggle} aria-pressed={soundOn} onClick={() => setSoundOn(!soundOn)}>
           <span className={styles.dot} data-on={soundOn} aria-hidden="true" />
-          Sound<span className={styles.long}>{soundOn ? " on" : " off"}</span>
+          <span>
+            Sound<span className={styles.long}>{soundOn ? " on" : " off"}</span>
+          </span>
         </button>
         <button
           type="button"
@@ -56,8 +58,10 @@ export function Hud() {
           onClick={() => setMotionPaused(!motionPaused)}
         >
           <span className={styles.dot} data-on={!motionPaused} aria-hidden="true" />
-          {motionPaused ? "Play" : "Pause"}
-          <span className={styles.long}>&nbsp;motion</span>
+          <span>
+            {motionPaused ? "Play" : "Pause"}
+            <span className={styles.long}> motion</span>
+          </span>
         </button>
       </nav>
     </header>

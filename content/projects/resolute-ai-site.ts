@@ -22,6 +22,12 @@ export default {
   },
   features: [
     "Cinematic video hero and scroll-driven sections",
+    "WebGL 3D centrepiece behind the page, moved scene by scene by GSAP ScrollTrigger",
+    "Floating live-voice agent that answers visitors and captures leads",
+    "Product catalogue with a detail page and share image for each system",
+    "Staff dashboard for leads, team invitations and voice-agent personas and knowledge",
+    "Contact form with rate limiting and email delivery",
+    "Static fallback for reduced motion and lighter scenes on mobile",
     "Responsive layout checked at five breakpoints with a Playwright harness",
   ],
   beats: [],

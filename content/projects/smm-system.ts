@@ -27,13 +27,18 @@ export default {
   ],
   screen: { poster: "/media/screens/smm-system.webp" },
   features: [
-    "Trend intake from four sources, deduplicated by content hash",
+    "Trend radar pulling from four sources, deduplicated by content hash",
     "Free deterministic pre-filter before any AI scoring",
-    "Observed facts shown apart from AI interpretation",
-    "Versioned scripts, an independent AI critic and 15 accuracy rules",
-    "Server-enforced production workflow with an audit trail",
-    "Publishing to Instagram Reels, Facebook Reels and YouTube Shorts",
+    "Observed facts shown apart from AI interpretation, with risk badges and overrides",
+    "Approved trends become a brief, a versioned script and a video edit plan",
+    "Independent AI critic whose serious findings block publishing",
+    "Accuracy rules in every prompt, backed by a linter that also catches Taglish phrasing",
+    "Server-enforced production workflow with role-gated steps and an audit trail",
+    "Creator studio view: assigned shoots, marked done and uploaded for automatic editing",
+    "Publishing to Instagram Reels, Facebook Reels and YouTube Shorts from one queue",
     "Content Score that weights purchases and sign-ups above likes",
+    "AI layer with model fallback, a response cache and a daily request guard",
+    "Weekly retro and funnel rollups that feed the next week's plan",
   ],
   beats: [
     {

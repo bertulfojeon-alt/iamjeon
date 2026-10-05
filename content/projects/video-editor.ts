@@ -36,13 +36,18 @@ export default {
     caption: "Raw recording in, finished 9:16 edit out — captions, punch-ins and sound design are automatic.",
   },
   features: [
+    "One command from raw clip to final render, caption copy and QC contact sheet",
     "Word-timed Taglish transcription and glossary-corrected word-pop captions",
     "Emphasis detection that drives face-tracked punch-ins",
     "Payoff-first story cut with dead air removed",
-    "16 transition types that never repeat back to back",
-    "141-sound catalogue and a mood-matched, ducked music bed",
+    "Transition engine that never repeats a move back to back",
+    "Reaction sound effects keyed to speech from a categorised library",
+    "Mood-matched music bed, ducked under speech and mastered to streaming loudness",
     "Compliance crops that hide P&L widgets",
-    "One command from raw clip to final render and QC contact sheet",
+    "Safe-zone layout that clears the TikTok, Reels and Shorts interface",
+    "Animated lesson diagrams and chart callouts for education clips",
+    "Worker that picks up uploaded footage and returns a finished render for QA",
+    "Optional CapCut draft export for manual touch-ups",
   ],
   beats: [
     {

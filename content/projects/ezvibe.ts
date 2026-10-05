@@ -28,14 +28,18 @@ export default {
   screen: { poster: "/media/screens/ezvibe.webp" },
   features: [
     "One profile per tab: Claude Code, GitHub, git author, Vercel, Supabase and browser",
-    "Folders pinned to profiles, with a warning bar when a tab wanders into the wrong one",
+    "Folders pinned to profiles, with a warning bar when a tab wanders into another's folder",
     "Activity dots and desktop notifications for agents waiting on an answer",
-    "Session restore and close protection while an agent is still running",
     "Per-profile usage meter that learns each account's ceiling from real lockouts",
-    "One git worktree per agent tab, with a guided merge back",
+    "Move-here button that shifts work to a profile with more headroom",
+    "One git worktree per agent tab, with a guided merge back that aborts cleanly on conflict",
+    "Session restore and close protection while an agent is still running",
     "Isolated browser per profile for OAuth sign-ins",
-    "Server-side trial and Ed25519-signed, machine-locked licences",
-    "Signed auto-updater and a keyboard-first workflow",
+    "Connection checks run inside each profile's own environment, with one-click logins",
+    "Custom environment variables encrypted with Windows DPAPI",
+    "Google sign-in, server-side trial and Ed25519-signed, machine-locked licences",
+    "Licence state and offline grace decided in compiled Rust, never in the UI",
+    "Signed auto-updater and keyboard shortcuts for every tab action",
   ],
   beats: [
     {

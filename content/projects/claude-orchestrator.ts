@@ -18,9 +18,12 @@ export default {
   features: [
     "Session-start brief from the live repo: branch, changes, recent commits",
     "About 60 tokens of working standards re-injected every turn",
-    "Eval harness that returns keep, experimental or cut verdicts",
+    "Eval harness that returns keep, experimental or cut verdicts per skill",
+    "Role agents inherit the session's model instead of silently downgrading it",
+    "Writes a tailored CLAUDE.md when a repo has none",
     "Zero-dependency engine: retrieval, context routing, consolidation",
-    "Bundles two credited third-party pieces: a UI/UX designer agent by Madina Gbotoe (CC BY 4.0) and the adopted ui-ux-pro-max skill",
+    "Fail-open hooks with timeouts, so the plugin never blocks a session",
+    "Credits bundled work: Madina Gbotoe's UI/UX agent (CC BY 4.0) and the ui-ux-pro-max skill",
   ],
   beats: [
     {
