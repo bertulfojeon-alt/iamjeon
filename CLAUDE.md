@@ -1,19 +1,22 @@
 # Night Shift — iamjeon portfolio
 
-Cinematic portfolio for Loreto "Jeon" Saquilabon Jr. One night, one unbroken camera move: sea at
-midnight → rooftops → the lit window → a wall of monitors (the work index) → dawn (contact).
+Cinematic portfolio for Loreto "Jeon" Saquilabon Jr. Welcome loop (Jeon on a seawall bench at night)
+→ first scroll plays one 7 s film (sea → rooftops → window → he sits at his desk → push-in to the
+monitor) → the monitor becomes a live desktop of the work → projects open in modals.
 Design record: `docs/specs/2026-10-05-night-shift-design.md`. Old static site: tag `v1-static`.
 
 ## Stack
 Next.js 16 App Router · React 19 (`<ViewTransition>` match cuts) · TypeScript · Tailwind v4 (tokens in
-`app/globals.css`) · GSAP + ScrollTrigger · Lenis · zod. No three.js/WebGL — footage is canvas image
-sequences (`features/cinematic-engine`, ported from Project Genesis).
+`app/globals.css`) · Lenis (smooth scroll) · zod. No three.js/WebGL — the film is a plain `<video>`; the desktop is
+DOM projected onto the monitor with a homography (`lib/homography.ts`, `content/theatre.json`).
 
 ## Commands
 - `npm run dev` / `npm run build` (build runs the leak check) / `npm start`
 - `npm test` (Vitest: content rules, homography, modes) · `npm run test:e2e` (Playwright, system Edge; build first)
-- `npm run frames` — convert Google Flow clips in `F:\ME\flow` (C1–C4, L1–L2) into footage
-- `npm run gen:placeholders [c1 c2 c3 c4 screens]` — procedural stand-in footage / screen posters
+- `npm run theatre` — encode `media-src/flow/{welcome,film}.mp4` (gitignored sources) into
+  `public/media/theatre/` and print the monitor corners for `content/theatre.json`
+- `npm run capture [slug]` — record public sites; `scripts/capture/live-session.mjs` records dashboards
+  from an Edge window the owner logged into (debug port 9333, profile in `F:\ME\portfolio-private`)
 
 ## Hard constraints
 - **Public repo.** Classified projects (PROJECT PAYDAY / FACEGATE / BALANCE SHEET) must never carry a real
@@ -28,7 +31,9 @@ sequences (`features/cinematic-engine`, ported from Project Genesis).
   Big Shoulders / Hanken Grotesk; no mono labels, no 01/02/03, no count-up stats, no fade-up on every section.
   The sodium warm-up (`WarmTitle`) is for chapter titles only.
 - Content: one file per project in `content/projects/`; registry and ordering in `content/index.ts`.
-- After replacing the room plate (C3's last frame), re-mark the six monitor corners in `content/room.json`.
+- After replacing the film, re-run `npm run theatre` and update the monitor corners in `content/theatre.json`.
+- Classified captures: masking rules and addresses live in `F:\ME\portfolio-private\capture.json`; every
+  classified image is reviewed by the owner before it is committed.
 
 ## Verify before claiming done
 `npm test && npm run build && npm run test:e2e` — all green, leak check "clean".

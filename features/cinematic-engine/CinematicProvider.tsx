@@ -3,11 +3,7 @@
 /**
  * CinematicProvider — the engine root.
  *
- * Owns the single shared smooth-scroll instance (Lenis) and wires it to GSAP so
- * the whole app runs on ONE requestAnimationFrame loop:
- *
- *   gsap.ticker  ──drives──▶  lenis.raf()        (smooth scroll stepping)
- *   lenis "scroll" event  ──▶  ScrollTrigger.update()  (scrub stays synced)
+ * Owns the single shared smooth-scroll instance (Lenis, driving its own rAF loop).
  *
  * It also owns the viewing mode. The head script stamps `data-mode` on <html>
  * before paint; this provider reads it on mount, keeps it current when the
@@ -16,7 +12,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Lenis from "lenis";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { pickMode, readSignals, type Mode } from "@/lib/mode";
 import { CinematicContext } from "./cinematic-context";
@@ -60,37 +55,20 @@ export function CinematicProvider({ children }: { children: ReactNode }) {
     root.dataset.mode = next;
     setMotionPausedState(paused);
     setMode(next);
-    // Layout differs between modes; let ScrollTrigger re-measure after the DOM settles.
-    requestAnimationFrame(() => ScrollTrigger.refresh());
   }, []);
 
   useIsomorphicLayoutEffect(() => {
-    if (!ready || mode === "still") {
-      ScrollTrigger.refresh();
-      return;
-    }
-
+    if (!ready || mode === "still") return;
     const instance = new Lenis({
       // Eased, weighty feel suited to a cinematic experience.
       duration: mode === "full" ? 1.1 : 0.9,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
+      autoRaf: true,
     });
     lenisRef.current = instance;
     setLenis(instance);
-
-    // Keep ScrollTrigger in lockstep with Lenis' virtual scroll position.
-    instance.on("scroll", ScrollTrigger.update);
-
-    // Single rAF loop: GSAP's ticker steps Lenis. (Lenis expects ms; ticker reports seconds.)
-    const tick = (time: number) => instance.raf(time * 1000);
-    gsap.ticker.add(tick);
-
-    ScrollTrigger.refresh();
-
     return () => {
-      gsap.ticker.remove(tick);
-      instance.off("scroll", ScrollTrigger.update);
       instance.destroy();
       lenisRef.current = null;
       setLenis(null);

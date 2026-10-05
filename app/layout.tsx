@@ -47,7 +47,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children, modal }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
@@ -60,12 +60,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: modeScript }} />
       </head>
       <body>
-        <a href="#work" className="skip-link">
+        <a href="#desk" className="skip-link">
           Skip to the work
         </a>
         <CinematicProvider>
           <Hud />
           {children}
+          {modal}
         </CinematicProvider>
         <div className="grain" aria-hidden="true" />
       </body>

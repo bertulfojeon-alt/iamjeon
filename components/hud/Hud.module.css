@@ -40,6 +40,9 @@
 .link,
 .toggle {
   font: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
   font-size: 0.88rem;
   color: var(--dim);
   padding: 0.5rem 0.7rem;
@@ -70,18 +73,10 @@
   background: var(--sodium);
   box-shadow: 0 0 10px var(--sodium);
 }
-.progress {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: var(--sodium);
-  opacity: 0.7;
-  transform-origin: 0 50%;
-  transform: scaleX(0);
-}
 @media (max-width: 720px) {
+  .long {
+    display: none;
+  }
   .link:nth-child(-n + 3) {
     display: none;
   }

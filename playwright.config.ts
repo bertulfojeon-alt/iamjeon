@@ -11,6 +11,8 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:3737",
     channel: process.env.PW_CHANNEL ?? "msedge",
+    // Muted autoplay is allowed in real browsers; make headless behave the same.
+    launchOptions: { args: ["--autoplay-policy=no-user-gesture-required"] },
   },
   webServer: {
     command: "npx next start -p 3737",

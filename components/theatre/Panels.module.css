@@ -1,0 +1,48 @@
+.contact {
+  padding: clamp(2rem, 5vw, 3.5rem);
+  background:
+    radial-gradient(90% 70% at 50% 110%, rgba(244, 180, 138, 0.16), transparent 70%),
+    var(--room);
+}
+.title {
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  color: var(--dawn-2);
+}
+.lead {
+  margin: 1.2rem 0 2rem;
+  max-width: 46ch;
+  color: #e9dfd2;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.primary {
+  background: var(--dawn-2);
+  color: #1b1720;
+}
+.primary:hover {
+  background: #fff1dc;
+}
+.secondary {
+  border: 1px solid rgba(255, 217, 168, 0.4);
+  color: var(--dawn-2);
+}
+.secondary:hover {
+  border-color: var(--dawn-2);
+}
+.where {
+  margin: 2rem 0 0;
+  color: var(--dim);
+  font-size: 0.9rem;
+}

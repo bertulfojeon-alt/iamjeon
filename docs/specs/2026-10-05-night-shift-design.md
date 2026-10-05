@@ -8,7 +8,28 @@ One night, one unbroken camera move. A developer in Lapu-Lapu City builds system
 worldwide while the city sleeps. The site opens at midnight over the sea and ends at dawn, where the
 visitor gets in touch. Cinema comes from camera, light, editing and sound — not film props.
 
-## Running order (home, `/`)
+## Revision 2026-10-05 (evening) — the home is now one short film
+The owner replaced the long scroll journey with a tighter flow:
+1. **Welcome** — an 8 s Google Flow shot of Jeon on a seawall bench at night, typing (only the waves,
+   hands and laptop move), loops full screen behind the name. Scrolling slides the copy away; the
+   picture stays.
+2. **Film** — on the first scroll one 7 s shot plays (time-based, not scrubbed): seawall → over the
+   sea and bridge → rooftops → the lit window → the room → Jeon walks in from the right and sits →
+   push-in to the right monitor. Its first frame matches the welcome shot. The page holds still
+   while it plays; Skip / Esc ends it; it plays once per visit.
+3. **Desk** — the film's last frame holds; a live desktop is projected onto the monitor's screen
+   (corners measured on the last frame, `content/theatre.json`). Chapter tabs, project tiles (loop on
+   hover), and a dock: About, Side projects, Contact, Résumé. On tall screens the desktop becomes a
+   full-screen panel.
+4. **Modals** — a tile opens its case study in a modal at `/work/[slug]` (intercepted route), so
+   links stay shareable; direct visits get the full page. About / Side projects / Contact are
+   dialogs. Media: `npm run theatre` encodes the clips (seamless welcome loop with its sound,
+   1080p + 720p, first/last frames) and prints the monitor corners.
+Still mode: no autoplay, no film — the welcome poster, then the desk. Sound is opt-in (HUD).
+
+The sections below describe the original scroll-journey version and are kept for the record.
+
+## Running order (original, superseded)
 1. **Sea** — scroll-scrubbed footage low over the Mactan channel; name rises over the city. Poster = LCP.
 2. **Approach** — glide over rooftops toward the one lit window; three static proof points.
 3. **Room** — through the window; footage ends on a wall of blank monitors and holds.

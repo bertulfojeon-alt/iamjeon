@@ -1,13 +1,13 @@
 import { ViewTransition } from "react";
-import { Journey } from "@/components/night/Journey";
-import { MonitorWall, type WallChapter } from "@/components/night/MonitorWall";
+import { Theatre } from "@/components/theatre/Theatre";
+import { Panels } from "@/components/theatre/Panels";
+import type { DeskChapter } from "@/components/theatre/Desktop";
 import { Archive } from "@/components/night/Archive";
 import { BehindTheDesk } from "@/components/night/BehindTheDesk";
-import { Dawn } from "@/components/night/Dawn";
-import { CHAPTER_TITLES, WALL_CHAPTERS, projects, projectsInChapter } from "@/content";
+import { CHAPTER_TITLES, WALL_CHAPTERS, projectsInChapter } from "@/content";
 
-export default function NightPage() {
-  const chapters: WallChapter[] = WALL_CHAPTERS.map((id) => ({
+export default function HomePage() {
+  const chapters: DeskChapter[] = WALL_CHAPTERS.map((id) => ({
     id,
     title: CHAPTER_TITLES[id],
     items: projectsInChapter(id).map((p) => ({
@@ -17,9 +17,10 @@ export default function NightPage() {
       poster: p.screen.poster,
       loop: p.screen.loop,
       classified: p.redacted,
+      status: p.status,
     })),
   }));
-  const liveCount = projects.filter((p) => p.status === "live").length;
+  const side = projectsInChapter("archive");
 
   return (
     <ViewTransition
@@ -28,11 +29,8 @@ export default function NightPage() {
       default="none"
     >
       <main>
-        <Journey liveCount={liveCount} />
-        <MonitorWall chapters={chapters} />
-        <Archive projects={projectsInChapter("archive")} />
-        <BehindTheDesk />
-        <Dawn />
+        <Theatre chapters={chapters} sideCount={side.length} />
+        <Panels about={<BehindTheDesk />} side={<Archive projects={side} />} />
       </main>
     </ViewTransition>
   );

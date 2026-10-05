@@ -1,7 +1,0 @@
-{
-  "_comment": "Frame counts per scene and rendition. Rewritten by scripts/video-to-frames.mjs when real clips are converted.",
-  "c1": { "desktop": 72, "mobile": 72 },
-  "c2": { "desktop": 72, "mobile": 72 },
-  "c3": { "desktop": 72, "mobile": 72 },
-  "c4": { "desktop": 72, "mobile": 72 }
-}

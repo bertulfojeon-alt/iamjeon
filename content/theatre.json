@@ -1,0 +1,17 @@
+{
+  "_comment": "Home stage media. Corners: the right monitor's glowing screen on the film's last frame (TL, TR, BR, BL), printed by `npm run theatre`.",
+  "frame": { "width": 1920, "height": 1080 },
+  "welcome": {
+    "src": "/media/theatre/welcome-1080.mp4",
+    "srcMobile": "/media/theatre/welcome-720.mp4",
+    "poster": "/media/theatre/welcome-poster.webp",
+    "posterMobile": "/media/theatre/welcome-poster-720.webp"
+  },
+  "film": {
+    "src": "/media/theatre/film-1080.mp4",
+    "srcMobile": "/media/theatre/film-720.mp4",
+    "first": "/media/theatre/film-first.webp",
+    "last": "/media/theatre/film-last.webp"
+  },
+  "monitor": [[228, 120], [1697, 120], [1697, 965], [227, 965]]
+}
