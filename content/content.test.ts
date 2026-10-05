@@ -68,7 +68,8 @@ const wordCount = (s: string) => s.split(/\s+/).filter(Boolean).length;
 describe("project content", () => {
   it("loads every project input through the schema", () => {
     expect(projects.length).toBe(projectInputs.length);
-    expect(projects.length).toBeGreaterThanOrEqual(24);
+    // Exactly the curated set (UGC Spark and AI Restaurant OS were removed by the owner).
+    expect(projects.length).toBe(22);
   });
 
   it("has unique slugs", () => {

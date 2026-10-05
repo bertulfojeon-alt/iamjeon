@@ -13,7 +13,7 @@
  * shows the finished frame. Scales with its container (container query units).
  */
 
-import { useEffect, useState } from "react";
+import { useLoopClock } from "./useLoopClock";
 import styles from "./AinalyticsPresenter.module.css";
 
 const LOOP = 15;
@@ -46,37 +46,10 @@ const PULSE_VALUE = wordTime(1, "₱2.48M");
 const PULSE_DELTA = wordTime(1, "12%");
 const PULSE_DRIVER = wordTime(2, "Visayas");
 
-function useClock(): number {
-  const [t, setT] = useState(LOOP - 0.8);
-  useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.dataset.mode === "still") {
-      setT(13.6);
-      return;
-    }
-    const start = performance.now();
-    let raf = 0;
-    let loop = -1;
-    const tick = (now: number) => {
-      const elapsed = (now - start) / 1000;
-      setT(elapsed % LOOP);
-      // Exposed so the capture script can cut exactly one loop from a recording.
-      const n = Math.floor(elapsed / LOOP);
-      if (n !== loop) {
-        loop = n;
-        document.documentElement.dataset.showcaseLoop = String(n);
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-  return t;
-}
-
 const pulse = (t: number, at: number) => t >= at && t < at + 0.9;
 
 export function AinalyticsPresenter() {
-  const t = useClock();
+  const t = useLoopClock(LOOP, 13.6);
 
   const speakingLine = LINES.findIndex((l, i) => {
     const end = l.at + l.text.split(" ").length * l.pace + 0.4;

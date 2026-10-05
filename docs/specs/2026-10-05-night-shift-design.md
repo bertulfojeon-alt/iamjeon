@@ -47,15 +47,18 @@ key decision → resolution (numbers, each with a recorded source) → credits (
 
 ## Tiers
 - Flagship (full arc): TG Auto Trader, 247Aisupports, TradesByMerc, EZVibe (pre-release), SMC.
-- Commissions (named client work): The Alpha Room, Unified CX, Ainalytics, AI Restaurant OS,
-  SMM System, Automated video editor, Merc SMC Pro.
+- Commissions (named client work): The Alpha Room, Unified CX, Ainalytics, SMM System,
+  Automated video editor, Merc SMC Pro.
 - Classified (anonymous, redacted, "Request a private screening"): PROJECT PAYDAY,
   PROJECT FACEGATE, PROJECT BALANCE SHEET. No link, launch date, product name, logo, domain or
   sample-company name may point at them. The real-name mapping lives outside this public repo.
 - Archive: Karaoke, JeonScraper, Resolute AI site, Midnight Vibes, claude-orchestrator,
-  UnsayBalita (fictional re-renders only), JelAI and UGC Spark (labelled "In development"),
+  UnsayBalita (fictional re-renders only), JelAI (labelled "In development"),
   Project Genesis (the engine this site runs on).
-- Excluded: Kairo; any third-party code presented as own work.
+- Excluded: Kairo, UGC Spark, AI Restaurant OS (owner's decision, 2026-10-06); any third-party code
+  presented as own work.
+- Coded showcases (demo data) replace screenshots where a product can't be shown: Ainalytics
+  (voice presenter) and 247Aisupports (after-hours call desk).
 
 ## Honesty rules
 - Every number shown must carry a `source` (what was counted, where). The build rejects numbers

@@ -66,7 +66,7 @@ test.describe("the desk", () => {
       await expect(tabs.nth(i)).toHaveAttribute("aria-selected", "true");
       for (const a of await page.locator('#desk a[href^="/work/"]').all()) hrefs.add((await a.getAttribute("href"))!);
     }
-    expect(hrefs.size).toBe(15);
+    expect(hrefs.size).toBe(14);
   });
 
   test("a project opens in a modal with its own address, and closes back to the desk", async ({ page }) => {

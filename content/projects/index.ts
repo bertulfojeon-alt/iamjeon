@@ -10,7 +10,6 @@ import smcClassroomToAlgorithm from "./smc-classroom-to-algorithm";
 import theAlphaRoom from "./the-alpha-room";
 import unifiedCx from "./unified-cx";
 import ainalytics from "./ainalytics";
-import aiRestaurantOs from "./ai-restaurant-os";
 import smmSystem from "./smm-system";
 import videoEditor from "./video-editor";
 import mercSmcPro from "./merc-smc-pro";
@@ -26,7 +25,6 @@ import midnightVibes from "./midnight-vibes";
 import claudeOrchestrator from "./claude-orchestrator";
 import unsaybalita from "./unsaybalita";
 import jelai from "./jelai";
-import ugcSpark from "./ugc-spark";
 import projectGenesis from "./project-genesis";
 
 export const projectInputs: ProjectInput[] = [
@@ -38,7 +36,6 @@ export const projectInputs: ProjectInput[] = [
   theAlphaRoom,
   unifiedCx,
   ainalytics,
-  aiRestaurantOs,
   smmSystem,
   videoEditor,
   mercSmcPro,
@@ -52,6 +49,5 @@ export const projectInputs: ProjectInput[] = [
   claudeOrchestrator,
   unsaybalita,
   jelai,
-  ugcSpark,
   projectGenesis,
 ];

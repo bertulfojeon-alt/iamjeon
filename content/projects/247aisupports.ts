@@ -26,6 +26,7 @@ export default {
     "Turnstile",
   ],
   screen: { poster: "/media/projects/247aisupports/screen.webp", loop: "/media/projects/247aisupports/loop.mp4" },
+  showcase: "support-call-desk",
   features: [
     "Real-time voice agent in the browser, relayed by the server so no AI key reaches the client",
     "Chat widget, AI-drafted email replies and messaging from one shared agent core",

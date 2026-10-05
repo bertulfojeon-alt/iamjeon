@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import { AinalyticsPresenter } from "./AinalyticsPresenter";
+import { SupportCallDesk } from "./SupportCallDesk";
 
 /**
  * Coded presentations used instead of screenshots when a product cannot be shown
@@ -7,6 +8,7 @@ import { AinalyticsPresenter } from "./AinalyticsPresenter";
  */
 export const SHOWCASES = {
   "ainalytics-presenter": AinalyticsPresenter,
+  "support-call-desk": SupportCallDesk,
 } satisfies Record<string, ComponentType>;
 
 export type ShowcaseId = keyof typeof SHOWCASES;
