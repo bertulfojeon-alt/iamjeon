@@ -1,3 +1,4 @@
+/** Quick contact sheet of several URLs for choosing captures: node scripts/capture/peek.mjs <url…> → $TEMP/shots/peek.png */
 import { chromium } from "@playwright/test";
 import sharp from "sharp";
 const urls = process.argv.slice(2);
