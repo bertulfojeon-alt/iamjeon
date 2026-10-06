@@ -203,16 +203,22 @@ export function Theatre(props: ScreenProps) {
       if (lenis) lenis.scrollTo(vh, { duration: 1, force: true });
       else window.scrollTo({ top: vh, behavior: "smooth" });
     };
+    // About / Contact pressed before the desk: go there directly (no film).
+    const onOpen = () => {
+      if (phaseRef.current !== "desk") onGo();
+    };
     // The keyboard skip link targets #desk.
     const onHash = () => {
       if (location.hash === "#desk" || location.hash === "#main-content") onGo();
     };
     window.addEventListener("keydown", onKey);
     window.addEventListener("ns:work", onGo);
+    window.addEventListener("ns:open", onOpen);
     window.addEventListener("hashchange", onHash);
     return () => {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("ns:work", onGo);
+      window.removeEventListener("ns:open", onOpen);
       window.removeEventListener("hashchange", onHash);
     };
   }, [lenis, toDesk]);

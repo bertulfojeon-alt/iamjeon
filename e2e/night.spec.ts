@@ -201,18 +201,28 @@ test.describe("the desk", () => {
     await expect(phase(page)).toHaveAttribute("data-phase", "desk");
   });
 
-  test("About, Side projects and Contact open from the dock", async ({ page }) => {
+  test("About, Side projects and Contact open on the screen and return to the work", async ({ page }) => {
     await toDesk(page);
-    for (const [button, dialog] of [
-      [/^About/, "About Jeon"],
-      [/^Side projects/, "Side projects"],
-      [/^Contact/, "Contact"],
+    const desk = page.locator("#desk");
+    for (const [button, region] of [
+      ["About", "About Jeon"],
+      ["Side projects", "Side projects"],
+      ["Contact", "Contact"],
     ] as const) {
-      await page.locator("#desk").getByRole("button", { name: button }).first().click();
-      await expect(page.getByRole("dialog", { name: dialog })).toBeVisible();
-      await page.keyboard.press("Escape");
-      await expect(page.getByRole("dialog", { name: dialog })).toBeHidden();
+      await desk.getByRole("navigation", { name: "Screen" }).getByRole("button", { name: button }).click();
+      await expect(desk.getByRole("region", { name: region })).toBeVisible();
+      await desk.getByRole("button", { name: "All work" }).first().click();
+      await expect(desk.getByRole("navigation", { name: "Work by business problem" })).toBeVisible();
     }
+  });
+
+  test("Get in touch on the welcome lands on the desk's Contact without the film", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Get in touch" }).click();
+    await expect(phase(page)).toHaveAttribute("data-phase", "desk", { timeout: 5000 });
+    await expect(page.getByRole("button", { name: "Skip" })).toHaveCount(0);
+    await expect(page.locator("#desk").getByRole("region", { name: "Contact" })).toBeVisible();
+    await expect(page.locator("#desk").getByRole("link", { name: /bertulfojeon@gmail\.com/ })).toHaveAttribute("href", /^mailto:/);
   });
 
   test("Pause motion switches to still mode and is remembered", async ({ page }) => {

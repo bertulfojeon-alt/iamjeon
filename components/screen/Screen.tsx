@@ -13,6 +13,7 @@ import { TRACK_TITLES, type Track } from "@/content/tracks";
 import { useCinematic } from "@/hooks/useCinematic";
 import { ExploreMenu } from "./ExploreMenu";
 import { ProjectScene } from "./ProjectScene";
+import { ContactView } from "./ContactView";
 import styles from "./Screen.module.css";
 
 export type Spot = { feature: string; x: number; y: number; label: string };
@@ -49,9 +50,7 @@ function useLocalTime() {
   return time;
 }
 
-const openPanel = (panel: Panel) => window.dispatchEvent(new CustomEvent("ns:open", { detail: panel }));
-
-export function Screen({ items, ready = true }: ScreenProps) {
+export function Screen({ items, about, side, ready = true }: ScreenProps) {
   const { mode, ready: modeReady } = useCinematic();
   const still = modeReady && mode === "still";
   const world = useMemo<StageWorld>(
@@ -62,6 +61,14 @@ export function Screen({ items, ready = true }: ScreenProps) {
   const [view, dispatch] = useReducer(reducer, world, initialStage);
   const time = useLocalTime();
   const bySlug = useMemo(() => new Map(items.map((i) => [i.slug, i])), [items]);
+
+  // About / Side projects / Contact, from the HUD or the welcome buttons.
+  useEffect(() => {
+    const onOpen = (e: Event) => dispatch({ type: "panel", panel: (e as CustomEvent<Panel>).detail });
+    window.addEventListener("ns:open", onOpen);
+    return () => window.removeEventListener("ns:open", onOpen);
+  }, []);
+  const panelCurrent = (panel: Panel) => (view.kind === "panel" && view.panel === panel ? "page" : undefined);
 
   const scene = view.kind === "scene" ? bySlug.get(view.slug) : undefined;
   const trackSize = (t: Track) => items.filter((i) => i.track === t).length;
@@ -74,13 +81,13 @@ export function Screen({ items, ready = true }: ScreenProps) {
           <button type="button" aria-current={view.kind === "explore" ? "page" : undefined} onClick={() => dispatch({ type: "explore" })}>
             All work
           </button>
-          <button type="button" onClick={() => openPanel("about")}>
+          <button type="button" aria-current={panelCurrent("about")} onClick={() => dispatch({ type: "panel", panel: "about" })}>
             About
           </button>
-          <button type="button" onClick={() => openPanel("side")}>
+          <button type="button" aria-current={panelCurrent("side")} onClick={() => dispatch({ type: "panel", panel: "side" })}>
             Side projects
           </button>
-          <button type="button" onClick={() => openPanel("contact")}>
+          <button type="button" aria-current={panelCurrent("contact")} onClick={() => dispatch({ type: "panel", panel: "contact" })}>
             Contact
           </button>
           <a href="/IamjeonResume.pdf" target="_blank" rel="noopener">
@@ -93,7 +100,20 @@ export function Screen({ items, ready = true }: ScreenProps) {
       </header>
 
       <div className={styles.view}>
-        {scene ? (
+        {view.kind === "panel" ? (
+          view.panel === "contact" ? (
+            <ContactView />
+          ) : (
+            <section
+              className={styles.panel}
+              aria-label={view.panel === "about" ? "About Jeon" : "Side projects"}
+              data-screen-view
+              data-lenis-prevent
+            >
+              {view.panel === "about" ? about : side}
+            </section>
+          )
+        ) : scene ? (
           <ProjectScene
             item={scene}
             trackTitle={TRACK_TITLES[scene.track]}

@@ -1,6 +1,5 @@
 import { ViewTransition } from "react";
 import { Theatre } from "@/components/theatre/Theatre";
-import { Panels } from "@/components/theatre/Panels";
 import type { ScreenItem } from "@/components/screen/Screen";
 import { Archive } from "@/components/night/Archive";
 import { BehindTheDesk } from "@/components/night/BehindTheDesk";
@@ -29,7 +28,6 @@ export default function HomePage() {
     >
       <main>
         <Theatre items={items} about={<BehindTheDesk />} side={<Archive projects={side} />} />
-        <Panels about={<BehindTheDesk />} side={<Archive projects={side} />} />
       </main>
     </ViewTransition>
   );
