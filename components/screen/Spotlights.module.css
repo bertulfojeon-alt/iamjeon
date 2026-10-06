@@ -1,0 +1,57 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.spot {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: #ff9a3c;
+  box-shadow: 0 0 0 4px rgba(255, 154, 60, 0.35);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 0.35s var(--ease-camera),
+    transform 0.35s var(--ease-camera);
+}
+.spot[data-on="true"] {
+  opacity: 1;
+  transform: none;
+  animation: ping 1.8s ease-out infinite;
+}
+@keyframes ping {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 154, 60, 0.55);
+  }
+  100% {
+    box-shadow: 0 0 0 18px rgba(255, 154, 60, 0);
+  }
+}
+.label {
+  position: absolute;
+  left: 26px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  color: #16181d;
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+.spot[data-side="left"] .label {
+  left: auto;
+  right: 26px;
+}
+.spot[data-on="false"] .label {
+  display: none;
+}
+:global(html[data-mode="still"]) .spot {
+  animation: none;
+  transition: none;
+}

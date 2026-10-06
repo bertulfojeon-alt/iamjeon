@@ -1,24 +1,23 @@
 import { ViewTransition } from "react";
 import { Theatre } from "@/components/theatre/Theatre";
 import { Panels } from "@/components/theatre/Panels";
-import type { DeskChapter } from "@/components/theatre/Desktop";
+import type { ScreenItem } from "@/components/screen/Screen";
 import { Archive } from "@/components/night/Archive";
 import { BehindTheDesk } from "@/components/night/BehindTheDesk";
-import { CHAPTER_TITLES, WALL_CHAPTERS, projectsInChapter } from "@/content";
+import { TRACKS, caseStudyProjects, projectsInChapter } from "@/content";
 
 export default function HomePage() {
-  const chapters: DeskChapter[] = WALL_CHAPTERS.map((id) => ({
-    id,
-    title: CHAPTER_TITLES[id],
-    items: projectsInChapter(id).map((p) => ({
-      slug: p.slug,
-      title: p.title,
-      logline: p.logline,
-      poster: p.screen.poster,
-      loop: p.screen.loop,
-      classified: p.redacted,
-      status: p.status,
-    })),
+  const all = caseStudyProjects();
+  const items: ScreenItem[] = TRACKS.flatMap((t) => all.filter((p) => p.pitch?.track === t)).map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    track: p.pitch!.track,
+    problem: p.pitch!.problem,
+    outcome: p.pitch!.outcome,
+    poster: p.screen.poster,
+    loop: p.screen.loop,
+    classified: p.redacted,
+    spotlights: p.spotlights,
   }));
   const side = projectsInChapter("archive");
 
@@ -29,7 +28,7 @@ export default function HomePage() {
       default="none"
     >
       <main>
-        <Theatre chapters={chapters} sideCount={side.length} />
+        <Theatre items={items} about={<BehindTheDesk />} side={<Archive projects={side} />} />
         <Panels about={<BehindTheDesk />} side={<Archive projects={side} />} />
       </main>
     </ViewTransition>

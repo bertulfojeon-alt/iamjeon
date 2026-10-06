@@ -8,6 +8,37 @@ async function topOfPage(page: Page) {
   await page.waitForTimeout(400); // the eased glide's last stretch, all under a pixel
 }
 
+/** The desk without the film: the HUD's "Work" skips it. */
+async function toDesk(page: Page) {
+  await page.goto("/");
+  const work = page.getByRole("button", { name: "Work", exact: true });
+  if (await work.isVisible()) await work.click();
+  else {
+    // Phones hide the HUD's Work link: scroll into the film and skip it.
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await page.mouse.wheel(0, 160);
+    await page.getByRole("button", { name: "Skip" }).click({ timeout: 8000 }).catch(() => {});
+  }
+  await expect(phase(page)).toHaveAttribute("data-phase", "desk", { timeout: 8000 });
+}
+
+/** WCAG contrast of an element's text against the first opaque background behind it. */
+function contrast(locator: ReturnType<Page["locator"]>) {
+  return locator.evaluate((el) => {
+    const rgb = (c: string) => c.match(/[\d.]+/g)!.slice(0, 3).map(Number);
+    const lum = (c: number[]) => {
+      const f = (v: number) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+      return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
+    };
+    let bgEl: Element | null = el;
+    let bg = "rgba(0, 0, 0, 0)";
+    while (bgEl && (bg = getComputedStyle(bgEl).backgroundColor).endsWith(", 0)")) bgEl = bgEl.parentElement;
+    const a = lum(rgb(getComputedStyle(el).color));
+    const b = lum(rgb(bg));
+    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  });
+}
+
 /** First scroll from the welcome screen: the copy leaves and the film starts. */
 async function scrollIntoFilm(page: Page) {
   await page.goto("/");
@@ -106,24 +137,61 @@ test.describe("going back to the welcome", () => {
 });
 
 test.describe("the desk", () => {
-  test("every case study is reachable from its tabs", async ({ page }) => {
-    await scrollIntoFilm(page);
-    await page.getByRole("button", { name: "Skip" }).click().catch(() => {});
-    await expect(phase(page)).toHaveAttribute("data-phase", "desk");
-    const tabs = page.locator("#desk").getByRole("tab");
-    const hrefs = new Set<string>();
-    for (let i = 0; i < (await tabs.count()); i++) {
-      await tabs.nth(i).click();
-      await expect(tabs.nth(i)).toHaveAttribute("aria-selected", "true");
-      for (const a of await page.locator('#desk a[href^="/work/"]').all()) hrefs.add((await a.getAttribute("href"))!);
+  test("the work is grouped by business problem and every case study opens as a scene", async ({ page }) => {
+    await toDesk(page);
+    const menu = page.locator("#desk").getByRole("navigation", { name: "Work by business problem" });
+    for (const group of ["Calls & messages", "Trading", "Admin & back-office", "More work"]) {
+      await expect(menu.getByRole("heading", { name: group })).toBeVisible();
     }
-    expect(hrefs.size).toBe(14);
+    const buttons = menu.getByRole("button");
+    expect(await buttons.count()).toBe(14);
+    await buttons.filter({ hasText: "TG Auto Trader" }).click();
+    const scene = page.locator("#desk").getByRole("article", { name: "TG Auto Trader" });
+    await expect(scene).toBeVisible();
+    await expect(scene.getByRole("link", { name: "How does it work?" })).toHaveAttribute("href", "/work/tg-auto-trader");
+    await scene.getByRole("button", { name: "Another example" }).click();
+    await expect(page.locator("#desk").getByRole("article")).not.toHaveAccessibleName("TG Auto Trader");
+    await page.locator("#desk").getByRole("button", { name: "All work" }).first().click();
+    await expect(menu).toBeVisible();
+  });
+
+  test("the screen is light and readable", async ({ page }) => {
+    await toDesk(page);
+    const heading = page.locator("#desk").getByRole("heading", { name: "Trading" });
+    expect(await contrast(heading)).toBeGreaterThanOrEqual(4.5);
+    const bg = await page.locator("#desk [data-screen]").evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).toBe("rgb(245, 241, 234)");
+  });
+
+  test("the menu and a scene fit the monitor without scrolling", async ({ page }, info) => {
+    test.skip(info.project.name === "phone", "the phone layout is a scrolling panel");
+    for (const size of [{ width: 1280, height: 720 }, { width: 1440, height: 900 }, { width: 1920, height: 1080 }]) {
+      await page.setViewportSize(size);
+      await toDesk(page);
+      const view = page.locator("#desk [data-screen-view]");
+      expect(await view.evaluate((el) => el.scrollHeight <= el.clientHeight + 1), `menu at ${size.width}`).toBe(true);
+      await page.locator("#desk").getByRole("button", { name: /^247Aisupports/ }).click();
+      expect(await view.evaluate((el) => el.scrollHeight <= el.clientHeight + 1), `scene at ${size.width}`).toBe(true);
+    }
+  });
+
+  test("keyboard: Tab reaches the menu, Enter opens a scene and its case", async ({ page }) => {
+    await toDesk(page);
+    const first = page.locator("#desk").getByRole("navigation", { name: "Work by business problem" }).getByRole("button").first();
+    for (let i = 0; i < 40 && !(await first.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press("Tab");
+    await expect(first).toBeFocused();
+    await page.keyboard.press("Enter");
+    const how = page.locator("#desk").getByRole("link", { name: "How does it work?" });
+    await expect(how).toBeVisible();
+    await how.focus();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/work\//);
   });
 
   test("a project opens in a modal with its own address, and closes back to the desk", async ({ page }) => {
-    await scrollIntoFilm(page);
-    await page.getByRole("button", { name: "Skip" }).click().catch(() => {});
-    await page.locator('#desk a[href="/work/tg-auto-trader"]').click();
+    await toDesk(page);
+    await page.locator("#desk").getByRole("button", { name: /^TG Auto Trader/ }).click();
+    await page.locator("#desk").getByRole("link", { name: "How does it work?" }).click();
     await expect(page).toHaveURL(/\/work\/tg-auto-trader$/);
     const dialog = page.getByRole("dialog", { name: "TG Auto Trader" });
     await expect(dialog).toBeVisible();
@@ -134,14 +202,13 @@ test.describe("the desk", () => {
   });
 
   test("About, Side projects and Contact open from the dock", async ({ page }) => {
-    await scrollIntoFilm(page);
-    await page.getByRole("button", { name: "Skip" }).click().catch(() => {});
+    await toDesk(page);
     for (const [button, dialog] of [
       [/^About/, "About Jeon"],
       [/^Side projects/, "Side projects"],
       [/^Contact/, "Contact"],
     ] as const) {
-      await page.locator("#desk").getByRole("button", { name: button }).click();
+      await page.locator("#desk").getByRole("button", { name: button }).first().click();
       await expect(page.getByRole("dialog", { name: dialog })).toBeVisible();
       await page.keyboard.press("Escape");
       await expect(page.getByRole("dialog", { name: dialog })).toBeHidden();

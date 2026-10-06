@@ -76,6 +76,10 @@
     opacity 0.6s var(--ease-camera) 0.15s,
     visibility 0s;
 }
+/* The light screen glows into the dark room. */
+.theatre[data-phase="desk"] .desktopWrap {
+  box-shadow: 0 0 140px 36px rgba(255, 236, 210, 0.16);
+}
 .theatre[data-phase="desk"] .desktopWrap[data-fit="panel"] ~ .deskShade,
 .theatre[data-phase="desk"] .deskShade:has(+ .desktopWrap[data-fit="panel"]) {
   opacity: 1;

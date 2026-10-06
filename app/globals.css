@@ -98,6 +98,24 @@ a {
   padding-inline: var(--gutter);
 }
 
+/* ───────────────────────── The light screen ─────────────────────────
+   A bright display in a dark room. Re-scoping the tokens turns any component
+   that uses them light inside this scope (screen views, the case takeover). */
+.screen-light {
+  --night: #f5f1ea; /* paper */
+  --room: #efe9df;
+  --room-2: #e6dfd3;
+  --line: rgba(22, 24, 29, 0.12);
+  --screen: #16181d; /* ink */
+  --dim: #575d67;
+  --faint: #8a8f98;
+  --sodium: #a04a08; /* deeper amber: AA on paper */
+  --sodium-low: #f3dcc4;
+  color-scheme: light;
+  background: var(--night);
+  color: var(--screen);
+}
+
 /* ───────────────────────── Type ───────────────────────── */
 .display {
   font-family: var(--font-display);

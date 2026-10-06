@@ -21,7 +21,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProp
 import { useCinematic } from "@/hooks/useCinematic";
 import { coverTransform, mapQuad, rectToQuadMatrix, toCssMatrix3d, type Quad } from "@/lib/homography";
 import theatre from "@/content/theatre.json";
-import { Desktop, type DesktopProps } from "./Desktop";
+import { Screen, type ScreenProps } from "@/components/screen/Screen";
 import styles from "./Theatre.module.css";
 
 type Phase = "welcome" | "film" | "desk";
@@ -32,7 +32,7 @@ const MONITOR = theatre.monitor as Quad;
 // True until the stage first mounts after a full page load; client navigations back home keep their place.
 let firstMount = true;
 
-export function Theatre(props: DesktopProps) {
+export function Theatre(props: ScreenProps) {
   const { mode, ready, lenis, soundOn } = useCinematic();
   const stageRef = useRef<HTMLDivElement>(null);
   const welcomeRef = useRef<HTMLVideoElement>(null);
@@ -123,6 +123,17 @@ export function Theatre(props: DesktopProps) {
   const movingRef = useRef(false); // a glide is running (kept across re-subscriptions)
   useEffect(() => {
     let lastY = window.scrollY;
+    // Only the visitor's own scroll-up (wheel, swipe, keys) heads back to the welcome —
+    // not the small scrolls the browser makes to reveal a focused element.
+    let upIntentAt = -Infinity;
+    let touchY = 0;
+    const markUp = () => (upIntentAt = performance.now());
+    const onWheel = (e: WheelEvent) => e.deltaY < 0 && markUp();
+    const onTouchStart = (e: TouchEvent) => (touchY = e.touches[0]?.clientY ?? 0);
+    const onTouchMove = (e: TouchEvent) => (e.touches[0]?.clientY ?? 0) > touchY + 4 && markUp();
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.key === "ArrowUp" || e.key === "PageUp" || e.key === "Home" || (e.key === " " && e.shiftKey)) markUp();
+    };
     const glide = (top: number, done: () => void) => {
       movingRef.current = true;
       const end = () => {
@@ -151,7 +162,7 @@ export function Theatre(props: DesktopProps) {
       if (p === "welcome" && down && y > vh * 0.04) {
         // The first scroll down carries the copy away, then the film rolls.
         glide(vh, playFilm);
-      } else if (p === "desk" && !down && y < vh * 0.92) {
+      } else if (p === "desk" && !down && y < vh * 0.92 && performance.now() - upIntentAt < 600) {
         // Scrolling back up returns to the bench; the copy slides back in.
         skipFilmRef.current = false;
         setPhase("welcome");
@@ -167,7 +178,17 @@ export function Theatre(props: DesktopProps) {
       else if (phaseRef.current === "welcome" && y > vh * 0.04) glide(vh, playFilm);
     }
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("keydown", onKeyUp);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("keydown", onKeyUp);
+    };
   }, [animated, lenis, playFilm]);
 
   // ── Skip: button, Esc, or the HUD "Work" link ──
@@ -315,7 +336,7 @@ export function Theatre(props: DesktopProps) {
           style={(desk.fit === "mapped" ? { width: DESK_W, height: DESK_H, transform: desk.matrix } : {}) as CSSProperties}
           inert={phase !== "desk"}
         >
-          <Desktop {...props} ready={deskReady} />
+          <Screen {...props} ready={deskReady} />
         </div>
 
         {phase === "film" && (
@@ -329,7 +350,7 @@ export function Theatre(props: DesktopProps) {
       <span id="main-content" className="sr-only" tabIndex={-1} />
 
       {/* The welcome copy scrolls away over the sticky picture. */}
-      <div className={styles.copy}>
+      <div className={styles.copy} inert={phase !== "welcome"}>
         <div className={styles.copyInner}>
           <h1 className={`display ${styles.name}`}>
             <span>Loreto “Jeon”</span>
