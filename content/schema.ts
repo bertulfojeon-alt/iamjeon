@@ -108,6 +108,8 @@ export const projectSchema = z
         "news-card-pipeline",
       ])
       .optional(),
+    /** Real screenshots of the product (the dashboard's Screens section). */
+    gallery: z.array(media).default([]),
     features: z.array(z.string().min(6)).default([]),
     pitch: pitch.optional(),
     spotlights: z.array(spotlight).max(3).default([]),

@@ -178,6 +178,13 @@ describe("pitch and spotlights", () => {
     }
   });
 
+  it("accepts a gallery of real screenshots and checks its files exist", () => {
+    const tg = projects.find((p) => p.slug === "tg-auto-trader")!;
+    expect(tg.gallery.length, "TG Auto Trader gallery").toBeGreaterThanOrEqual(6);
+    const missing = projects.flatMap((p) => p.gallery.filter((m) => !existsSync(path.join(process.cwd(), "public", m.src))).map((m) => `${p.slug}: ${m.src}`));
+    expect(missing).toEqual([]);
+  });
+
   it("groups case studies by track in the declared order", () => {
     expect(TRACKS).toEqual(["calls", "trading", "admin", "other"]);
     for (const t of TRACKS) for (const p of projectsInTrack(t)) expect(p.pitch?.track).toBe(t);

@@ -9,8 +9,10 @@ import type { Project } from "@/content/schema";
 
 /** Everything the dashboard shows for one project — public fields only. */
 function toItem(p: Project): ScreenItem {
-  const images = [p.coldOpen, ...p.beats.flatMap((b) => b.media ?? [])].filter((m) => m && m.type === "image");
-  const shots = images.map((m) => ({ src: m!.src, alt: m!.alt, caption: m!.caption }));
+  const images = [p.coldOpen, ...p.gallery, ...p.beats.flatMap((b) => b.media ?? [])].filter((m) => m && m.type === "image");
+  const shots = images
+    .map((m) => ({ src: m!.src, alt: m!.alt, caption: m!.caption }))
+    .filter((s, i, all) => all.findIndex((o) => o.src === s.src) === i);
   if (!shots.some((s) => s.src === p.screen.poster)) shots.unshift({ src: p.screen.poster, alt: `${p.title} — interface`, caption: undefined });
   return {
     slug: p.slug,
