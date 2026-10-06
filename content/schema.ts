@@ -9,6 +9,7 @@
  */
 
 import { z } from "zod";
+import { TRACKS } from "./tracks";
 
 export const TIERS = ["flagship", "commission", "classified", "archive"] as const;
 export const CHAPTERS = ["trading", "voice", "saas", "classified", "archive"] as const;
@@ -38,6 +39,23 @@ const metric = z.object({
   label: z.string().min(2),
   /** Where the number comes from: what was counted and where. Never rendered. */
   source: z.string().min(12),
+});
+
+const pitch = z.object({
+  track: z.enum(TRACKS),
+  /** The problem in the client's own words. No digits: numbers live in `metrics`. */
+  problem: z.string().min(20).max(170),
+  /** What changed, in plain language. No digits. */
+  outcome: z.string().min(20).max(170),
+});
+
+const spotlight = z.object({
+  /** Must equal one of the project's `features`. */
+  feature: z.string(),
+  /** Marker position as a percentage of the screen image (`screen.poster`). */
+  x: z.number().min(0).max(100),
+  y: z.number().min(0).max(100),
+  label: z.string().min(3).max(42),
 });
 
 const link = z.object({
@@ -81,6 +99,8 @@ export const projectSchema = z
       .enum(["ainalytics-presenter", "support-call-desk", "ezvibe-terminal", "voice-router", "content-pipeline", "liveness-bench"])
       .optional(),
     features: z.array(z.string().min(6)).default([]),
+    pitch: pitch.optional(),
+    spotlights: z.array(spotlight).max(3).default([]),
     beats: z.array(beat).default([]),
     metrics: z.array(metric).default([]),
     links: z.array(link).default([]),
@@ -104,6 +124,11 @@ export const projectSchema = z
     }
     if (p.tier === "archive" && p.chapter !== "archive") {
       ctx.addIssue({ code: "custom", message: `${p.slug}: archive tier must use the archive chapter` });
+    }
+    for (const s of p.spotlights) {
+      if (!p.features.includes(s.feature)) {
+        ctx.addIssue({ code: "custom", message: `${p.slug}: spotlight "${s.label}" names a feature the project does not list` });
+      }
     }
     for (const m of [p.coldOpen, ...p.beats.flatMap((b) => b.media ?? [])]) {
       if (m?.type === "video" && !m.poster) {

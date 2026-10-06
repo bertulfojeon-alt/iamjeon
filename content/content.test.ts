@@ -10,7 +10,9 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import denylist from "../scripts/leak-denylist.json";
-import { projects } from "./index";
+import { projects, projectsInTrack } from "./index";
+import { projectSchema } from "./schema";
+import { TRACKS } from "./tracks";
 import { projectInputs } from "./projects";
 import type { Project } from "./schema";
 
@@ -128,5 +130,34 @@ describe("project content", () => {
       for (const r of refs) if (r && !existsSync(path.join(process.cwd(), "public", r))) missing.push(`${p.slug}: ${r}`);
     }
     expect(missing).toEqual([]);
+  });
+});
+
+describe("pitch and spotlights", () => {
+  const base = projects.find((p) => p.slug === "tg-auto-trader")!;
+
+  it("accepts a pitch and spotlights that name a real feature", () => {
+    const ok = projectSchema.safeParse({
+      ...base,
+      pitch: { track: "trading", problem: "Traders copy signals by hand and miss the price.", outcome: "Signals become orders in moments, sized to risk." },
+      spotlights: [{ feature: base.features[0], x: 40, y: 30, label: "Signal parser" }],
+    });
+    expect(ok.success).toBe(true);
+  });
+
+  it("rejects a spotlight for a feature the project does not list", () => {
+    const bad = projectSchema.safeParse({ ...base, spotlights: [{ feature: "Not a feature at all", x: 10, y: 10, label: "Nope" }] });
+    expect(bad.success).toBe(false);
+  });
+
+  it("rejects more than three spotlights and coordinates outside 0–100", () => {
+    const four = Array.from({ length: 4 }, (_, i) => ({ feature: base.features[i], x: 10, y: 10, label: "Spot" }));
+    expect(projectSchema.safeParse({ ...base, spotlights: four }).success).toBe(false);
+    expect(projectSchema.safeParse({ ...base, spotlights: [{ feature: base.features[0], x: 120, y: 10, label: "Spot" }] }).success).toBe(false);
+  });
+
+  it("groups case studies by track in the declared order", () => {
+    expect(TRACKS).toEqual(["calls", "trading", "admin", "other"]);
+    for (const t of TRACKS) for (const p of projectsInTrack(t)) expect(p.pitch?.track).toBe(t);
   });
 });

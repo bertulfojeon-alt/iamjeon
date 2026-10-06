@@ -5,6 +5,9 @@
 
 import { projectSchema, type Chapter, type Project, type ProjectInput } from "./schema";
 import { projectInputs } from "./projects";
+import type { Track } from "./tracks";
+
+export { TRACKS, TRACK_TITLES, TRACK_LINES, type Track } from "./tracks";
 
 function load(inputs: ProjectInput[]): Project[] {
   const seen = new Set<string>();
@@ -42,6 +45,11 @@ export function getProject(slug: string): Project | undefined {
 /** Projects that have a case-study page (everything except the archive). */
 export function caseStudyProjects(): Project[] {
   return WALL_CHAPTERS.flatMap(projectsInChapter);
+}
+
+/** Case studies in a business track, in wall order. */
+export function projectsInTrack(track: Track): Project[] {
+  return caseStudyProjects().filter((p) => p.pitch?.track === track);
 }
 
 /** The project after `slug` in wall order, wrapping around — powers "Next screen". */
