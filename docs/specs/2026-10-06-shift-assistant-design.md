@@ -125,7 +125,7 @@ the monitor is light.
 
 ### What Shift knows and how it behaves
 - **Knowledge pack**, generated at build time from the same public sources the site renders:
-  each case-study project's public fields (title, logline, industry, the new `pitch` and spotlights,
+  each case-study project's public fields (kept compact — under ~6K tokens in total, see Quota) (title, logline, industry, the new `pitch` and spotlights,
   features, metrics value + label, stack, status, role, public links), a reviewed résumé file
   `content/resume.md` (text from the public résumé PDF, owner-reviewed), the About copy, and the
   contact options. The model never receives anything the site does not already show, so no prompt
@@ -206,6 +206,28 @@ Drafted from existing content by Claude, reviewed by the owner (classified ones 
   5-minute conversation ≈ $0.12. The prepared tour costs nothing per visit.
 - Static site otherwise unchanged; the token route is the only function.
 
+### Quota and tier (owner's project limits, checked 2026-10-06)
+The owner's Google project is on the **free tier**. Relevant limits: `gemini-3.8-live` — unlimited
+requests, **65K tokens per minute** (project-wide); `gemini-3.8-flash-tts` — **3 requests per
+minute, 10 per day**; `gemini-3.8-flash` (text) — 5 per minute, 20 per day. Consequences:
+- **Go paid before launch.** On the free tier Google may use prompts and responses to improve its
+  products and human reviewers may read them; its terms say not to send personal or confidential
+  information. Visitors' voices and business details are exactly that. Paid use is not used for
+  training. Phases 1–2 and development can run on the free tier; Phase 3 goes live only on a billed
+  project with the daily cap set.
+- **The live context must be small.** Audio counts 32 tokens per second, and each turn of a live
+  session re-reads the whole context (instruction + knowledge pack + conversation so far). With a
+  large pack, one conversation could approach 65K tokens per minute on the free tier. Targets: the
+  knowledge pack stays under ~6K tokens (a test enforces it), context-window compression is enabled,
+  and the 5-minute cap stays. Actual token use is measured in Phase 3 before launch.
+- **Fallback model:** if `gemini-3.8-live` throughput is a problem, `gemini-2.5-flash-native-audio`
+  (1M tokens per minute on the same tier) is the documented alternative, at some cost in quality.
+- **Tour voicing within 10 TTS requests a day:** `npm run voice` waits ~20 s between requests and
+  stops cleanly at the daily limit; thanks to the hash cache, the next run continues where it stopped.
+  On a billed project the whole tour voices in minutes for well under a dollar.
+- **The eval script uses `gemini-3.8-live` in text mode** (no daily request cap, and the same model
+  visitors talk to) rather than the 20-a-day text model.
+
 ### Classified safety
 - The knowledge pack is built only from public fields; `client` and real names never exist in
   content (zod already forbids them on classified projects).
@@ -216,7 +238,8 @@ Drafted from existing content by Claude, reviewed by the owner (classified ones 
 ### Testing
 - **Unit (Vitest):** stage reducer (every command, invalid args ignored); tour graph (every branch
   ends at the close or explore, every referenced slug/feature exists, every line has an audio file);
-  knowledge builder (includes every case study, excludes non-public fields, passes the denylist);
+  knowledge builder (includes every case study, excludes non-public fields, passes the denylist,
+  stays under the token budget);
   contact builders (encoding, length cap, `wa.me` / `viber://` / `mailto:` formats); function-call
   validation.
 - **E2E (Playwright):** greeting after the film and after Skip; the full button tour with sound off
@@ -241,4 +264,5 @@ Drafted from existing content by Claude, reviewed by the owner (classified ones 
 - WhatsApp and Viber numbers to publish (they will be visible to anyone, including bots).
 - The assistant's name ("Shift" is a placeholder) and the voice (pick from a short audition, Phase 2).
 - Final wording of the welcome copy and the tour script (drafted by Claude, approved by the owner).
-- Google-side budget amount for the daily cap.
+- Google-side budget amount for the daily cap, and enabling billing on the project before Phase 3
+  goes live (see Quota and tier).
