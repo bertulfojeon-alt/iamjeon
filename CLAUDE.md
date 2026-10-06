@@ -2,8 +2,10 @@
 
 Cinematic portfolio for Loreto "Jeon" Saquilabon Jr. Welcome loop (Jeon on a seawall bench at night, copy
 aimed at business owners) → every scroll down from the welcome plays one 7 s film → the monitor wakes up
-as a **light** screen: the work grouped by business problem (`content/tracks.ts`), project scenes with
-spotlights, About / Side projects / Contact → a case opens as a full-screen light takeover at /work/[slug].
+as a **light project dashboard**: a side nav of all projects grouped by business problem (`content/tracks.ts`,
+side projects last), the selected project in full in the pane (video, screens, features with spotlights,
+numbers, stack, story behind a button), About / Contact. Opening a project pushes /work/<slug> (shareable;
+direct visits get the full page). At the desk, scrolling never returns to the hero — the ↑ button does.
 Design records: `docs/specs/2026-10-05-night-shift-design.md`, `docs/specs/2026-10-06-shift-assistant-design.md`.
 Old static site: tag `v1-static`.
 
