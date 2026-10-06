@@ -35,6 +35,11 @@ export default {
     height: 860,
     caption: "The live course at freesmartmoneycourse.online.",
   },
+  pitch: {
+    track: "trading",
+    problem: "Trading lessons teach patterns from hand-drawn examples, and nobody checks whether the examples or the rules hold up.",
+    outcome: "A free course in English and Tagalog whose every chart is checked by code, and a lab that tested the rules before anyone traded them.",
+  },
   features: [
     "Bilingual course: every lesson block, caption and quiz item in English and Tagalog",
     "Guided charts that reveal candles and annotations step by step",

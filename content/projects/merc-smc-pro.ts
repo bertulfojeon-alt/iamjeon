@@ -24,6 +24,11 @@ export default {
     height: 460,
     caption: "GOLD M15 with every feature enabled — structure, order blocks, sessions, premium/discount and the bias panel.",
   },
+  pitch: {
+    track: "trading",
+    problem: "Smart-money traders mark structure, order blocks and liquidity by hand on every chart, and paid tools get shared for free.",
+    outcome: "A MetaTrader indicator draws and scores it all live, and its licence is locked offline to one account and one expiry date.",
+  },
   features: [
     "Major and minor market structure with BOS/CHoCH and swing labels",
     "Order blocks scored 0–100 on displacement, gap and volume",

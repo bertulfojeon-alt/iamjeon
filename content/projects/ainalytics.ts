@@ -26,6 +26,11 @@ export default {
   ],
   screen: { poster: "/media/projects/ainalytics/screen.webp", loop: "/media/projects/ainalytics/loop.mp4" },
   showcase: "ainalytics-presenter",
+  pitch: {
+    track: "other",
+    problem: "Owners want to know why sales moved, but the answer is buried in spreadsheets nobody has time to read.",
+    outcome: "Ask out loud and an AI advisor answers from the company's own data, showing each chart as it speaks, and never invents a number.",
+  },
   features: [
     "Answers business questions by chat or voice from the company's own connected data",
     "Voice presenter that shows each chart as it speaks and highlights the number it names",

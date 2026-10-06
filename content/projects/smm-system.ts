@@ -27,6 +27,11 @@ export default {
   ],
   screen: { poster: "/media/projects/smm-system/screen.webp", loop: "/media/projects/smm-system/loop.mp4" },
   showcase: "content-pipeline",
+  pitch: {
+    track: "other",
+    problem: "A small team has to post every day, and AI-written scripts keep getting facts wrong in public.",
+    outcome: "Trends become scripts, an AI critic blocks inaccurate ones, and approved videos publish to every platform from one queue.",
+  },
   features: [
     "Trend radar pulling from four sources, deduplicated by content hash",
     "Free deterministic pre-filter before any AI scoring",

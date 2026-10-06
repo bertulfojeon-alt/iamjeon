@@ -37,6 +37,11 @@ export default {
     height: 726,
     caption: "Inside the student app — the academy catalog, with peso pricing and members-only courses.",
   },
+  pitch: {
+    track: "trading",
+    problem: "A trading mentor's courses, live rooms, payments and emails are spread across paid tools that don't talk to each other.",
+    outcome: "One academy runs it all: courses with certificates, live sessions, memberships paid by card or GCash, and the mentor's own email engine.",
+  },
   features: [
     "Courses, modules and lessons with a rich-text editor, lesson notes and reviews",
     "Gold PDF certificates with font-metric text fitting and a public verification page",

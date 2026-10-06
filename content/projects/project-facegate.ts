@@ -17,6 +17,11 @@ export default {
   screen: { poster: "/media/projects/project-facegate/screen.webp", loop: "/media/projects/project-facegate/loop.mp4" },
   showcase: "liveness-bench",
   redacted: true,
+  pitch: {
+    track: "admin",
+    problem: "Attendance kiosks can be fooled by a photo held up to the camera, so someone can clock in for a friend.",
+    outcome: "A liveness check asks for a blink or a head turn and logs every trial, so photos are caught and pass rates are measured.",
+  },
   features: [
     "Challenge-response liveness: blink twice, turn left or turn right",
     "Five-point alignment to a 112×112 template and 512-dimension embeddings",

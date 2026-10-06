@@ -24,6 +24,11 @@ export default {
     caption: "Dashboard for a sample company — every figure is computed from the double-entry ledger. Brand withheld.",
   },
   redacted: true,
+  pitch: {
+    track: "admin",
+    problem: "Small businesses keep receipts in a drawer and rebuild their VAT and tax filings from scratch every quarter.",
+    outcome: "Cloud books on a double-entry engine: receipts are scanned with VAT rules applied, and reports and BIR deadlines come from the journal.",
+  },
   features: [
     "Invoices, estimates, bills, purchase orders and payments on a double-entry engine",
     "Receipt scanning with input-VAT eligibility rules and supplier matching by TIN",

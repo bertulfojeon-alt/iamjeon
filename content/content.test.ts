@@ -10,7 +10,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import denylist from "../scripts/leak-denylist.json";
-import { projects, projectsInTrack } from "./index";
+import { caseStudyProjects, projects, projectsInTrack } from "./index";
 import { projectSchema } from "./schema";
 import { TRACKS } from "./tracks";
 import { projectInputs } from "./projects";
@@ -154,6 +154,21 @@ describe("pitch and spotlights", () => {
     const four = Array.from({ length: 4 }, (_, i) => ({ feature: base.features[i], x: 10, y: 10, label: "Spot" }));
     expect(projectSchema.safeParse({ ...base, spotlights: four }).success).toBe(false);
     expect(projectSchema.safeParse({ ...base, spotlights: [{ feature: base.features[0], x: 120, y: 10, label: "Spot" }] }).success).toBe(false);
+  });
+
+  it("gives every case study a pitch with no digits, in the agreed tracks", () => {
+    const tracks: Record<string, string> = {
+      "247aisupports": "calls", "unified-cx": "calls",
+      "tg-auto-trader": "trading", tradesbymerc: "trading", "the-alpha-room": "trading",
+      "smc-classroom-to-algorithm": "trading", "merc-smc-pro": "trading",
+      "project-payday": "admin", "project-facegate": "admin", "project-balance-sheet": "admin",
+      ainalytics: "other", ezvibe: "other", "smm-system": "other", "video-editor": "other",
+    };
+    for (const p of caseStudyProjects()) {
+      expect(p.pitch, p.slug).toBeDefined();
+      expect(p.pitch!.track, p.slug).toBe(tracks[p.slug]);
+      expect(/\d/.test(p.pitch!.problem + p.pitch!.outcome), `${p.slug} pitch has a digit`).toBe(false);
+    }
   });
 
   it("groups case studies by track in the declared order", () => {

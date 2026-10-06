@@ -27,6 +27,11 @@ export default {
   ],
   screen: { poster: "/media/projects/unified-cx/screen.webp", loop: "/media/projects/unified-cx/loop.mp4" },
   showcase: "voice-router",
+  pitch: {
+    track: "calls",
+    problem: "Callers ring one hotline for many different providers and wait on hold while staff work out who they need.",
+    outcome: "An AI front desk finds the right company, verifies the caller and hands the call to that company's agent, in Tagalog, Bisaya or English.",
+  },
   features: [
     "Universal front desk that hands the caller to a company's own agent on the same call",
     "Tagalog, Bisaya and English, including code-switching mid-sentence",

@@ -36,6 +36,11 @@ export default {
     height: 891,
     caption: "Chart Trading — custom canvas engine, indicator library and order ticket. Demo account.",
   },
+  pitch: {
+    track: "trading",
+    problem: "Traders copy signals from Telegram into MetaTrader by hand, and by the time the order is in, the price has moved.",
+    outcome: "Signals become orders on MetaTrader in moments, sized to the trader's risk, with charts, copy trading and a journal in one desk.",
+  },
   features: [
     "Telegram listener (Telethon user client) with a signal parser that knows symbol aliases",
     "Auto-execution on MT5: single or dual entry, partial close, breakeven, trailing stop",

@@ -34,6 +34,11 @@ export default {
     caption: "Owner overview — approvals that block payroll, attendance and labour cost. Names, tenant and brand withheld.",
   },
   redacted: true,
+  pitch: {
+    track: "admin",
+    problem: "Payroll week means chasing timesheets, checking who really showed up, and recomputing deductions and premiums by hand.",
+    outcome: "Clock-ins are checked by location and face, and payroll computes government deductions and premiums, then locks once approved.",
+  },
   features: [
     "Kiosk and phone clock-in gated by GPS geofence and face match",
     "Configurable pay schedules with SSS, PhilHealth, Pag-IBIG and withholding tax",

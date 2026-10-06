@@ -27,6 +27,11 @@ export default {
   ],
   screen: { poster: "/media/projects/247aisupports/screen.webp", loop: "/media/projects/247aisupports/loop.mp4" },
   showcase: "support-call-desk",
+  pitch: {
+    track: "calls",
+    problem: "Calls, chats and emails come in after hours and on weekends, and every unanswered one is a customer who goes somewhere else.",
+    outcome: "An AI receptionist answers every call, chat and email from the business's own documents, and hands over to staff when a person is needed.",
+  },
   features: [
     "Real-time voice agent in the browser, relayed by the server so no AI key reaches the client",
     "Chat widget, AI-drafted email replies and messaging from one shared agent core",

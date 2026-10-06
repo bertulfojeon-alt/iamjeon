@@ -35,6 +35,11 @@ export default {
     height: 600,
     caption: "Raw recording in, finished 9:16 edit out — captions, punch-ins and sound design are automatic.",
   },
+  pitch: {
+    track: "other",
+    problem: "Turning one raw recording into a polished vertical short takes an editor most of an afternoon.",
+    outcome: "One command turns the recording into a captioned, sound-designed short, ready for TikTok, Reels and Shorts.",
+  },
   features: [
     "One command from raw clip to final render, caption copy and QC contact sheet",
     "Word-timed Taglish transcription and glossary-corrected word-pop captions",
