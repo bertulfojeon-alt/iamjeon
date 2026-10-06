@@ -220,8 +220,15 @@ minute, 10 per day**; `gemini-3.8-flash` (text) — 5 per minute, 20 per day. Co
   large pack, one conversation could approach 65K tokens per minute on the free tier. Targets: the
   knowledge pack stays under ~6K tokens (a test enforces it), context-window compression is enabled,
   and the 5-minute cap stays. Actual token use is measured in Phase 3 before launch.
-- **Fallback model:** if `gemini-3.8-live` throughput is a problem, `gemini-2.5-flash-native-audio`
-  (1M tokens per minute on the same tier) is the documented alternative, at some cost in quality.
+- **Model choice:** `gemini-3.8-live` is Google's current stable **Flash-class native-audio** Live
+  model (successor to the legacy `gemini-3.1-flash-live-preview`): function calling, input/output
+  transcription, 131K-token context. Function calls are asynchronous by default (Shift keeps talking
+  while the screen changes) and proactive audio is always on (it can ignore background noise).
+- **Fallback model:** if `gemini-3.8-live` throughput is a problem,
+  `gemini-2.5-flash-native-audio-preview-12-2025` ("Gemini 2.5 Flash Native Audio Dialog" in the
+  quota table; 1M tokens per minute on the same tier) is the alternative, at some cost in quality and
+  with preview status. The model ID is one constant in the token route, so switching is a one-line
+  change.
 - **Tour voicing within 10 TTS requests a day:** `npm run voice` waits ~20 s between requests and
   stops cleanly at the daily limit; thanks to the hash cache, the next run continues where it stopped.
   On a billed project the whole tour voices in minutes for well under a dollar.
