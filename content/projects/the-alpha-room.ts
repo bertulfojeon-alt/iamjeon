@@ -113,6 +113,6 @@ export default {
       source: `git log, 2026-07-04 to 2026-09-28, ${SRC} (client-trading.md §1F)`,
     },
   ],
-  links: [],
+  links: [{ label: "AlphaVault", href: "https://www.alphavault.trade", kind: "live" }],
   order: 10,
 } satisfies ProjectInput;
