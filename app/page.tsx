@@ -1,24 +1,44 @@
 import { ViewTransition } from "react";
 import { Theatre } from "@/components/theatre/Theatre";
 import type { ScreenItem } from "@/components/screen/Screen";
-import { Archive } from "@/components/night/Archive";
 import { BehindTheDesk } from "@/components/night/BehindTheDesk";
-import { TRACKS, caseStudyProjects, projectsInChapter } from "@/content";
+import { STATUS_LABEL } from "@/components/case/labels";
+import { projects } from "@/content";
+import { GROUP_ORDER } from "@/content/tracks";
+import type { Project } from "@/content/schema";
 
-export default function HomePage() {
-  const all = caseStudyProjects();
-  const items: ScreenItem[] = TRACKS.flatMap((t) => all.filter((p) => p.pitch?.track === t)).map((p) => ({
+/** Everything the dashboard shows for one project — public fields only. */
+function toItem(p: Project): ScreenItem {
+  const images = [p.coldOpen, ...p.beats.flatMap((b) => b.media ?? [])].filter((m) => m && m.type === "image");
+  const shots = images.map((m) => ({ src: m!.src, alt: m!.alt, caption: m!.caption }));
+  if (!shots.some((s) => s.src === p.screen.poster)) shots.unshift({ src: p.screen.poster, alt: `${p.title} — interface`, caption: undefined });
+  return {
     slug: p.slug,
     title: p.title,
-    track: p.pitch!.track,
-    problem: p.pitch!.problem,
-    outcome: p.pitch!.outcome,
+    group: p.pitch?.track ?? "side",
+    classified: p.redacted,
+    problem: p.pitch?.problem ?? p.logline,
+    outcome: p.pitch?.outcome ?? null,
+    industry: p.industry,
+    year: p.year,
+    status: STATUS_LABEL[p.status],
+    role: p.role,
     poster: p.screen.poster,
     loop: p.screen.loop,
-    classified: p.redacted,
+    showcase: p.showcase,
+    live: p.links.filter((l) => l.kind === "live" || l.kind === "demo").map((l) => ({ label: l.label, href: l.href })),
+    shots,
+    features: p.features,
     spotlights: p.spotlights,
-  }));
-  const side = projectsInChapter("archive");
+    metrics: p.metrics.map((m) => ({ value: m.value, label: m.label })),
+    stack: p.stack,
+    story: p.beats.map((b) => ({ heading: b.heading, body: b.body })),
+  };
+}
+
+export default function HomePage() {
+  const all = projects.map(toItem);
+  const items = GROUP_ORDER.flatMap((g) => all.filter((i) => i.group === g));
 
   return (
     <ViewTransition
@@ -27,7 +47,7 @@ export default function HomePage() {
       default="none"
     >
       <main>
-        <Theatre items={items} about={<BehindTheDesk />} side={<Archive projects={side} />} />
+        <Theatre items={items} about={<BehindTheDesk />} />
       </main>
     </ViewTransition>
   );

@@ -56,19 +56,118 @@
   min-height: 0;
   position: relative;
 }
-.caseSlot {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-}
-.caseSlot:empty {
-  display: none;
-}
-/* About and Side projects are long reads: they scroll inside the screen. */
+/* About is a long read: it scrolls inside the screen. */
 .panel {
   height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+/* ── The dashboard: side nav + project pane ── */
+.dashboard {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 236px 1fr;
+  min-height: 0;
+}
+.side {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px 12px 20px 20px;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  line-height: 1.3;
+}
+.group ul {
+  list-style: none;
+  margin: 3px 0 0;
+  padding: 0;
+}
+.groupTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+.item {
+  font: inherit;
+  font-size: 14px;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  margin-left: -8px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--screen);
+  cursor: pointer;
+}
+.item:hover {
+  background: rgba(22, 24, 29, 0.05);
+}
+.item[aria-current="true"] {
+  background: rgba(160, 74, 8, 0.1);
+  color: var(--sodium);
+  font-weight: 600;
+}
+.chip {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--dim);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 0 6px;
+}
+.paneWait {
+  min-height: 0;
+}
+
+/* An enlarged screenshot, still inside the monitor. */
+.zoom {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  justify-items: center;
+  gap: 10px;
+  padding: 14px 20px 18px;
+  background: rgba(245, 241, 234, 0.97);
+}
+.zoom img {
+  max-width: 100%;
+  max-height: 100%;
+  min-height: 0;
+  object-fit: contain;
+  border: 8px solid #16181d;
+  border-radius: 10px;
+  background: #0b0e13;
+}
+.zoom p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--dim);
+}
+.zoomClose {
+  justify-self: end;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--screen);
+  cursor: pointer;
 }
 @container screen (max-width: 899px) {
   .clock {
@@ -85,5 +184,35 @@
     flex-wrap: wrap;
     overflow: visible;
     margin-left: -10px;
+  }
+  /* Phones: the side nav becomes a row of project chips above the pane. */
+  .dashboard {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .side {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px 12px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    gap: 4px;
+  }
+  .group {
+    display: contents;
+  }
+  .groupTitle {
+    display: none;
+  }
+  .group ul {
+    display: contents;
+  }
+  .item {
+    white-space: nowrap;
+    margin-left: 0;
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    padding: 5px 12px;
   }
 }

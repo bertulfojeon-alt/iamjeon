@@ -49,7 +49,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children, modal }: LayoutProps<"/">) {
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
@@ -68,7 +68,6 @@ export default function RootLayout({ children, modal }: LayoutProps<"/">) {
         <CinematicProvider>
           <Hud />
           {children}
-          {modal}
         </CinematicProvider>
         <div className="grain" aria-hidden="true" />
       </body>

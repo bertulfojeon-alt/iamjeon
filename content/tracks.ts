@@ -20,3 +20,8 @@ export const TRACK_LINES: Record<Track, string> = {
   admin: "Payroll, attendance and books. Client work under NDA.",
   other: "Products and tools built along the way.",
 };
+
+/** The dashboard's side-nav groups: the tracks, then side projects. */
+export type Group = Track | "side";
+export const GROUP_ORDER: Group[] = ["calls", "trading", "admin", "other", "side"];
+export const GROUP_TITLES: Record<Group, string> = { ...TRACK_TITLES, side: "Side projects" };

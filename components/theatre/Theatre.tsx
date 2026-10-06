@@ -138,17 +138,6 @@ export function Theatre(props: ScreenProps) {
   const movingRef = useRef(false); // a glide is running (kept across re-subscriptions)
   useEffect(() => {
     let lastY = window.scrollY;
-    // Only the visitor's own scroll-up (wheel, swipe, keys) heads back to the welcome —
-    // not the small scrolls the browser makes to reveal a focused element.
-    let upIntentAt = -Infinity;
-    let touchY = 0;
-    const markUp = () => (upIntentAt = performance.now());
-    const onWheel = (e: WheelEvent) => e.deltaY < 0 && markUp();
-    const onTouchStart = (e: TouchEvent) => (touchY = e.touches[0]?.clientY ?? 0);
-    const onTouchMove = (e: TouchEvent) => (e.touches[0]?.clientY ?? 0) > touchY + 4 && markUp();
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.key === "ArrowUp" || e.key === "PageUp" || e.key === "Home" || (e.key === " " && e.shiftKey)) markUp();
-    };
     const glide = (top: number, done: () => void) => {
       movingRef.current = true;
       const end = () => {
@@ -174,15 +163,10 @@ export function Theatre(props: ScreenProps) {
       }
       if (movingRef.current) return;
       const p = phaseRef.current;
-      if (p === "welcome" && down && y > vh * 0.04) {
-        // The first scroll down carries the copy away, then the film rolls.
-        glide(vh, playFilm);
-      } else if (p === "desk" && !down && y < vh * 0.92 && performance.now() - upIntentAt < 1500) {
-        // Scrolling back up returns to the bench; the copy slides back in.
-        skipFilmRef.current = false;
-        setPhase("welcome");
-        glide(0, () => {});
-      }
+      // The first scroll down carries the copy away, then the film rolls. At the desk,
+      // scrolling never heads back up (it would fight the dashboard's own scrolling):
+      // the back-to-top button does that.
+      if (p === "welcome" && down && y > vh * 0.04) glide(vh, playFilm);
     };
     if (!pinnedRef.current && !movingRef.current) {
       const y = window.scrollY;
@@ -193,18 +177,17 @@ export function Theatre(props: ScreenProps) {
       else if (phaseRef.current === "welcome" && y > vh * 0.04) glide(vh, playFilm);
     }
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("wheel", onWheel, { passive: true });
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: true });
-    window.addEventListener("keydown", onKeyUp);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("keydown", onKeyUp);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, [animated, lenis, playFilm]);
+
+  // ── Back to the top: from the desk to the bench (and the home address) ──
+  const toTop = useCallback(() => {
+    skipFilmRef.current = false;
+    setPhase("welcome");
+    if (window.location.pathname !== "/") window.history.pushState(null, "", "/");
+    if (lenis && animated) lenis.scrollTo(0, { duration: 1, lock: true, force: true });
+    else window.scrollTo({ top: 0, behavior: animated ? "smooth" : "auto" });
+  }, [animated, lenis]);
 
   // ── Skip: button, Esc, or the HUD "Work" link ──
   useEffect(() => {
@@ -372,6 +355,11 @@ export function Theatre(props: ScreenProps) {
         {phase === "film" && (
           <button type="button" className={styles.skip} onClick={toDesk}>
             Skip
+          </button>
+        )}
+        {phase === "desk" && (
+          <button type="button" className={styles.top} onClick={toTop} aria-label="Back to the top">
+            ↑
           </button>
         )}
       </div>
