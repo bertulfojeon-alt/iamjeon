@@ -180,14 +180,23 @@ export function Theatre(props: ScreenProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, [animated, lenis, playFilm]);
 
+  // ── At the desk the page itself holds still: only the screen's own panels scroll, so
+  //    no wheel or swipe outside them can slide the hero copy back over the monitor ──
+  useEffect(() => {
+    if (phase !== "desk") return;
+    lock(true);
+    return () => lock(false);
+  }, [phase, lock]);
+
   // ── Back to the top: from the desk to the bench (and the home address) ──
   const toTop = useCallback(() => {
     skipFilmRef.current = false;
+    lock(false);
     setPhase("welcome");
     if (window.location.pathname !== "/") window.history.pushState(null, "", "/");
     if (lenis && animated) lenis.scrollTo(0, { duration: 1, lock: true, force: true });
     else window.scrollTo({ top: 0, behavior: animated ? "smooth" : "auto" });
-  }, [animated, lenis]);
+  }, [animated, lenis, lock]);
 
   // ── Skip: button, Esc, or the HUD "Work" link ──
   useEffect(() => {

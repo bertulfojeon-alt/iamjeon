@@ -25,7 +25,6 @@ import midnightVibes from "./midnight-vibes";
 import claudeOrchestrator from "./claude-orchestrator";
 import unsaybalita from "./unsaybalita";
 import jelai from "./jelai";
-import projectGenesis from "./project-genesis";
 
 export const projectInputs: ProjectInput[] = [
   tgAutoTrader,
@@ -49,5 +48,4 @@ export const projectInputs: ProjectInput[] = [
   claudeOrchestrator,
   unsaybalita,
   jelai,
-  projectGenesis,
 ];

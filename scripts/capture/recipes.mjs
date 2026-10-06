@@ -82,7 +82,7 @@ export const recipes = [
   }),
   publicSite("ezvibe-landing", "https://ezvibe.vercel.app/", { settle: 2500 }),
   publicSite("unified-cx-landing", "https://aibpo-eight.vercel.app/", { settle: 3500 }),
-  // ── Local apps (start them first: Karaoke `npm start`, Project Genesis `npm run dev`) ──
+  // ── Local apps (start it first: Karaoke `npm start`) ──
   publicSite("karaoke", "http://localhost:5173/", {
     settle: 4000,
     microphone: true,
@@ -92,8 +92,6 @@ export const recipes = [
       await page.waitForTimeout(5000);
     },
   }),
-  // The Next dev badge is not part of the product.
-  publicSite("project-genesis", "http://localhost:3000/", { settle: 4000, hide: [...COOKIE_BANNERS, "nextjs-portal"] }),
   // ── Classified: address + name swaps come from the private config ──
   {
     slug: "project-balance-sheet",

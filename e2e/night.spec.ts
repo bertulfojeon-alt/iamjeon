@@ -128,6 +128,18 @@ test.describe("back to the top", () => {
     await expect(phase(page)).toHaveAttribute("data-phase", "film", { timeout: 8000 });
   });
 
+  test("at the desk the page itself stays put: scrolling over the top bar never reveals the hero copy", async ({ page }, info) => {
+    test.skip(info.project.name === "phone", "desktop wheel path");
+    await toDesk(page);
+    const y0 = await page.evaluate(() => window.scrollY);
+    await page.mouse.move(700, 20); // over the HUD, outside every scrolling panel
+    await page.mouse.wheel(0, -800);
+    await page.waitForTimeout(1200);
+    expect(await page.evaluate(() => window.scrollY)).toBe(y0);
+    await expect(page.getByRole("heading", { level: 1 })).not.toBeInViewport();
+    await expect(phase(page)).toHaveAttribute("data-phase", "desk");
+  });
+
   test("a reload starts at the welcome", async ({ page }) => {
     await toDesk(page);
     await page.reload();
@@ -144,7 +156,7 @@ test.describe("the desk dashboard", () => {
   const nav = (page: Page) => page.locator("#desk").getByRole("navigation", { name: "Projects" });
   const pane = (page: Page, name: string) => page.locator("#desk").getByRole("region", { name });
 
-  test("the side nav lists all 22 projects in groups, and a click (not a hover) opens one", async ({ page }) => {
+  test("the side nav lists all 21 projects in groups, and a click (not a hover) opens one", async ({ page }) => {
     await toDesk(page);
     // Phones show the nav as a row of chips without group headings.
     if (test.info().project.name !== "phone") {
@@ -152,7 +164,7 @@ test.describe("the desk dashboard", () => {
         await expect(nav(page).getByRole("heading", { name: group })).toBeVisible();
       }
     }
-    await expect(nav(page).getByRole("button")).toHaveCount(22);
+    await expect(nav(page).getByRole("button")).toHaveCount(21);
     const first = nav(page).getByRole("button").first();
     await expect(first).toHaveAttribute("aria-current", "true");
     await nav(page).getByRole("button", { name: /^TG Auto Trader/ }).hover();

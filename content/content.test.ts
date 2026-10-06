@@ -70,8 +70,9 @@ const wordCount = (s: string) => s.split(/\s+/).filter(Boolean).length;
 describe("project content", () => {
   it("loads every project input through the schema", () => {
     expect(projects.length).toBe(projectInputs.length);
-    // Exactly the curated set (UGC Spark and AI Restaurant OS were removed by the owner).
-    expect(projects.length).toBe(22);
+    // Exactly the curated set (UGC Spark, AI Restaurant OS and Project Genesis were removed by the owner).
+    expect(projects.length).toBe(21);
+    expect(projects.some((p) => p.slug === "project-genesis")).toBe(false);
   });
 
   it("has unique slugs", () => {
