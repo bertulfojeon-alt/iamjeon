@@ -30,6 +30,6 @@ export const CinematicContext = createContext<CinematicContextValue>({
   ready: false,
   motionPaused: false,
   setMotionPaused: () => {},
-  soundOn: false,
+  soundOn: true,
   setSoundOn: () => {},
 });

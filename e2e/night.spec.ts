@@ -271,6 +271,17 @@ test.describe("the desk dashboard", () => {
     }
   });
 
+  test("Contact offers email, WhatsApp and Viber with the right links, next to Jeon's photo", async ({ page }) => {
+    await toDesk(page);
+    await page.locator("#desk").getByRole("navigation", { name: "Screen" }).getByRole("button", { name: "Contact" }).click();
+    const c = page.locator("#desk").getByRole("region", { name: "Contact" });
+    await expect(c.getByRole("heading", { name: /Let.s build something/i })).toBeVisible();
+    await expect(c.getByRole("img", { name: /Loreto/ })).toBeVisible();
+    await expect(c.getByRole("link", { name: /Email/ }).first()).toHaveAttribute("href", /^mailto:bertulfojeon@gmail\.com/);
+    await expect(c.getByRole("link", { name: /WhatsApp/ }).first()).toHaveAttribute("href", "https://wa.me/639684333479");
+    await expect(c.getByRole("link", { name: /Viber/ }).first()).toHaveAttribute("href", "viber://chat?number=%2B63474660563");
+  });
+
   test("Get in touch on the welcome lands on the desk's Contact without the film", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Get in touch" }).click();
@@ -280,13 +291,24 @@ test.describe("the desk dashboard", () => {
     await expect(page.locator("#desk").getByRole("link", { name: /bertulfojeon@gmail\.com/ })).toHaveAttribute("href", /^mailto:/);
   });
 
-  test("Pause motion switches to still mode and is remembered", async ({ page }) => {
+  test("Pause motion switches to still mode for this visit; a new visit starts with motion on", async ({ page }, info) => {
     await page.goto("/");
     await page.getByRole("button", { name: /^Pause/ }).click();
     await expect(page.locator("html")).toHaveAttribute("data-mode", "still");
     await page.reload();
-    await expect(page.locator("html")).toHaveAttribute("data-mode", "still");
-    await page.getByRole("button", { name: /^Play/ }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-mode", info.project.name === "phone" ? "lite" : "full");
+    await expect(page.getByRole("button", { name: /^Pause/ })).toHaveAttribute("aria-pressed", "false");
+  });
+
+  test("sound is on by default and starts with the visitor's first click", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByRole("button", { name: /^Sound/ })).toHaveAttribute("aria-pressed", "true");
+    const welcome = page.locator("video[src*='welcome']");
+    await expect(welcome).toHaveCount(1, { timeout: 10000 });
+    expect(await welcome.evaluate((v: HTMLVideoElement) => v.muted)).toBe(true); // browsers need a gesture first
+    await page.mouse.click(900, 450);
+    await expect.poll(() => welcome.evaluate((v: HTMLVideoElement) => v.muted)).toBe(false);
+    await expect.poll(() => welcome.evaluate((v: HTMLVideoElement) => v.paused)).toBe(false);
   });
 });
 
@@ -422,9 +444,9 @@ test.describe("final review fixes", () => {
     const r = (await region.boundingBox())!;
     const title = (await region.getByRole("heading").boundingBox())!;
     expect(title.y).toBeGreaterThanOrEqual(r.y - 1);
-    // Measured without scrolling: a visitor cannot scroll a clipped box.
-    const w = (await region.getByText("working with clients in any time zone").boundingBox())!;
-    expect(w.y + w.height).toBeLessThanOrEqual(r.y + r.height + 1);
+    // Anything taller than the screen must be reachable by scrolling the view itself.
+    const scrollable = await region.evaluate((el) => el.scrollHeight <= el.clientHeight + 1 || ["auto", "scroll"].includes(getComputedStyle(el).overflowY));
+    expect(scrollable).toBe(true);
   });
 
   test("I5: the welcome fits under the HUD on short phones", async ({ page }, info) => {

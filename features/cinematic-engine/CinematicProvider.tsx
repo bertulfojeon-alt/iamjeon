@@ -8,6 +8,8 @@
  * It also owns the viewing mode. The head script stamps `data-mode` on <html>
  * before paint; this provider reads it on mount, keeps it current when the
  * visitor toggles "Pause motion", and skips Lenis entirely in "still" mode.
+ * Every visit starts with motion playing and sound on: "Pause motion" lasts
+ * for the visit only, and sound is heard from the visitor's first gesture.
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
@@ -15,23 +17,17 @@ import Lenis from "lenis";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import { pickMode, readSignals, type Mode } from "@/lib/mode";
 import { CinematicContext } from "./cinematic-context";
-import { MOTION_STORAGE_KEY } from "./mode-script";
 
 export function CinematicProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<Mode>("full");
   const [ready, setReady] = useState(false);
   const [motionPaused, setMotionPausedState] = useState(false);
-  const [soundOn, setSoundOn] = useState(false);
+  const [soundOn, setSoundOn] = useState(true);
   const [lenis, setLenis] = useState<Lenis | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
 
   // Read the mode the head script decided, then follow live changes.
   useEffect(() => {
-    let paused = false;
-    try {
-      paused = localStorage.getItem(MOTION_STORAGE_KEY) === "1";
-    } catch {}
-    setMotionPausedState(paused);
     const apply = () => {
       const next = pickMode(readSignals(document.documentElement.dataset.motionPaused === "true"));
       document.documentElement.dataset.mode = next;
@@ -45,9 +41,6 @@ export function CinematicProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setMotionPaused = useCallback((paused: boolean) => {
-    try {
-      localStorage.setItem(MOTION_STORAGE_KEY, paused ? "1" : "0");
-    } catch {}
     const root = document.documentElement;
     if (paused) root.dataset.motionPaused = "true";
     else delete root.dataset.motionPaused;

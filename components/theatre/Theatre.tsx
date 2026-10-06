@@ -48,6 +48,15 @@ export function Theatre(props: ScreenProps) {
   phaseRef.current = phase;
   const skipFilmRef = useRef(false); // the next trip to the desk skips the film
 
+  // Sound follows the toggle from the visitor's first gesture (browsers refuse sound before one).
+  const [gestured, setGestured] = useState(false);
+  useEffect(() => {
+    const on = () => setGestured(true);
+    const types = ["pointerdown", "keydown", "touchstart"] as const;
+    types.forEach((t) => window.addEventListener(t, on, { once: true, passive: true }));
+    return () => types.forEach((t) => window.removeEventListener(t, on));
+  }, []);
+  const audible = soundOn && gestured;
   const animated = ready && mode !== "still";
   const mobile = mode === "lite";
 
@@ -78,7 +87,7 @@ export function Theatre(props: ScreenProps) {
     setPhase("film");
     lock(true);
     film.currentTime = 0;
-    film.muted = !soundOn;
+    film.muted = !audible;
     // A play() interrupted by loading (AbortError) is retried once the film can
     // play; refused with sound (NotAllowedError) it retries muted; anything else
     // (decode error) falls back to the desk.
@@ -90,7 +99,7 @@ export function Theatre(props: ScreenProps) {
         film.play().catch(() => toDesk());
       } else toDesk();
     });
-  }, [animated, lock, soundOn, toDesk]);
+  }, [animated, lock, audible, toDesk]);
 
   // ── A refresh (or Back into the site from elsewhere) opens on the welcome ──
   // The browser restores the old scroll position while the page loads; until it
@@ -262,9 +271,9 @@ export function Theatre(props: ScreenProps) {
 
   // ── Sound follows the toggle ──
   useEffect(() => {
-    if (welcomeRef.current) welcomeRef.current.muted = !soundOn;
-    if (filmRef.current) filmRef.current.muted = !soundOn;
-  }, [soundOn, phase]);
+    if (welcomeRef.current) welcomeRef.current.muted = !audible;
+    if (filmRef.current) filmRef.current.muted = !audible;
+  }, [audible, phase, mediaReady]);
 
   // The welcome loop only runs while it is on screen.
   useEffect(() => {
