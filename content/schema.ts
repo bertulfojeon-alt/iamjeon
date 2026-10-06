@@ -96,7 +96,17 @@ export const projectSchema = z
     coldOpen: media.optional(),
     /** A coded, demo-data presentation shown instead of the cold open (components/showcase). */
     showcase: z
-      .enum(["ainalytics-presenter", "support-call-desk", "ezvibe-terminal", "voice-router", "content-pipeline", "liveness-bench"])
+      .enum([
+        "ainalytics-presenter",
+        "support-call-desk",
+        "ezvibe-terminal",
+        "voice-router",
+        "content-pipeline",
+        "liveness-bench",
+        "tutor-math-check",
+        "orchestrator-session",
+        "news-card-pipeline",
+      ])
       .optional(),
     features: z.array(z.string().min(6)).default([]),
     pitch: pitch.optional(),

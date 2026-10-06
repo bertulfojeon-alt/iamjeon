@@ -1,0 +1,146 @@
+/* Workflow panel in neutral greys; the card uses a bold news-red brand. */
+.stage {
+  --bg: #101114;
+  --panel: #18191d;
+  --line: rgba(255, 255, 255, 0.08);
+  --text: #ecedf0;
+  --muted: #8d9099;
+  --ok: #4ade80;
+  --bad: #f87171;
+  --brand: #d7263d;
+  container-type: inline-size;
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 2.4cqw;
+  padding: 2.6cqw;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow: hidden;
+  transition: opacity 0.6s;
+}
+.stage[data-fading="true"] {
+  opacity: 0.15;
+}
+.flow {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 1.2cqw;
+  padding: 1.8cqw;
+}
+.head {
+  margin: 0 0 1.4cqw;
+  font-size: 1.4cqw;
+  font-weight: 700;
+  color: var(--muted);
+}
+.flow ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.1cqw;
+}
+.flow li {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 1cqw;
+  font-size: 1.35cqw;
+  opacity: 0.2;
+  transition: opacity 0.35s;
+}
+.flow li[data-in="true"] {
+  opacity: 1;
+}
+.dot {
+  width: 1.1cqw;
+  height: 1.1cqw;
+  border-radius: 50%;
+  background: var(--ok);
+}
+.flow li[data-state="fail"] .dot {
+  background: var(--bad);
+}
+.flow li[data-state="fail"] strong {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.detail {
+  font-size: 1.15cqw;
+  color: var(--muted);
+  justify-self: end;
+}
+.flow li[data-state="fail"] .detail {
+  color: var(--bad);
+}
+.cardWrap {
+  display: grid;
+  place-items: center;
+}
+.card {
+  position: relative;
+  width: 82%;
+  aspect-ratio: 1;
+  border-radius: 1cqw;
+  padding: 2.6cqw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1.2cqw;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.75)), linear-gradient(135deg, #2a3b55, #12161f);
+  box-shadow: 0 2cqw 4cqw rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: scale(0.94);
+  transition:
+    opacity 0.5s,
+    transform 0.6s cubic-bezier(0.22, 0.61, 0.18, 1);
+}
+.card[data-in="true"] {
+  opacity: 1;
+  transform: none;
+}
+.badge {
+  position: absolute;
+  top: 2cqw;
+  left: 2cqw;
+  font-size: 1.1cqw;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.3cqw 0.9cqw;
+  background: var(--brand);
+  color: #fff;
+}
+.headline {
+  margin: 0;
+  font-size: 2.2cqw;
+  line-height: 1.2;
+  font-weight: 600;
+}
+.headline b {
+  color: #ffd23f;
+  font-weight: 800;
+}
+.dek {
+  margin: 0;
+  font-size: 1.2cqw;
+  color: #c9ccd4;
+}
+.size {
+  position: absolute;
+  top: 2cqw;
+  right: 2cqw;
+  font-family: var(--font-code);
+  font-size: 0.95cqw;
+  color: #c9ccd4;
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .stage * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

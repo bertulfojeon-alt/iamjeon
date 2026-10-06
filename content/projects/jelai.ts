@@ -14,7 +14,8 @@ export default {
   status: "in-development",
   role: "Solo — design and engineering",
   stack: ["Expo", "React Native", "TypeScript", "math.js"],
-  screen: { poster: "/media/screens/jelai.webp" },
+  screen: { poster: "/media/projects/jelai/screen.webp", loop: "/media/projects/jelai/loop.mp4" },
+  showcase: "tutor-math-check",
   features: [
     "Correctness core that checks spoken math with math.js, never the model",
     "Handles Unicode minus and times signs and filler words from transcripts",

@@ -14,7 +14,8 @@ export default {
   status: "built",
   role: "Solo — plugin, hooks and engine",
   stack: ["Node.js", "Claude Code hooks", "Claude Code agents and skills"],
-  screen: { poster: "/media/screens/claude-orchestrator.webp" },
+  screen: { poster: "/media/projects/claude-orchestrator/screen.webp", loop: "/media/projects/claude-orchestrator/loop.mp4" },
+  showcase: "orchestrator-session",
   features: [
     "Session-start brief from the live repo: branch, changes, recent commits",
     "About 60 tokens of working standards re-injected every turn",

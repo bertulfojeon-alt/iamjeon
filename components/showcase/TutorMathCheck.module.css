@@ -1,0 +1,174 @@
+/* Product palette (JelAI prototype): indigo accent; the phone shows the light session screen, mint marks "correct". */
+.stage {
+  --bg: #0f1222;
+  --panel: #171b31;
+  --line: rgba(160, 170, 255, 0.16);
+  --text: #eef0ff;
+  --muted: #9aa0c7;
+  --accent: #8b8cff;
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --bad: #f87171;
+  container-type: inline-size;
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 0.8fr 1.4fr;
+  gap: 2.4cqw;
+  padding: 2.6cqw;
+  background: radial-gradient(60% 60% at 15% 20%, rgba(139, 140, 255, 0.14), transparent 60%), var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow: hidden;
+  transition: opacity 0.6s;
+}
+.stage[data-fading="true"] {
+  opacity: 0.15;
+}
+.phone {
+  position: relative;
+  border: 0.5cqw solid #2a2f52;
+  border-radius: 3.2cqw;
+  background: #f6f6ff;
+  color: #1b1d33;
+  padding: 3.4cqw 2cqw 2cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4cqw;
+}
+.notch {
+  position: absolute;
+  top: 1cqw;
+  width: 7cqw;
+  height: 1cqw;
+  border-radius: 99px;
+  background: #2a2f52;
+}
+.task {
+  margin: 0;
+  font-size: 1.2cqw;
+  color: #6b6f95;
+}
+.problem {
+  margin: 0;
+  font-size: 3.2cqw;
+  font-weight: 700;
+}
+.tutor {
+  display: flex;
+  align-items: center;
+  gap: 1cqw;
+  margin-top: 1cqw;
+}
+.avatar {
+  width: 4cqw;
+  height: 4cqw;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.6cqw;
+  color: #fff;
+  background: var(--accent);
+}
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 0.3cqw;
+  height: 3cqw;
+}
+.wave i {
+  display: block;
+  width: 0.35cqw;
+  height: 0.6cqw;
+  border-radius: 99px;
+  background: var(--accent);
+}
+.wave[data-on="true"] i {
+  animation: wave 0.7s ease-in-out infinite alternate;
+}
+@keyframes wave {
+  to {
+    height: 2.8cqw;
+  }
+}
+.say {
+  margin: 0;
+  font-size: 1.25cqw;
+  text-align: center;
+  color: #3d4066;
+}
+.core {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2cqw;
+}
+.coreHead {
+  margin: 0;
+  font-size: 1.3cqw;
+  font-weight: 700;
+  color: var(--muted);
+}
+.trial {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 1.2cqw;
+  padding: 1.2cqw 1.4cqw;
+  display: grid;
+  gap: 0.5cqw;
+  opacity: 0.25;
+  transition: opacity 0.4s;
+}
+.trial[data-in="true"] {
+  opacity: 1;
+}
+.heard,
+.clean,
+.verdict {
+  margin: 0;
+  font-size: 1.3cqw;
+}
+.heard span,
+.clean span {
+  display: inline-block;
+  width: 5.5cqw;
+  color: var(--muted);
+  font-size: 1.05cqw;
+}
+.clean,
+.verdict {
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.clean[data-in="true"],
+.verdict[data-in="true"] {
+  opacity: 1;
+}
+.verdict {
+  font-weight: 700;
+  display: flex;
+  gap: 1cqw;
+  align-items: baseline;
+}
+.verdict span {
+  font-weight: 400;
+  font-size: 1.15cqw;
+  color: var(--muted);
+}
+.verdict[data-kind="correct"] {
+  color: var(--ok);
+}
+.verdict[data-kind="mistake"] {
+  color: var(--warn);
+}
+.verdict[data-kind="unparseable"] {
+  color: var(--bad);
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .stage * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

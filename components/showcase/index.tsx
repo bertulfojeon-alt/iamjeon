@@ -5,6 +5,9 @@ import { EZVibeTerminal } from "./EZVibeTerminal";
 import { VoiceRouter } from "./VoiceRouter";
 import { ContentPipeline } from "./ContentPipeline";
 import { LivenessBench } from "./LivenessBench";
+import { TutorMathCheck } from "./TutorMathCheck";
+import { OrchestratorSession } from "./OrchestratorSession";
+import { NewsCardPipeline } from "./NewsCardPipeline";
 
 /**
  * Coded presentations used instead of screenshots when a product cannot be shown
@@ -17,6 +20,9 @@ export const SHOWCASES = {
   "voice-router": VoiceRouter,
   "content-pipeline": ContentPipeline,
   "liveness-bench": LivenessBench,
+  "tutor-math-check": TutorMathCheck,
+  "orchestrator-session": OrchestratorSession,
+  "news-card-pipeline": NewsCardPipeline,
 } satisfies Record<string, ComponentType>;
 
 export type ShowcaseId = keyof typeof SHOWCASES;

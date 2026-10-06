@@ -14,7 +14,8 @@ export default {
   status: "built",
   role: "Solo — workflow, rendering service, deployment",
   stack: ["n8n", "Groq", "Node.js", "Express", "Puppeteer", "Docker"],
-  screen: { poster: "/media/screens/unsaybalita.webp" },
+  screen: { poster: "/media/projects/unsaybalita/screen.webp", loop: "/media/projects/unsaybalita/loop.mp4" },
+  showcase: "news-card-pipeline",
   features: [
     "Feed polled on a schedule, article text and image fetched with fallbacks",
     "Three LLMs in an ordered fallback chain, with an alert when one fails over",
