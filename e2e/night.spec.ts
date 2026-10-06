@@ -48,9 +48,11 @@ async function scrollIntoFilm(page: Page) {
 }
 
 test.describe("welcome", () => {
-  test("opens on the name, visible before any scroll", async ({ page }) => {
+  test("opens on the promise, the visitor's time and the name as a credit", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Saquilabon");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("While your office sleeps, your systems keep working.");
+    await expect(page.getByText(/A night shift by .*Saquilabon Jr\./)).toBeVisible();
+    await expect(page.getByText(/in Lapu-Lapu City/).first()).toBeVisible();
     await expect(phase(page)).toHaveAttribute("data-phase", "welcome");
   });
 
@@ -64,6 +66,14 @@ test.describe("welcome", () => {
     await page.goto("/");
     const mode = await page.evaluate(() => document.documentElement.dataset.mode);
     expect(mode).toBe(info.project.name === "phone" ? "lite" : "full");
+  });
+});
+
+test.describe("welcome, visitor abroad", () => {
+  test.use({ timezoneId: "America/New_York" });
+  test("shows the visitor's own time next to Lapu-Lapu's", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByText(/where you are/)).toBeVisible();
   });
 });
 
@@ -93,10 +103,12 @@ test.describe("the film", () => {
     await expect(phase(page)).toHaveAttribute("data-phase", "desk");
   });
 
-  test("See the work goes straight to the desk", async ({ page }) => {
+  test("'See what I'd build for you' plays the film; the HUD's Work skips it", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "See the work" }).click();
-    await expect(phase(page)).toHaveAttribute("data-phase", "desk", { timeout: 5000 });
+    await page.getByRole("button", { name: "See what I'd build for you" }).click();
+    await expect(phase(page)).toHaveAttribute("data-phase", "film", { timeout: 8000 });
+    await page.keyboard.press("Escape");
+    await toDesk(page);
     await expect(page.getByRole("button", { name: "Skip" })).toHaveCount(0);
   });
 });
@@ -255,6 +267,12 @@ test.describe("the desk", () => {
 
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
+
+  test("the rotating line is a static sentence", async ({ page }) => {
+    await page.goto("/");
+    // .last(): the first match is the screen-reader copy of the same sentence.
+    await expect(page.getByText("…answering your calls, placing your trades, running your payroll.").last()).toBeVisible();
+  });
 
   test("no autoplay and no film: scrolling goes straight to the desk", async ({ page }) => {
     await page.goto("/");

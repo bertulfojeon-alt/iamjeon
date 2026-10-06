@@ -22,6 +22,7 @@ import { useCinematic } from "@/hooks/useCinematic";
 import { coverTransform, mapQuad, rectToQuadMatrix, toCssMatrix3d, type Quad } from "@/lib/homography";
 import theatre from "@/content/theatre.json";
 import { Screen, type ScreenProps } from "@/components/screen/Screen";
+import { Welcome } from "./Welcome";
 import styles from "./Theatre.module.css";
 
 type Phase = "welcome" | "film" | "desk";
@@ -110,11 +111,18 @@ export function Theatre(props: ScreenProps) {
         pinnedRef.current = false;
       }, 300);
     };
+    // The visitor's own input ends the hold at once (the browser restores before anyone can scroll).
+    const onInput = () => {
+      window.clearTimeout(timer);
+      pinnedRef.current = false;
+    };
     if (document.readyState === "complete") release();
     else window.addEventListener("load", release, { once: true });
+    for (const type of ["wheel", "touchstart", "keydown"] as const) window.addEventListener(type, onInput, { once: true, passive: true });
     return () => {
       window.clearTimeout(timer);
       window.removeEventListener("load", release);
+      for (const type of ["wheel", "touchstart", "keydown"] as const) window.removeEventListener(type, onInput);
       pinnedRef.current = false;
     };
   }, []);
@@ -203,6 +211,13 @@ export function Theatre(props: ScreenProps) {
       if (lenis) lenis.scrollTo(vh, { duration: 1, force: true });
       else window.scrollTo({ top: vh, behavior: "smooth" });
     };
+    // "See what I'd build for you": a scroll down from the welcome, which plays the film.
+    const onPlay = () => {
+      if (phaseRef.current !== "welcome") return;
+      const vh = window.innerHeight;
+      if (lenis) lenis.scrollTo(vh, { duration: 1, force: true });
+      else window.scrollTo({ top: vh, behavior: "smooth" });
+    };
     // About / Contact pressed before the desk: go there directly (no film).
     const onOpen = () => {
       if (phaseRef.current !== "desk") onGo();
@@ -214,11 +229,13 @@ export function Theatre(props: ScreenProps) {
     window.addEventListener("keydown", onKey);
     window.addEventListener("ns:work", onGo);
     window.addEventListener("ns:open", onOpen);
+    window.addEventListener("ns:play", onPlay);
     window.addEventListener("hashchange", onHash);
     return () => {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("ns:work", onGo);
       window.removeEventListener("ns:open", onOpen);
+      window.removeEventListener("ns:play", onPlay);
       window.removeEventListener("hashchange", onHash);
     };
   }, [lenis, toDesk]);
@@ -356,27 +373,7 @@ export function Theatre(props: ScreenProps) {
       <span id="main-content" className="sr-only" tabIndex={-1} />
 
       {/* The welcome copy scrolls away over the sticky picture. */}
-      <div className={styles.copy} inert={phase !== "welcome"}>
-        <div className={styles.copyInner}>
-          <h1 className={`display ${styles.name}`}>
-            <span>Loreto “Jeon”</span>
-            <span>Saquilabon Jr.</span>
-          </h1>
-          <p className={styles.role}>Full-stack developer &amp; automation engineer</p>
-          <p className={styles.line}>Systems for businesses everywhere, built in Lapu-Lapu City after dark.</p>
-          <div className={styles.actions}>
-            <button type="button" className={styles.primary} onClick={() => window.dispatchEvent(new Event("ns:work"))}>
-              See the work
-            </button>
-            <button type="button" className={styles.ghost} onClick={() => window.dispatchEvent(new CustomEvent("ns:open", { detail: "contact" }))}>
-              Get in touch
-            </button>
-          </div>
-        </div>
-        <p className={styles.cue} aria-hidden="true">
-          Scroll
-        </p>
-      </div>
+      <Welcome active={phase === "welcome"} />
     </section>
   );
 }
