@@ -49,7 +49,7 @@ export function FeatureScenes({ poster, title, features, spotlights, classified 
       <div className={styles.grid}>
         <figure className={styles.pinned}>
           <div className={styles.frame}>
-            <img src={poster} alt={`${title} — interface`} loading="lazy" decoding="async" />
+            <img src={poster} alt={`${title} interface`} loading="lazy" decoding="async" />
             <Spotlights spots={spotlights} active={still ? "all" : spot >= 0 ? spot : null} />
             {classified && <span className={styles.privacy} aria-hidden="true" />}
           </div>

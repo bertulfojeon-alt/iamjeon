@@ -20,11 +20,11 @@ const SITE = "https://iamjeon.vercel.app";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: {
-    default: "Loreto “Jeon” Saquilabon Jr. — Full-Stack Developer & Automation Engineer",
-    template: "%s — Jeon",
+    default: "Loreto “Jeon” Saquilabon Jr. | Full-Stack Developer & Automation Engineer",
+    template: "%s | Jeon",
   },
   description:
-    "Systems for businesses everywhere, built in Cebu after dark. Trading platforms, AI voice agents and SaaS — designed, engineered and shipped solo.",
+    "Systems for businesses everywhere, built in Cebu after dark. Trading platforms, AI voice agents and SaaS, designed, engineered and shipped by one developer.",
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   openGraph: {
     type: "website",
-    title: "Jeon — Night Shift",
+    title: "Jeon | Night Shift",
     description: "Systems for businesses everywhere, built in Cebu after dark.",
     images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Jeon on a seawall bench at night, typing on a laptop" }],
   },

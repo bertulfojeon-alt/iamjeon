@@ -17,7 +17,7 @@ const LOOP = 16;
 
 const LINES: Line[] = [
   { who: "desk", at: 1.0, pace: 0.22, text: "Hello! Which provider are you calling about today?" },
-  { who: "caller", at: 3.4, pace: 0.24, text: "Fibernet po — walang internet since kanina." },
+  { who: "caller", at: 3.4, pace: 0.24, text: "Fibernet po, walang internet since kanina." },
   { who: "agent", at: 7.4, pace: 0.23, text: "This is Fibernet support. There's an outage in your area, fixed by 6 PM. Want a callback when it's back?" },
   { who: "caller", at: 12.0, pace: 0.24, text: "Yes, please." },
 ];

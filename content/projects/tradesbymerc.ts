@@ -12,7 +12,7 @@ export default {
   industry: "Trading education",
   year: 2026,
   status: "live",
-  role: "Full-stack developer — platform, payments, email engine, licensing",
+  role: "Full-stack developer: platform, payments, email engine and licensing",
   client: "TradesByMerc",
   stack: [
     "Next.js",
@@ -35,7 +35,7 @@ export default {
     alt: "Inside the academy: the course catalog with Forex 101, one-on-one mentorship and the ICT Beginner to Expert course, with levels, lesson counts and prices",
     width: 1568,
     height: 726,
-    caption: "Inside the student app — the academy catalog, with peso pricing and members-only courses.",
+    caption: "Inside the student app: the academy catalog, with peso pricing and members-only courses.",
   },
   pitch: {
     track: "trading",
@@ -95,7 +95,7 @@ export default {
       heading: "Payments, attribution and a licensed indicator",
       body: [
         "Payments run on two rails: Stripe checkout with a signature-verified webhook, and GCash QR payments with proof upload and admin verification. Peso prices come from the server, never from the client.",
-        "Funnel events fire three ways — GA4, Meta Pixel and the platform's own table — with first-touch UTMs, so the admin funnel follows views to signups to webinar to payment by clip and campaign.",
+        "Funnel events are sent to GA4, Meta Pixel and the platform's own table with first-touch UTMs, so the admin funnel follows views to signups to webinar to payment by clip and campaign.",
         "The newest piece is an indicator store: members receive MT5 indicator keys signed with SHA-256, with an activation ceiling and protected downloads.",
         "The current build has 55 pages, 52 API routes, 66 migrations and an 18-section admin.",
       ].join("\n\n"),
@@ -124,7 +124,7 @@ export default {
     },
     {
       value: "2",
-      label: "payment rails — Stripe and GCash",
+      label: "payment rails (Stripe and GCash)",
       source: `api/webhooks/stripe and api/payments/gcash in ${SRC} (client-trading.md §5C)`,
     },
   ],

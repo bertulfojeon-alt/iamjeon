@@ -4,7 +4,7 @@ const SRC = "client-trading.md §2";
 
 export default {
   slug: "smm-system",
-  title: "SMM System — content operations",
+  title: "SMM System: content operations",
   tier: "commission",
   chapter: "saas",
   logline:
@@ -12,7 +12,7 @@ export default {
   industry: "Marketing technology",
   year: 2026,
   status: "built",
-  role: "Full-stack developer — pipeline, workflow, publishing",
+  role: "Full-stack developer: pipeline, workflow and publishing",
   client: "A trading coach",
   stack: [
     "Next.js",
@@ -67,7 +67,7 @@ export default {
       kind: "resolution",
       heading: "From brief to Reels",
       body: [
-        "Approved briefs move through a server-enforced workflow — draft, assigned, shot, uploaded, editing, QA, approved, scheduled, posted — with every transition recorded. When the coach uploads footage, the automated editor picks it up and returns a cut for QA.",
+        "Approved briefs move through a server-enforced workflow (draft, assigned, shot, uploaded, editing, QA, approved, scheduled, posted), and every transition is recorded. When the coach uploads footage, the automated editor picks it up and returns a cut for QA.",
         "Publishing goes to Instagram Reels, Facebook Reels and YouTube Shorts from a queue processed every five minutes; TikTok is manual by design. A Content Score weights purchases and webinar sign-ups far above likes, normalised to each platform's 30-day median.",
       ].join("\n\n"),
     },

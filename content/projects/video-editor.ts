@@ -12,7 +12,7 @@ export default {
   industry: "Media tools",
   year: 2026,
   status: "local",
-  role: "Developer — analysis, timeline engine, render and audio",
+  role: "Developer: analysis, timeline engine, render and audio",
   client: "A trading coach",
   stack: [
     "Remotion 4",
@@ -33,7 +33,7 @@ export default {
     alt: "A finished vertical short from the editor: chart breakdown with word-pop Taglish captions and a hook title",
     width: 960,
     height: 600,
-    caption: "Raw recording in, finished 9:16 edit out — captions, punch-ins and sound design are automatic.",
+    caption: "Raw recording in, finished 9:16 edit out. Captions, punch-ins and sound design are automatic.",
   },
   pitch: {
     track: "other",
@@ -59,7 +59,7 @@ export default {
       kind: "context",
       heading: "Recorded, never edited",
       body: [
-        "A trading coach recorded clips but had no editor. The finished videos had to look produced, and they had to hide live P&L widgets, which finance ads don't allow — at near-zero cost, on a Windows PC.",
+        "A trading coach recorded clips but had no editor. The finished videos had to look produced, and they had to hide live P&L widgets, which finance ads don't allow. It all had to run at near-zero cost on a Windows PC.",
         "One command now takes a raw phone or screen recording to a finished 1080×1920 short with captions, music and sound design, plus a contact sheet of every cut for quality control. The editor can also run on its own when the content system hands it new footage.",
       ].join("\n\n"),
     },
@@ -68,7 +68,7 @@ export default {
       heading: "Listening for emphasis",
       body: [
         "The analysis stage is Python: faster-whisper for word timings, OpenCV for the face, scene changes and the cursor on chart recordings, and a scanner that finds P&L regions to crop. Vocal emphasis is measured from 50 ms loudness and brightness, smoothed to word scale, and places face-tracked punch-ins; manual punch-ins always win.",
-        "The timeline engine restructures each clip payoff-first, removes dead air and keeps nothing static for more than six seconds. A transition engine picks from 16 types and never repeats a move back to back — except where meaning wins: a flash for a win, a dip for weight.",
+        "The timeline engine restructures each clip payoff-first, removes dead air and keeps nothing static for more than six seconds. A transition engine picks from 16 types and never repeats a move back to back, except where meaning wins: a flash for a win, a dip for weight.",
       ].join("\n\n"),
     },
     {

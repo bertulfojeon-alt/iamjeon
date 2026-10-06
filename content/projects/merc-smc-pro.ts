@@ -12,7 +12,7 @@ export default {
   industry: "Trading tools",
   year: 2026,
   status: "live",
-  role: "MQL5 developer — detection engine, renderer, licensing, tests",
+  role: "MQL5 developer: detection engine, renderer, licensing and tests",
   client: "TradesByMerc",
   stack: ["MQL5", "MetaTrader 5", "SHA-256", "PowerShell", "Python", "TypeScript"],
   screen: { poster: "/media/projects/merc-smc-pro/screen.webp", loop: "/media/projects/merc-smc-pro/loop.mp4" },
@@ -22,7 +22,7 @@ export default {
     alt: "Gold, 15-minute chart with Merc SMC Pro: market structure labels, order blocks, session ranges and a three-timeframe bias panel",
     width: 1350,
     height: 460,
-    caption: "GOLD M15 with every feature enabled — structure, order blocks, sessions, premium/discount and the bias panel.",
+    caption: "GOLD M15 with every feature enabled: structure, order blocks, sessions, premium/discount and the bias panel.",
   },
   pitch: {
     track: "trading",
@@ -36,7 +36,7 @@ export default {
       alt: "GOLD H1 with structure, scored order blocks, premium and discount zones and the bias panel",
       width: 1350,
       height: 460,
-      caption: "GOLD H1 — rendered on a real MT5 chart by the test harness.",
+      caption: "GOLD H1, rendered on a real MT5 chart by the test harness.",
     },
     {
       type: "image",
@@ -44,7 +44,7 @@ export default {
       alt: "GOLD H4 with breaks of structure, changes of character and liquidity levels",
       width: 1350,
       height: 460,
-      caption: "GOLD H4 — rendered on a real MT5 chart by the test harness.",
+      caption: "GOLD H4, rendered on a real MT5 chart by the test harness.",
     },
     {
       type: "image",
@@ -52,7 +52,7 @@ export default {
       alt: "GOLD daily with swing labels, order blocks and previous-day levels",
       width: 1350,
       height: 460,
-      caption: "GOLD D1 — rendered on a real MT5 chart by the test harness.",
+      caption: "GOLD D1, rendered on a real MT5 chart by the test harness.",
     },
     {
       type: "image",
@@ -60,7 +60,7 @@ export default {
       alt: "EURUSD H4 with structure, zones and the multi-timeframe bias panel",
       width: 1350,
       height: 460,
-      caption: "EURUSD H4 — rendered on a real MT5 chart by the test harness.",
+      caption: "EURUSD H4, rendered on a real MT5 chart by the test harness.",
     },
     {
       type: "image",
@@ -68,7 +68,7 @@ export default {
       alt: "EURUSD M15 with session ranges, fair value gaps and liquidity",
       width: 1350,
       height: 460,
-      caption: "EURUSD M15 — rendered on a real MT5 chart by the test harness.",
+      caption: "EURUSD M15, rendered on a real MT5 chart by the test harness.",
     },
     {
       type: "image",
@@ -76,7 +76,7 @@ export default {
       alt: "EURUSD daily with major structure and premium and discount zones",
       width: 1350,
       height: 460,
-      caption: "EURUSD D1 — rendered on a real MT5 chart by the test harness.",
+      caption: "EURUSD D1, rendered on a real MT5 chart by the test harness.",
     },
   ],
   spotlights: [
@@ -110,7 +110,7 @@ export default {
       kind: "decision",
       heading: "Measure everything in ATR",
       body: [
-        "Fixed pip thresholds break across instruments, so every threshold is measured in ATR. Swings must clear an ATR excursion to count. Order blocks are the last opposing candle before a move of at least 1.5 ATR within 10 bars, scored 0–100 on displacement, gap and volume. Fair value gaps use a rolling percentile per instrument — the top 30% of recent gaps — with an ATR fallback until 20 have been seen.",
+        "Fixed pip thresholds break across instruments, so every threshold is measured in ATR. Swings must clear an ATR excursion to count. Order blocks are the last opposing candle before a move of at least 1.5 ATR within 10 bars, scored 0–100 on displacement, gap and volume. Fair value gaps use a rolling percentile per instrument (the top 30% of recent gaps), with an ATR fallback until 20 have been seen.",
         "MT5 rectangles are opaque, so zones are alpha-painted onto one chart-sized bitmap that repaints only when something changes. An idle chart costs nothing.",
       ].join("\n\n"),
     },

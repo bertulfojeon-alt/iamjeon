@@ -12,7 +12,7 @@ export default {
   industry: "Education",
   year: 2026,
   status: "in-development",
-  role: "Solo — design and engineering",
+  role: "Solo: design and engineering",
   stack: ["Expo", "React Native", "TypeScript", "math.js"],
   screen: { poster: "/media/projects/jelai/screen.webp", loop: "/media/projects/jelai/loop.mp4" },
   showcase: "tutor-math-check",

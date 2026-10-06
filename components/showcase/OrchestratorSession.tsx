@@ -23,9 +23,9 @@ const ROWS: Row[] = [
   { at: 3.2, kind: "cmd", text: "> add a refund endpoint with tests" },
   { at: 3.8, kind: "hook", text: "turn · working standards re-injected (≈60 tokens)" },
   { at: 5.6, kind: "hook", text: "agent · test-writer spawned" },
-  { at: 6.1, kind: "ok", text: "  model inherited from session — no silent downgrade" },
+  { at: 6.1, kind: "ok", text: "  model inherited from session, no silent downgrade" },
   { at: 8.6, kind: "hook", text: "hook · lint-check timed out after 2.0 s" },
-  { at: 9.1, kind: "warn", text: "  failed open — session continues" },
+  { at: 9.1, kind: "warn", text: "  failed open, session continues" },
 ];
 
 const EVALS = [

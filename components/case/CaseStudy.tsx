@@ -83,7 +83,7 @@ export function CaseStudy({ project: p, inModal = false }: { project: Project; i
                 sizes="(max-width: 1400px) 100vw, 1400px"
               />
             ) : (
-              <img src={p.screen.poster} alt={`${p.title} — interface`} width={1280} height={800} />
+              <img src={p.screen.poster} alt={`${p.title} interface`} width={1280} height={800} />
             )}
             {p.redacted && <div className={styles.privacy} aria-hidden="true" />}
           </figure>
@@ -172,7 +172,7 @@ export function CaseStudy({ project: p, inModal = false }: { project: Project; i
             {p.redacted ? (
               <a
                 className={styles.linkPrimary}
-                href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Private screening — ${p.title}`)}`}
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent(`Private walkthrough: ${p.title}`)}`}
               >
                 Request a private screening
               </a>

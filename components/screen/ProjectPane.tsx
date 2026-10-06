@@ -66,7 +66,7 @@ export function ProjectPane({ item, groupTitle, still, onZoom }: Props) {
               Visit live site ↗
             </a>
           ))}
-          {item.classified && <p className={styles.nda}>Client work under NDA — names withheld; a live walkthrough is available.</p>}
+          {item.classified && <p className={styles.nda}>Client work under NDA. Names are withheld, and a live walkthrough is available on request.</p>}
         </div>
       </header>
 
@@ -76,7 +76,7 @@ export function ProjectPane({ item, groupTitle, still, onZoom }: Props) {
         ) : item.loop && !still ? (
           <video key={item.slug} src={item.loop} poster={item.poster} muted loop playsInline autoPlay aria-hidden="true" />
         ) : (
-          <img src={item.poster} alt={`${item.title} — interface`} decoding="async" />
+          <img src={item.poster} alt={`${item.title} interface`} decoding="async" />
         )}
         {item.classified && <span className={styles.privacy} aria-hidden="true" />}
       </figure>

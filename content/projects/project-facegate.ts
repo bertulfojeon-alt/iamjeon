@@ -12,7 +12,7 @@ export default {
   industry: "Biometric security",
   year: 2026,
   status: "r-and-d",
-  role: "Engineer — computer vision and security design",
+  role: "Engineer: computer vision and security design",
   stack: ["TypeScript", "React", "Vite", "MediaPipe", "ONNX Runtime", "SCRFD", "AuraFace-v1", "Node.js"],
   screen: { poster: "/media/projects/project-facegate/screen.webp", loop: "/media/projects/project-facegate/loop.mp4" },
   showcase: "liveness-bench",
@@ -42,7 +42,7 @@ export default {
       heading: "A printed photo passed",
       body: [
         "The incumbent face check on an attendance kiosk asked a general-purpose LLM whether two photos matched. It accepted printed photos held up to the camera, and the screen reported a liveness result it had never computed. Clocking in for a colleague took one printout.",
-        "This R&D replaces the guess with a deterministic pipeline: detect the face with five keypoints, align it to a 112×112 template, compute a 512-dimension embedding and compare by cosine similarity. A browser liveness bench issues random challenges — blink twice, turn left, turn right — and logs every trial, so pass rates are measured rather than assumed.",
+        "This R&D replaces the guess with a deterministic pipeline: detect the face with five keypoints, align it to a 112×112 template, compute a 512-dimension embedding and compare by cosine similarity. A browser liveness bench issues random challenges (blink twice, turn left, turn right) and logs every trial, so pass rates are measured rather than assumed.",
       ].join("\n\n"),
     },
     {

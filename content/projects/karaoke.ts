@@ -12,7 +12,7 @@ export default {
   industry: "Home entertainment",
   year: 2026,
   status: "local",
-  role: "Solo — audio engineering, client and server",
+  role: "Solo: audio engineering, client and server",
   stack: ["Vanilla JS", "Web Audio API", "YouTube IFrame API", "Node.js http", "Server-Sent Events"],
   screen: { poster: "/media/projects/karaoke/screen.webp", loop: "/media/projects/karaoke/loop.mp4" },
   features: [
@@ -31,7 +31,7 @@ export default {
       heading: "Latency read from the source",
       body: [
         "Chromium's built-in compressor adds a 6 ms look-ahead, and the vocal chain had three of them. Every dynamics stage was rebuilt as a side-chain follower driving gain at audio rate, which took the chain's added latency from 26.7 ms to zero.",
-        "Search cost dropped from 101 YouTube quota units to 1, and cache hits cost nothing. Phones join through a QR code drawn by a hand-written encoder — Reed-Solomon over GF(256), versions 1 to 5 — and the shared queue updates over Server-Sent Events. It runs on a local network only.",
+        "Search cost dropped from 101 YouTube quota units to 1, and cache hits cost nothing. Phones join through a QR code drawn by a hand-written encoder (Reed-Solomon over GF(256), versions 1 to 5), and the shared queue updates over Server-Sent Events. It runs on a local network only.",
       ].join("\n\n"),
     },
   ],

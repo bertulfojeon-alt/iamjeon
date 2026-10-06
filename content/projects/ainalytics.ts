@@ -4,7 +4,7 @@ const SRC = "F:\\Work\\AI Analytcis";
 
 export default {
   slug: "ainalytics",
-  title: "Ainalytics — AI chief of staff",
+  title: "Ainalytics: AI chief of staff",
   tier: "commission",
   chapter: "voice",
   logline:
@@ -12,7 +12,7 @@ export default {
   industry: "Business intelligence for small and mid-size companies",
   year: 2026,
   status: "live",
-  role: "Engineer — metric engine, voice presenter, exports",
+  role: "Engineer: metric engine, voice presenter and exports",
   stack: [
     "Next.js",
     "TypeScript",
@@ -51,7 +51,7 @@ export default {
       heading: "Data everywhere, analyst nowhere",
       body: [
         "Owners of small and mid-size businesses keep their numbers in spreadsheets, point-of-sale exports and databases, and decide on instinct because there is no analyst to ask.",
-        "Ainalytics connects to that data — uploaded spreadsheets, shared Google Sheets, read-only Postgres — and proposes a catalogue of metrics for the owner to confirm. From then on it answers questions about them in plain language or by voice, watches for anomalies, and emails a briefing every morning at 6 a.m.",
+        "Ainalytics connects to that data (uploaded spreadsheets, shared Google Sheets or a read-only Postgres database) and proposes a catalogue of metrics for the owner to confirm. From then on it answers questions about them in plain language or by voice, watches for anomalies, and emails a briefing every morning at 6 a.m.",
       ].join("\n\n"),
     },
     {
@@ -59,7 +59,7 @@ export default {
       heading: "The model never computes a number",
       body: [
         "An advisor that is confidently wrong is worse than none, so the language model only reads intent. Numbers come from a deterministic metric engine. An unknown or ambiguous metric returns a structured error that forces “I don't have that” or a clarifying question. Driver analysis explains what moved a metric, and refuses to name a driver when the change is spread thin.",
-        "Even the verdict — on track, watch, off target — and the bottom-line sentence are computed in code. A production bug in which one metric silently returned another's value was caught and pinned by a behaviour smoke test.",
+        "Even the verdict (on track, watch or off target) and the bottom-line sentence are computed in code. A production bug in which one metric silently returned another's value was caught and pinned by a behaviour smoke test.",
       ].join("\n\n"),
     },
     {

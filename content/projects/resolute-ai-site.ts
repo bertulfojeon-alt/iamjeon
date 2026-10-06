@@ -2,7 +2,7 @@ import type { ProjectInput } from "../schema";
 
 export default {
   slug: "resolute-ai-site",
-  title: "Resolute AI — corporate site",
+  title: "Resolute AI: corporate site",
   tier: "archive",
   chapter: "archive",
   logline:

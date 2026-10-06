@@ -12,7 +12,7 @@ export default {
   industry: "Content automation",
   year: 2026,
   status: "built",
-  role: "Solo — workflow, rendering service, deployment",
+  role: "Solo: workflow, rendering service and deployment",
   stack: ["n8n", "Groq", "Node.js", "Express", "Puppeteer", "Docker"],
   screen: { poster: "/media/projects/unsaybalita/screen.webp", loop: "/media/projects/unsaybalita/loop.mp4" },
   showcase: "news-card-pipeline",

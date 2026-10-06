@@ -12,7 +12,7 @@ export default {
   industry: "Customer support SaaS",
   year: 2026,
   status: "live",
-  role: "Solo — design, engineering, deployment",
+  role: "Solo: design, engineering and deployment",
   stack: [
     "Node.js",
     "Express",
@@ -77,7 +77,7 @@ export default {
       heading: "A public key that is worth nothing",
       body: [
         "An embeddable widget means a public key sitting in someone's page source. Anyone can copy it, and every call it opens costs real money.",
-        "So the key on its own does nothing. It works only from the domains a tenant has listed — no domains, no widget. After an origin check and a bot check it is exchanged for a 15-minute signed token that can never act as a dashboard login. Every path that reaches the model then passes an entitlement check on the server: an active subscription or positive prepaid credit.",
+        "So the key on its own does nothing. It works only from the domains a tenant has listed. No domains means no widget. After an origin check and a bot check it is exchanged for a 15-minute signed token that can never act as a dashboard login. Every path that reaches the model then passes an entitlement check on the server: an active subscription or positive prepaid credit.",
         "No API keys, prompts or model names ever reach the browser. Connector credentials are encrypted at rest with AES-256-GCM.",
       ].join("\n\n"),
     },
@@ -86,7 +86,7 @@ export default {
       heading: "One agent, every channel",
       body: [
         "The same agent core serves voice, chat and email, grounded in each tenant's documents through a per-tenant retrieval index. Visitors can test it on their own material: the demo builds a temporary knowledge handle that lives in memory for 30 minutes and is never saved.",
-        "In September 2026 the platform gained shop tools — product search, proof-gated order lookup, requests and human handoff — and signed webhooks for Messenger, Instagram, WhatsApp and Viber. Those channels pass 227 deterministic checks against simulated, signed webhooks; going live on them waits on each tenant's own credentials and Meta's app review.",
+        "In September 2026 the platform gained shop tools (product search, proof-gated order lookup, requests and human handoff) and signed webhooks for Messenger, Instagram, WhatsApp and Viber. Those channels pass 227 deterministic checks against simulated, signed webhooks; going live on them waits on each tenant's own credentials and Meta's app review.",
         "Tenants work from a 13-section dashboard. The operator manages tenants from an 8-section console.",
       ].join("\n\n"),
     },

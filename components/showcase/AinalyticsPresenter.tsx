@@ -21,7 +21,7 @@ const LOOP = 15;
 /** Spoken lines: start time and per-word pace. */
 const LINES = [
   { who: "you", at: 0.6, pace: 0.24, text: "How did we do this month?" },
-  { who: "ai", at: 2.5, pace: 0.26, text: "Revenue closed at ₱2.48M — 12% above target." },
+  { who: "ai", at: 2.5, pace: 0.26, text: "Revenue closed at ₱2.48M, 12% above target." },
   { who: "ai", at: 5.6, pace: 0.25, text: "Most of the lift came from the Visayas team: plus ₱310K." },
   { who: "ai", at: 9.6, pace: 0.24, text: "Want me to email this report to you?" },
   { who: "you", at: 11.4, pace: 0.22, text: "Yes, please." },

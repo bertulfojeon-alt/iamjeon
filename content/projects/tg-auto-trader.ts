@@ -12,7 +12,7 @@ export default {
   industry: "Retail trading software",
   year: 2026,
   status: "built",
-  role: "Solo — design, engineering, desktop agent and web dashboard",
+  role: "Solo: design, engineering, desktop agent and web dashboard",
   stack: [
     "Next.js 14",
     "TypeScript",
@@ -34,7 +34,7 @@ export default {
     alt: "Chart Trading screen: a gold chart with the indicator library open and a buy/sell order ticket on the right",
     width: 1460,
     height: 891,
-    caption: "Chart Trading — custom canvas engine, indicator library and order ticket. Demo account.",
+    caption: "Chart Trading: a custom canvas engine, indicator library and order ticket. Demo account.",
   },
   pitch: {
     track: "trading",
@@ -135,7 +135,7 @@ export default {
       body: [
         "Retail traders who follow Telegram signal channels copy each call into MetaTrader 5 by hand. The message lands, they read it, open the terminal, type the lots and the levels, and by then the price has moved.",
         "Around that habit sit three more paid tools: a journal, an analytics service and a copy-trading subscription. Each wants its own account, its own fee and its own copy of the trade history.",
-        "The brief was one product that listens to the channel, places the order, records it and explains the result afterwards — without a server bill that grows with every new user.",
+        "The brief was one product that listens to the channel, places the order, records it and explains the result afterwards, all without a server bill that grows with every new user.",
       ].join("\n\n"),
     },
     {
@@ -143,7 +143,7 @@ export default {
       heading: "Rebuilding the trading screen",
       body: [
         "The dashboard needed a chart traders would accept as a working screen. It is a custom canvas engine with no chart library in the dependencies: nine timeframes, Heikin-Ashi, 61 built-in indicators and about 60 drawing tools, from Fibonacci and Gann sets to harmonic patterns and long/short position tools.",
-        "Traders also arrive with scripts written for TradingView. So the dashboard carries its own Pine Script engine — tokenizer, parser, syntax tree and a bar-by-bar interpreter, about 2,700 lines of TypeScript — that draws plots, shapes, fills and inputs on the same canvas.",
+        "Traders also arrive with scripts written for TradingView. So the dashboard carries its own Pine Script engine. Its tokenizer, parser, syntax tree and bar-by-bar interpreter come to about 2,700 lines of TypeScript, and it draws plots, shapes, fills and inputs on the same canvas.",
         "Trade Replay reuses the engine to step back through a closed trade, with drawings, emotions, tags and notes saved against it.",
       ].join("\n\n"),
       media: [
@@ -191,7 +191,7 @@ export default {
           alt: "Reports view with filters, report tabs and a close-reason pie chart beside a table of counts and win rates",
           width: 1222,
           height: 753,
-          caption: "Reports — close-reason breakdown. Demo account data.",
+          caption: "Reports: close-reason breakdown. Demo account data.",
         },
       ],
     },

@@ -31,7 +31,7 @@ export default {
     alt: "Payroll and attendance overview: items needing approval, workforce, attendance and month-to-date labour cost",
     width: 1280,
     height: 800,
-    caption: "Owner overview — approvals that block payroll, attendance and labour cost. Names, tenant and brand withheld.",
+    caption: "Owner overview: approvals that block payroll, attendance and labour cost. Names, tenant and brand withheld.",
   },
   redacted: true,
   pitch: {
@@ -95,7 +95,7 @@ export default {
       kind: "context",
       heading: "Payroll the law can check",
       body: [
-        "Philippine employers have to apply SSS, PhilHealth and Pag-IBIG contributions, TRAIN-law withholding, holiday and rest-day premiums, night differential and 13th-month pay correctly — often from spreadsheets, with attendance kept on paper.",
+        "Philippine employers have to apply SSS, PhilHealth and Pag-IBIG contributions, TRAIN-law withholding, holiday and rest-day premiums, night differential and 13th-month pay correctly, often from spreadsheets and with attendance kept on paper.",
         "This platform runs the path from clock-in to payslip: a kiosk and phone clock-in gated by a GPS geofence and a face match, schedules, leave with two-stage approvals, overtime queues, and a payroll register that moves from open to approved to paid. Employees review and sign off their payslips in a mobile portal.",
       ].join("\n\n"),
     },

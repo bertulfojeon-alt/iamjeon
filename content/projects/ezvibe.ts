@@ -12,7 +12,7 @@ export default {
   industry: "Developer tools",
   year: 2026,
   status: "pre-release",
-  role: "Solo — design, Rust core, interface, licensing backend",
+  role: "Solo: design, Rust core, interface and licensing backend",
   stack: [
     "Tauri 2",
     "Rust",
@@ -127,6 +127,6 @@ export default {
       source: `grep of it(/test( across 13 Vitest files, ${SRC} (own-saas.md §2F)`,
     },
   ],
-  links: [{ label: "ezvibe.vercel.app — join the waitlist", href: "https://ezvibe.vercel.app", kind: "waitlist" }],
+  links: [{ label: "Join the waitlist at ezvibe.vercel.app", href: "https://ezvibe.vercel.app", kind: "waitlist" }],
   order: 1,
 } satisfies ProjectInput;

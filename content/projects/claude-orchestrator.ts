@@ -12,7 +12,7 @@ export default {
   industry: "Developer tools",
   year: 2026,
   status: "built",
-  role: "Solo — plugin, hooks and engine",
+  role: "Solo: plugin, hooks and engine",
   stack: ["Node.js", "Claude Code hooks", "Claude Code agents and skills"],
   screen: { poster: "/media/projects/claude-orchestrator/screen.webp", loop: "/media/projects/claude-orchestrator/loop.mp4" },
   showcase: "orchestrator-session",

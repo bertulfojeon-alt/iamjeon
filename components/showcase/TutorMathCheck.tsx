@@ -46,7 +46,7 @@ export function TutorMathCheck() {
       className={styles.stage}
       data-fading={fading}
       role="img"
-      aria-label="Demo: a student's spoken answers to 2x + 6 = 0 are cleaned up and checked by a math engine — the right answer passes, a sign error is named, and a garbled answer is marked unparseable instead of guessed."
+      aria-label="Demo: a student's spoken answers to 2x + 6 = 0 are cleaned up and checked by a math engine. The right answer passes, a sign error is named, and a garbled answer is marked unparseable instead of guessed."
     >
       <section className={styles.phone}>
         <div className={styles.notch} />
@@ -60,7 +60,7 @@ export function TutorMathCheck() {
             ))}
           </span>
         </div>
-        <p className={styles.say}>Talk me through it — what is x?</p>
+        <p className={styles.say}>Talk me through it. What is x?</p>
       </section>
 
       <section className={styles.core}>

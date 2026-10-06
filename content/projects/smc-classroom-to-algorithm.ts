@@ -13,7 +13,7 @@ export default {
   industry: "Trading education and quant research",
   year: 2026,
   status: "live",
-  role: "Solo — course platform, chart engine, research lab (course content by its instructor)",
+  role: "Solo: course platform, chart engine and research lab (course content by its instructor)",
   stack: [
     "Next.js",
     "TypeScript",
@@ -93,7 +93,7 @@ export default {
       heading: "Then the algorithm",
       body: [
         "The instructor wanted the method traded automatically. The research lab was built to find out whether that was wise.",
-        "It has nine strategy EAs in MQL5, a build where warnings fail, 221 green test fixtures, and an independent JavaScript verifier that re-derives every detection from raw prices with no shared code — 100% agreement over about 6,700 checks. Acceptance criteria were written before each run, tested once on out-of-sample years and never re-rolled.",
+        "It has nine strategy EAs in MQL5, a build where warnings fail, 221 green test fixtures, and an independent JavaScript verifier that re-derives every detection from raw prices with no shared code. The two agreed 100% of the time over about 6,700 checks. Acceptance criteria were written before each run, tested once on out-of-sample years and never re-rolled.",
         "The answer was mostly no. In backtest only, the mechanical SMC rules lost 11.6R over 271 trades, so that family was closed. A scalper with a 70.8% win rate still drained its account. One candidate cleared the bar and waits for forward testing. None of this is live trading.",
       ].join("\n\n"),
     },
@@ -126,7 +126,7 @@ export default {
     },
     {
       value: "−11.6R",
-      label: "BACKTEST ONLY — mechanical SMC rules, 271 trades, closed",
+      label: "Backtest only: mechanical SMC rules, 271 closed trades",
       source: `pooled result of the SMC mechanical family in CLAUDE.md "Verdicts" and docs/BACKLOG.md; backtest, not live, ${EA} (own-trading.md §2F)`,
     },
   ],

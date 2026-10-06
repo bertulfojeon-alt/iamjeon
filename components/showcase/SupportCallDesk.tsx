@@ -19,7 +19,7 @@ const LINES: Line[] = [
   { who: "caller", at: 1.6, pace: 0.24, text: "Hi! May slot pa ba kayo bukas for a cleaning?" },
   { who: "ai", at: 4.3, pace: 0.24, text: "Opo! Tomorrow we have 10:00 AM or 2:30 PM. Which works for you?" },
   { who: "caller", at: 8.0, pace: 0.26, text: "2:30 po, please." },
-  { who: "ai", at: 9.4, pace: 0.24, text: "Booked — 2:30 PM tomorrow for a cleaning. I'll text you a confirmation." },
+  { who: "ai", at: 9.4, pace: 0.24, text: "You're booked for a cleaning at 2:30 PM tomorrow. I'll text you a confirmation." },
 ];
 
 const DETECT_AT = 3.2;
@@ -48,7 +48,7 @@ export function SupportCallDesk() {
           </span>
           <span className={styles.time}>9:42 PM · after hours</span>
         </div>
-        <div className={styles.biz}>Bright Smile Dental — AI front desk</div>
+        <div className={styles.biz}>Bright Smile Dental · AI front desk</div>
 
         <div className={styles.wave} data-active={Boolean(speaking)} data-who={speaking?.who ?? "none"}>
           {Array.from({ length: 28 }, (_, i) => (
@@ -117,7 +117,7 @@ export function SupportCallDesk() {
           <div className={styles.calSlots}>
             <span className={styles.slot}>10:00 AM · Open</span>
             <span className={styles.slot} data-booked="true">
-              2:30 PM · Cleaning — Maria S.
+              2:30 PM · Cleaning · Maria S.
             </span>
             <span className={styles.slot}>4:00 PM · Open</span>
           </div>

@@ -88,7 +88,7 @@ export function LivenessBench() {
               ? "✓ Live face confirmed"
               : `Blink twice · ${blinks}/2`
             : photoFail
-              ? "✗ No turn detected — rejected"
+              ? "✗ No turn detected, rejected"
               : "Turn your head left"}
         </div>
       </section>

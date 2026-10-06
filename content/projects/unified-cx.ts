@@ -4,7 +4,7 @@ const SRC = "F:\\Work\\Unified Telco";
 
 export default {
   slug: "unified-cx",
-  title: "Unified CX — AI voice front desk",
+  title: "Unified CX: AI voice front desk",
   tier: "commission",
   chapter: "voice",
   logline:
@@ -12,7 +12,7 @@ export default {
   industry: "Contact-centre AI for internet and cable providers",
   year: 2026,
   status: "live",
-  role: "Engineer — voice runtime, phone layer, operator console",
+  role: "Engineer: voice runtime, phone layer and operator console",
   stack: [
     "Next.js",
     "TypeScript",
@@ -67,15 +67,15 @@ export default {
       heading: "No more “press 1”",
       body: [
         "Regional internet and cable providers in the Philippines run keyword phone menus or overloaded hotlines, and their callers switch between Tagalog, Bisaya and English mid-sentence. An agent that quotes a wrong balance or a wrong outage is worse than no agent at all.",
-        "Unified CX puts one number in front of many providers. A front-desk agent works out which company the caller needs and, on the same call, hands them to that company's own agent — which verifies the caller, reads the real account, files tickets and arranges callbacks.",
+        "Unified CX puts one number in front of many providers. A front-desk agent works out which company the caller needs and, on the same call, hands them to that company's own agent, which verifies the caller, reads the real account, files tickets and arranges callbacks.",
       ].join("\n\n"),
     },
     {
       kind: "rising",
       heading: "An agent that can't make up a bill",
       body: [
-        "Speech-to-speech output can't be filtered before it is spoken, so grounding has to be a mechanism rather than a line in the prompt. A grounding ledger tracks which kinds of fact — money, outages, arrival times, references, plans — each successful tool call has granted on this leg of the call, and injects a correction when the agent claims something no tool supported.",
-        "The prompt itself is split into parts — brain, hands, eyes, ears, mouth, memory, conscience — each with snapshot tests and per-tenant fingerprints, so a change in one can't silently move another. The build fails if the composed prompt grows past 35,000 characters.",
+        "Speech-to-speech output can't be filtered before it is spoken, so grounding has to be a mechanism rather than a line in the prompt. A grounding ledger tracks which kinds of fact (money, outages, arrival times, references, plans) each successful tool call has granted on this leg of the call, and injects a correction when the agent claims something no tool supported.",
+        "The prompt itself is split into parts (brain, hands, eyes, ears, mouth, memory, conscience), each with snapshot tests and per-tenant fingerprints, so a change in one can't silently move another. The build fails if the composed prompt grows past 35,000 characters.",
       ].join("\n\n"),
     },
     {

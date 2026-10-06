@@ -12,7 +12,7 @@ export default {
   industry: "Trading education",
   year: 2026,
   status: "live",
-  role: "Full-stack developer — app, sync fleet, edge relay",
+  role: "Full-stack developer: app, sync fleet and edge relay",
   client: "A trading coach",
   stack: [
     "Next.js",
@@ -123,7 +123,7 @@ export default {
       heading: "A desk students use daily",
       body: [
         "Students get a 32-widget dashboard, tick-accurate excursion analysis and per-minute equity rebuilt from real ticks, seven analytics sections, 13 calculators, a leaderboard ranked by risk-adjusted score rather than raw gain, and a canvas chart with 60 indicators, 63 drawing tools, paper trading and bar-replay backtests.",
-        "The coach gets a console that ranks who needs attention — rule breaches, losing runs, missing journal entries, silence — plus a rules engine and cohorts. Two-factor sign-in is enforced in the proxy and again in row-level security on every table.",
+        "The coach gets a console that ranks who needs attention by rule breaches, losing runs, missing journal entries and silence. It also has a rules engine and cohorts. Two-factor sign-in is enforced in the proxy and again in row-level security on every table.",
         "It shipped in 654 commits over about twelve weeks.",
       ].join("\n\n"),
     },

@@ -14,7 +14,7 @@ const LOOP = 16;
 const STAGES = ["Trends", "Scored", "Script", "Critic", "Scheduled"] as const;
 
 const SCRIPT = [
-  "HOOK: “Ginto sa all-time high — huli na ba ako?”",
+  "HOOK: “Ginto sa all-time high, huli na ba ako?”",
   "1 · Why price at a record isn't a buy signal",
   "2 · Where structure says wait",
   "CTA: Comment “PLAN” for the free lesson",
@@ -52,7 +52,7 @@ export function ContentPipeline() {
         <section className={styles.trends}>
           <div className={styles.colTitle}>Trend radar · PH finance</div>
           <article className={styles.trend} data-score={t >= 2.2 ? "high" : "pending"}>
-            <span className={styles.trendName}>Gold hits a record high — beginners ask “too late?”</span>
+            <span className={styles.trendName}>Gold hits a record high, and beginners ask “too late?”</span>
             <span className={styles.score}>{t >= 2.2 ? "82 · generate" : "scoring…"}</span>
           </article>
           <article className={styles.trend} data-score={t >= 2.9 ? "low" : "pending"}>

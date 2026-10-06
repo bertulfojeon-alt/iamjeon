@@ -21,7 +21,7 @@ export default {
     alt: "Accounting dashboard for a sample company: cash on hand, profit, unpaid and overdue invoices, cash-flow chart and spending breakdown",
     width: 1280,
     height: 800,
-    caption: "Dashboard for a sample company — every figure is computed from the double-entry ledger. Brand withheld.",
+    caption: "Dashboard for a sample company. Every figure is computed from the double-entry ledger. Brand withheld.",
   },
   redacted: true,
   pitch: {
@@ -110,7 +110,7 @@ export default {
       heading: "The model reads, the rules decide",
       body: [
         "Every invoice, payment, bill, bank categorisation and pay run posts a balanced double-entry journal, and every report is derived from that journal.",
-        "Receipt scanning uses a model only to extract fields against a schema. Pure functions decide the rest: expense or bill, supplier match by TIN, and whether input VAT can be claimed — both parties VAT-registered, a document valid for input tax, VAT printed, the buyer this company. Uncertain fields are flagged for a person to check, and an offline harness re-reads documents to confirm zero wrong VAT claims.",
+        "Receipt scanning uses a model only to extract fields against a schema. Pure functions decide the rest: expense or bill, supplier match by TIN, and whether input VAT can be claimed. That requires both parties to be VAT-registered, a document valid for input tax, VAT printed on it, and this company as the buyer. Uncertain fields are flagged for a person to check, and an offline harness re-reads documents to confirm zero wrong VAT claims.",
         "The book syncs as one document with version compare-and-swap, so a stale save can't overwrite an edit.",
       ].join("\n\n"),
     },

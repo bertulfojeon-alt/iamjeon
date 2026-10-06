@@ -12,7 +12,7 @@ export default {
   industry: "E-commerce intelligence",
   year: 2026,
   status: "live",
-  role: "Solo — desktop app and marketing site",
+  role: "Solo: desktop app and marketing site",
   stack: ["Electron", "Node.js", "SQLite", "Cheerio", "Vitest", "WebGL"],
   screen: { poster: "/media/projects/jeonscraper/screen.webp", loop: "/media/projects/jeonscraper/loop.mp4" },
   features: [

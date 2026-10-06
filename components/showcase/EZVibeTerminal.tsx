@@ -68,7 +68,7 @@ export function EZVibeTerminal() {
         {/* Wrong-profile warning */}
         <div className={styles.warning} data-in={warning}>
           <span>
-            <b>F:\acme-shop</b> is pinned to <b style={{ color: ACME.color }}>Acme</b> — this tab is <b style={{ color: SAAS.color }}>My SaaS</b>.
+            <b>F:\acme-shop</b> is pinned to <b style={{ color: ACME.color }}>Acme</b>, and this tab is <b style={{ color: SAAS.color }}>My SaaS</b>.
           </span>
           <span className={styles.fix} data-press={clicking}>
             Reopen in Acme
@@ -82,7 +82,7 @@ export function EZVibeTerminal() {
               <p>
                 <span className={styles.prompt}>PS F:\acme-shop&gt;</span> {typed("claude", 0.5, t)}
               </p>
-              {t >= 1.3 && <p className={styles.out}>✻ Claude Code — signed in as dev@acme.example (Acme team)</p>}
+              {t >= 1.3 && <p className={styles.out}>✻ Claude Code · signed in as dev@acme.example (Acme team)</p>}
               {t >= 1.9 && <p className={styles.out}>  Working on: checkout flow refactor…</p>}
               {t >= 2.6 && <p className={styles.dim}>  ◼◼◼◼◻◻ reading src/checkout/*.ts</p>}
             </>
@@ -104,7 +104,7 @@ export function EZVibeTerminal() {
           )}
           {front === "acme" && t >= 10.6 && (
             <>
-              {reopened && <p className={styles.ok}>  ✓ Reopened in Acme — dev@acme.example, gh acme-dev</p>}
+              {reopened && <p className={styles.ok}>  ✓ Reopened in Acme as dev@acme.example, gh acme-dev</p>}
               <p>
                 <span className={styles.prompt}>PS F:\acme-shop&gt;</span> {typed("claude --continue", 11.0, t)}
               </p>
