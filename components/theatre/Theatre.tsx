@@ -29,6 +29,8 @@ export const DESK_W = 1280;
 export const DESK_H = 736;
 const SEEN_KEY = "ns-film-seen";
 const MONITOR = theatre.monitor as Quad;
+// True until the stage first mounts after a full page load; client navigations back home keep their place.
+let firstMount = true;
 
 export function Theatre(props: DesktopProps) {
   const { mode, ready, lenis, soundOn } = useCinematic();
@@ -88,31 +90,80 @@ export function Theatre(props: DesktopProps) {
     });
   }, [animated, lock, soundOn, toDesk]);
 
-  // ── Phase from scroll position ──
+  // ── A refresh (or Back into the site from elsewhere) opens on the welcome ──
+  // The browser restores the old scroll position while the page loads; until it
+  // has loaded, the page is held at the top and no scroll starts the film.
+  // (Turning history.scrollRestoration off instead breaks some client navigations.)
+  const pinnedRef = useRef(false);
   useEffect(() => {
-    let leaving = false;
+    if (!firstMount) return;
+    firstMount = false;
+    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    if (location.hash || (nav?.type !== "reload" && nav?.type !== "back_forward")) return;
+    pinnedRef.current = true;
+    window.scrollTo(0, 0);
+    let timer = 0;
+    const release = () => {
+      timer = window.setTimeout(() => {
+        window.scrollTo(0, 0);
+        pinnedRef.current = false;
+      }, 300);
+    };
+    if (document.readyState === "complete") release();
+    else window.addEventListener("load", release, { once: true });
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("load", release);
+      pinnedRef.current = false;
+    };
+  }, []);
+
+  // ── Phase from scroll position and direction ──
+  const movingRef = useRef(false); // a glide is running (kept across re-subscriptions)
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const glide = (top: number, done: () => void) => {
+      movingRef.current = true;
+      const end = () => {
+        movingRef.current = false;
+        lastY = window.scrollY;
+        done();
+      };
+      if (lenis && animated) lenis.scrollTo(top, { duration: 1, lock: true, force: true, onComplete: end });
+      else {
+        window.scrollTo({ top, behavior: animated ? "smooth" : "auto" });
+        window.setTimeout(end, animated ? 700 : 0);
+      }
+    };
     const onScroll = () => {
       const y = window.scrollY;
       const vh = window.innerHeight;
+      const down = y > lastY;
+      lastY = y;
+      if (pinnedRef.current) {
+        if (y) window.scrollTo(0, 0);
+        lastY = 0;
+        return;
+      }
+      if (movingRef.current) return;
       const p = phaseRef.current;
-      if (p === "welcome" && y > vh * 0.04 && !leaving) {
-        // The first scroll intent carries the copy away, then the film rolls.
-        leaving = true;
-        const done = () => {
-          leaving = false;
-          playFilm();
-        };
-        if (lenis && animated) lenis.scrollTo(vh, { duration: 1, lock: true, force: true, onComplete: done });
-        else {
-          window.scrollTo({ top: vh, behavior: animated ? "smooth" : "auto" });
-          window.setTimeout(done, animated ? 700 : 0);
-        }
-      } else if (p === "desk" && y < vh * 0.5) {
+      if (p === "welcome" && down && y > vh * 0.04) {
+        // The first scroll down carries the copy away, then the film rolls.
+        glide(vh, playFilm);
+      } else if (p === "desk" && !down && y < vh * 0.92) {
+        // Scrolling back up returns to the bench; the copy slides back in.
         setPhase("welcome");
+        glide(0, () => {});
       }
     };
-    // Arriving mid-page (refresh, back button): go straight to the desk.
-    if (window.scrollY >= window.innerHeight * 0.5) setPhase("desk");
+    if (!pinnedRef.current && !movingRef.current) {
+      const y = window.scrollY;
+      const vh = window.innerHeight;
+      // Arriving mid-page (back button within the site): go straight to the desk.
+      if (y >= vh * 0.5) setPhase("desk");
+      // Scrolled before this listener was attached (a fast first scroll while the page hydrates).
+      else if (phaseRef.current === "welcome" && y > vh * 0.04) glide(vh, playFilm);
+    }
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [animated, lenis, playFilm]);
