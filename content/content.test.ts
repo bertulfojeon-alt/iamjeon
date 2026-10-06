@@ -171,6 +171,13 @@ describe("pitch and spotlights", () => {
     }
   });
 
+  it("gives every project in the calls, trading and admin tracks two or three spotlights", () => {
+    for (const p of caseStudyProjects().filter((x) => x.pitch && x.pitch.track !== "other")) {
+      expect(p.spotlights.length, p.slug).toBeGreaterThanOrEqual(2);
+      expect(p.spotlights.length, p.slug).toBeLessThanOrEqual(3);
+    }
+  });
+
   it("groups case studies by track in the declared order", () => {
     expect(TRACKS).toEqual(["calls", "trading", "admin", "other"]);
     for (const t of TRACKS) for (const p of projectsInTrack(t)) expect(p.pitch?.track).toBe(t);

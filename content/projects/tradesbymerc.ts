@@ -42,6 +42,10 @@ export default {
     problem: "A trading mentor's courses, live rooms, payments and emails are spread across paid tools that don't talk to each other.",
     outcome: "One academy runs it all: courses with certificates, live sessions, memberships paid by card or GCash, and the mentor's own email engine.",
   },
+  spotlights: [
+    { feature: "Courses, modules and lessons with a rich-text editor, lesson notes and reviews", x: 66, y: 4, label: "Courses and lessons" },
+    { feature: "Community with funded-account submissions and a leaderboard podium", x: 79, y: 40, label: "Funded-account community" },
+  ],
   features: [
     "Courses, modules and lessons with a rich-text editor, lesson notes and reviews",
     "Gold PDF certificates with font-metric text fitting and a public verification page",

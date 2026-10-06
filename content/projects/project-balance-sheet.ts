@@ -29,6 +29,11 @@ export default {
     problem: "Small businesses keep receipts in a drawer and rebuild their VAT and tax filings from scratch every quarter.",
     outcome: "Cloud books on a double-entry engine: receipts are scanned with VAT rules applied, and reports and BIR deadlines come from the journal.",
   },
+  spotlights: [
+    { feature: "Receipt scanning with input-VAT eligibility rules and supplier matching by TIN", x: 87, y: 3, label: "Receipts scanned with VAT rules" },
+    { feature: "Printable reports derived from the journal, from P&L to trial balance", x: 45, y: 55, label: "Reports from the journal" },
+    { feature: "Bank and e-wallet feed review and reconciliation", x: 55, y: 90, label: "Bank feed reconciliation" },
+  ],
   features: [
     "Invoices, estimates, bills, purchase orders and payments on a double-entry engine",
     "Receipt scanning with input-VAT eligibility rules and supplier matching by TIN",

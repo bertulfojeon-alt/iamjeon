@@ -32,6 +32,11 @@ export default {
     problem: "Callers ring one hotline for many different providers and wait on hold while staff work out who they need.",
     outcome: "An AI front desk finds the right company, verifies the caller and hands the call to that company's agent, in Tagalog, Bisaya or English.",
   },
+  spotlights: [
+    { feature: "Universal front desk that hands the caller to a company's own agent on the same call", x: 48, y: 45, label: "Routes callers to the right company" },
+    { feature: "Tagalog, Bisaya and English, including code-switching mid-sentence", x: 24, y: 66, label: "Tagalog, Bisaya and English" },
+    { feature: "Area outages synced from a shared sheet and checked before anything else", x: 57, y: 86, label: "Checks area outages first" },
+  ],
   features: [
     "Universal front desk that hands the caller to a company's own agent on the same call",
     "Tagalog, Bisaya and English, including code-switching mid-sentence",

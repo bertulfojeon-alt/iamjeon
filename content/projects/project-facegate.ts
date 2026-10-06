@@ -22,6 +22,10 @@ export default {
     problem: "Attendance kiosks can be fooled by a photo held up to the camera, so someone can clock in for a friend.",
     outcome: "A liveness check asks for a blink or a head turn and logs every trial, so photos are caught and pass rates are measured.",
   },
+  spotlights: [
+    { feature: "Challenge-response liveness: blink twice, turn left or turn right", x: 27, y: 48, label: "Blink or turn challenge" },
+    { feature: "Liveness bench that logs each trial as a live face or a photo, so pass rates are measured", x: 57, y: 15, label: "Every trial logged" },
+  ],
   features: [
     "Challenge-response liveness: blink twice, turn left or turn right",
     "Five-point alignment to a 112×112 template and 512-dimension embeddings",

@@ -41,6 +41,11 @@ export default {
     problem: "Traders copy signals from Telegram into MetaTrader by hand, and by the time the order is in, the price has moved.",
     outcome: "Signals become orders on MetaTrader in moments, sized to the trader's risk, with charts, copy trading and a journal in one desk.",
   },
+  spotlights: [
+    { feature: "Custom canvas chart with indicators, drawing tools and a buy/sell order ticket", x: 8, y: 47, label: "Chart with an order ticket" },
+    { feature: "Auto-execution on MT5: single or dual entry, partial close, breakeven, trailing stop", x: 88, y: 40, label: "Places the signal on MetaTrader" },
+    { feature: "Risk-based lot sizing with daily-loss, max-position and session filters", x: 91, y: 22, label: "Lot size from your risk" },
+  ],
   features: [
     "Telegram listener (Telethon user client) with a signal parser that knows symbol aliases",
     "Auto-execution on MT5: single or dual entry, partial close, breakeven, trailing stop",

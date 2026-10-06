@@ -32,6 +32,11 @@ export default {
     problem: "Calls, chats and emails come in after hours and on weekends, and every unanswered one is a customer who goes somewhere else.",
     outcome: "An AI receptionist answers every call, chat and email from the business's own documents, and hands over to staff when a person is needed.",
   },
+  spotlights: [
+    { feature: "Real-time voice agent in the browser, relayed by the server so no AI key reaches the client", x: 21, y: 23, label: "Answers calls in the browser" },
+    { feature: "Per-tenant call queue with a visible position; calls already in progress are never cut", x: 88, y: 7, label: "Queue that never drops a call" },
+    { feature: "Answers from each business's own documents: PDF and text upload, embeddings, per-tenant retrieval", x: 23, y: 34, label: "Answers from your documents" },
+  ],
   features: [
     "Real-time voice agent in the browser, relayed by the server so no AI key reaches the client",
     "Chat widget, AI-drafted email replies and messaging from one shared agent core",

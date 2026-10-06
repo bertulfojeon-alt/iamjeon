@@ -40,6 +40,11 @@ export default {
     problem: "A trading coach can't see how each student is really trading until the student sends screenshots, usually too late.",
     outcome: "Students' accounts sync on their own into a journal and charting desk, and the coach sees who needs attention first.",
   },
+  spotlights: [
+    { feature: "Journal with a trade drawer, daily notes, image attachments and shareable trade cards", x: 8, y: 26, label: "Journal" },
+    { feature: "Live and demo leaderboards ranked by a risk-adjusted score, with weekly movement", x: 8, y: 69, label: "Leaderboards" },
+    { feature: "Configurable dashboard with tick-accurate MAE/MFE and per-minute equity", x: 75, y: 52, label: "Equity and trade stats" },
+  ],
   features: [
     "Automatic MT5 and cTrader sync with read-only credentials, encrypted at rest",
     "Canvas chart with paper trading, bar-replay backtests and cloud-synced drawings",

@@ -29,6 +29,11 @@ export default {
     problem: "Smart-money traders mark structure, order blocks and liquidity by hand on every chart, and paid tools get shared for free.",
     outcome: "A MetaTrader indicator draws and scores it all live, and its licence is locked offline to one account and one expiry date.",
   },
+  spotlights: [
+    { feature: "Major and minor market structure with BOS/CHoCH and swing labels", x: 15, y: 48, label: "Market structure" },
+    { feature: "Order blocks scored 0–100 on displacement, gap and volume", x: 49, y: 35, label: "Order blocks scored live" },
+    { feature: "Liquidity pools and sweeps, with strong and weak highs and lows", x: 86, y: 27, label: "Liquidity: strong and weak highs" },
+  ],
   features: [
     "Major and minor market structure with BOS/CHoCH and swing labels",
     "Order blocks scored 0–100 on displacement, gap and volume",

@@ -40,6 +40,11 @@ export default {
     problem: "Trading lessons teach patterns from hand-drawn examples, and nobody checks whether the examples or the rules hold up.",
     outcome: "A free course in English and Tagalog whose every chart is checked by code, and a lab that tested the rules before anyone traded them.",
   },
+  spotlights: [
+    { feature: "Mastery-loop quizzes: missed questions come back until none are wrong", x: 54, y: 28, label: "Quizzes that loop" },
+    { feature: "Guided charts that reveal candles and annotations step by step", x: 68, y: 42, label: "Step-by-step chart lessons" },
+    { feature: "Bilingual course: every lesson block, caption and quiz item in English and Tagalog", x: 81, y: 80, label: "English and Tagalog" },
+  ],
   features: [
     "Bilingual course: every lesson block, caption and quiz item in English and Tagalog",
     "Guided charts that reveal candles and annotations step by step",

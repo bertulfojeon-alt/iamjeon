@@ -39,6 +39,11 @@ export default {
     problem: "Payroll week means chasing timesheets, checking who really showed up, and recomputing deductions and premiums by hand.",
     outcome: "Clock-ins are checked by location and face, and payroll computes government deductions and premiums, then locks once approved.",
   },
+  spotlights: [
+    { feature: "Kiosk and phone clock-in gated by GPS geofence and face match", x: 8, y: 25, label: "Clock-in checked by place and face" },
+    { feature: "Schedules, overtime queues and two-stage leave approvals", x: 30, y: 19, label: "Overtime and leave approvals" },
+    { feature: "Payroll register: open, for approval, approved, paid, frozen once approved", x: 6, y: 80, label: "Payroll locks once approved" },
+  ],
   features: [
     "Kiosk and phone clock-in gated by GPS geofence and face match",
     "Configurable pay schedules with SSS, PhilHealth, Pag-IBIG and withholding tax",
