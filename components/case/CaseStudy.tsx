@@ -1,7 +1,8 @@
 /**
- * A case study told like a short film: cold open → context → the hard part → the
- * decision → the result → numbers → credits → next screen. Rendered both as a full
- * page (/work/[slug], for direct links and search) and inside the desk's modal.
+ * A case study told as scenes: the business problem and what changed → the product
+ * → what it does (pinned screen, spotlights) → what changed in numbers → behind the
+ * build → credits → next screen. Rendered as the full-screen takeover from the desk
+ * and as a page for direct links.
  */
 
 import Image from "next/image";
@@ -13,6 +14,8 @@ import { STATUS_LABEL } from "@/components/case/labels";
 import { RedactionStrip } from "@/components/case/RedactionStrip";
 import { screenTransitionName } from "@/lib/transition";
 import { SHOWCASES } from "@/components/showcase";
+import { TRACK_TITLES } from "@/content/tracks";
+import { FeatureScenes } from "./FeatureScenes";
 import styles from "./CaseStudy.module.css";
 
 const BEAT_LABEL = {
@@ -39,14 +42,21 @@ export function CaseStudy({ project: p, inModal = false }: { project: Project; i
 
         <header className={styles.head}>
           <p className={styles.kicker}>
-            {CHAPTER_TITLES[p.chapter]} · {p.industry} · {p.year}
+            {p.pitch ? TRACK_TITLES[p.pitch.track] : CHAPTER_TITLES[p.chapter]} · {p.industry} · {p.year}
           </p>
           <h1 className={`display ${styles.title}`}>{p.title}</h1>
-          <p className={styles.logline}>{p.logline}</p>
+          {p.pitch ? (
+            <div className={styles.pitch}>
+              <p className={styles.problem}>{p.pitch.problem}</p>
+              <p className={styles.outcome}>{p.pitch.outcome}</p>
+            </div>
+          ) : (
+            <p className={styles.logline}>{p.logline}</p>
+          )}
           <dl className={styles.meta}>
             <div>
-              <dt>Role</dt>
-              <dd>{p.role}</dd>
+              <dt>Status</dt>
+              <dd data-status={p.status}>{STATUS_LABEL[p.status]}</dd>
             </div>
             {p.client && (
               <div>
@@ -54,10 +64,6 @@ export function CaseStudy({ project: p, inModal = false }: { project: Project; i
                 <dd>{p.client}</dd>
               </div>
             )}
-            <div>
-              <dt>Status</dt>
-              <dd data-status={p.status}>{STATUS_LABEL[p.status]}</dd>
-            </div>
           </dl>
         </header>
       </div>
@@ -88,56 +94,60 @@ export function CaseStudy({ project: p, inModal = false }: { project: Project; i
       <div className="wrap">
         {p.redacted && <RedactionStrip codename={p.title} />}
 
-        {p.beats.map((b, i) => (
-          <section key={i} className={styles.beat} aria-labelledby={`beat-${i}`}>
-            <p className={styles.beatKind}>{BEAT_LABEL[b.kind]}</p>
-            <div className={styles.beatBody}>
-              <h2 id={`beat-${i}`} className={styles.beatHeading}>
-                {b.heading}
-              </h2>
-              {b.body.split(/\n\s*\n/).map((para, j) => (
-                <p key={j}>{para}</p>
-              ))}
-            </div>
-            {b.media?.map((m) => (
-              <figure key={m.src} className={styles.figure}>
-                {m.type === "image" ? (
-                  <Image src={m.src} alt={m.alt} width={m.width} height={m.height} sizes="(max-width: 1240px) 100vw, 1240px" />
-                ) : (
-                  <video src={m.src} poster={m.poster} width={m.width} height={m.height} controls muted playsInline preload="none" />
-                )}
-                {m.caption && <figcaption>{m.caption}</figcaption>}
-              </figure>
-            ))}
-          </section>
-        ))}
-
         {p.features.length > 0 && (
-          <section className={styles.features} aria-labelledby="features-title">
-            <h2 id="features-title" className={styles.sectionTitle}>
-              What it does
-            </h2>
-            <ul>
-              {p.features.map((f) => (
-                <li key={f}>{f}</li>
-              ))}
-            </ul>
-          </section>
+          <FeatureScenes
+            poster={p.screen.poster}
+            title={p.title}
+            features={p.features}
+            spotlights={p.spotlights}
+            classified={p.redacted}
+          />
         )}
 
         {p.metrics.length > 0 && (
           <section className={styles.metrics} aria-labelledby="metrics-title">
             <h2 id="metrics-title" className={styles.sectionTitle}>
-              By the numbers
+              What changed
             </h2>
             <dl>
               {p.metrics.map((m) => (
                 <div key={m.label}>
-                  <dt>{m.label}</dt>
                   <dd>{m.value}</dd>
+                  <dt>{m.label}</dt>
                 </div>
               ))}
             </dl>
+          </section>
+        )}
+
+        {p.beats.length > 0 && (
+          <section className={styles.story} aria-labelledby="story-title">
+            <h2 id="story-title" className={styles.sectionTitle}>
+              Behind the build
+            </h2>
+            {p.beats.map((b, i) => (
+              <section key={i} className={styles.beat} aria-labelledby={`beat-${i}`}>
+                <p className={styles.beatKind}>{BEAT_LABEL[b.kind]}</p>
+                <div className={styles.beatBody}>
+                  <h3 id={`beat-${i}`} className={styles.beatHeading}>
+                    {b.heading}
+                  </h3>
+                  {b.body.split(/\n\s*\n/).map((para, j) => (
+                    <p key={j}>{para}</p>
+                  ))}
+                </div>
+                {b.media?.map((m) => (
+                  <figure key={m.src} className={styles.figure}>
+                    {m.type === "image" ? (
+                      <Image src={m.src} alt={m.alt} width={m.width} height={m.height} sizes="(max-width: 1240px) 100vw, 1240px" />
+                    ) : (
+                      <video src={m.src} poster={m.poster} width={m.width} height={m.height} controls muted playsInline preload="none" />
+                    )}
+                    {m.caption && <figcaption>{m.caption}</figcaption>}
+                  </figure>
+                ))}
+              </section>
+            ))}
           </section>
         )}
 
@@ -145,7 +155,14 @@ export function CaseStudy({ project: p, inModal = false }: { project: Project; i
           <h2 id="credits-title" className={styles.sectionTitle}>
             Credits
           </h2>
-          <p className={styles.stack}>{p.stack.join(" · ")}</p>
+          <p className={styles.role}>
+            <span>Role</span> {p.role}
+          </p>
+          <ul className={styles.stack} aria-label="Built with">
+            {p.stack.map((tech) => (
+              <li key={tech}>{tech}</li>
+            ))}
+          </ul>
           <div className={styles.links}>
             {p.links.map((l) => (
               <a key={l.href} href={l.href} target="_blank" rel="noopener" className={styles.linkPrimary}>

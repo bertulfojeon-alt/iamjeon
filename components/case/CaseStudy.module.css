@@ -136,22 +136,6 @@
   line-height: 1;
   margin: 0 0 1.5rem;
 }
-.features {
-  padding-top: clamp(3.5rem, 8vw, 6rem);
-}
-.features ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-  gap: 0.9rem 2.5rem;
-}
-.features li {
-  border-top: 1px solid var(--line);
-  padding-top: 0.8rem;
-  color: #c4cfdc;
-}
 .metrics {
   padding-top: clamp(3.5rem, 8vw, 6rem);
 }
@@ -160,11 +144,6 @@
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 2rem;
   margin: 0;
-}
-.metrics dl > div {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 0.3rem;
 }
 .metrics dt {
   color: var(--dim);
@@ -248,4 +227,69 @@
   .beat {
     grid-template-columns: 1fr;
   }
+}
+
+/* ── The case as scenes ── */
+.pitch {
+  display: grid;
+  gap: 0.8rem;
+  max-width: 46ch;
+}
+.problem {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  line-height: 1.25;
+  font-weight: 700;
+}
+.outcome {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  line-height: 1.5;
+  color: var(--dim);
+}
+.metrics dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2.5rem 2rem;
+  margin: 0;
+}
+.metrics dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72;
+  font-weight: 800;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  line-height: 1;
+  color: var(--sodium);
+}
+.metrics dt {
+  margin-top: 0.35rem;
+  color: var(--dim);
+}
+.story {
+  padding-top: 4rem;
+}
+.role {
+  margin: 0 0 1.4rem;
+  text-align: center;
+}
+.role span {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--dim);
+}
+.stack {
+  list-style: none;
+  margin: 0 auto 2rem;
+  padding: 0;
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  font-size: 1.05rem;
+}
+.credits {
+  text-align: center;
+}
+.credits .links {
+  justify-content: center;
 }

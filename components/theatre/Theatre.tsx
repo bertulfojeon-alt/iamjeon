@@ -162,7 +162,7 @@ export function Theatre(props: ScreenProps) {
       if (p === "welcome" && down && y > vh * 0.04) {
         // The first scroll down carries the copy away, then the film rolls.
         glide(vh, playFilm);
-      } else if (p === "desk" && !down && y < vh * 0.92 && performance.now() - upIntentAt < 600) {
+      } else if (p === "desk" && !down && y < vh * 0.92 && performance.now() - upIntentAt < 1500) {
         // Scrolling back up returns to the bench; the copy slides back in.
         skipFilmRef.current = false;
         setPhase("welcome");

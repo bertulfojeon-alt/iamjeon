@@ -289,6 +289,26 @@ test.describe("case pages", () => {
     await expect(page.getByRole("banner")).toHaveAttribute("data-surface", "light");
   });
 
+  test("a case leads with the business problem, then features, outcomes and credits", async ({ page }) => {
+    await page.goto("/work/247aisupports");
+    const main = page.getByRole("main");
+    await expect(main.getByText("Calls, chats and emails come in after hours", { exact: false })).toBeVisible();
+    const features = main.getByRole("region", { name: "What it does" });
+    await expect(features.getByRole("listitem")).toHaveCount(14);
+    await expect(main.getByRole("region", { name: "What changed" })).toBeVisible();
+    await expect(main.getByRole("region", { name: "Credits" })).toContainText("Role");
+  });
+
+  test("scrolling the features moves the spotlight on the pinned screen", async ({ page }, info) => {
+    test.skip(info.project.name === "phone", "the pinned screen is a desktop layout");
+    await page.goto("/work/tg-auto-trader");
+    const features = page.getByRole("region", { name: "What it does" });
+    const item = features.getByRole("listitem").filter({ hasText: "Custom canvas chart" });
+    await item.scrollIntoViewIfNeeded();
+    await expect(item).toHaveAttribute("data-active", "true");
+    await expect(features.locator("[data-on='true']")).toHaveCount(1);
+  });
+
   test("archive projects have no case page", async ({ page }) => {
     const res = await page.goto("/work/karaoke");
     expect(res?.status()).toBe(404);
