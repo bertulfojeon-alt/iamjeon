@@ -14,7 +14,7 @@ export default {
   status: "built",
   role: "Solo — engine design and implementation",
   stack: ["Next.js 16", "GSAP ScrollTrigger", "Lenis", "Motion", "Canvas 2D", "sharp"],
-  screen: { poster: "/media/screens/project-genesis.webp" },
+  screen: { poster: "/media/projects/project-genesis/screen.webp", loop: "/media/projects/project-genesis/loop.mp4" },
   features: [
     "Scroll-scrubbed image sequences on one canvas, with text overlays on the same timeline",
     "Scenes authored as data: frame pattern, scroll length, overlays",

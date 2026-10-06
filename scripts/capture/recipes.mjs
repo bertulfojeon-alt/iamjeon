@@ -52,9 +52,32 @@ export const recipes = [
   }),
   publicSite("smc-classroom-to-algorithm", "https://freesmartmoneycourse.online/"),
   // The live hero still carries placeholder counters with nothing behind them — keep them out.
-  publicSite("jeonscraper", "https://jeonscraper.vercel.app/", { hide: [...COOKIE_BANNERS, ".hero-stats"] }),
+  publicSite("jeonscraper", "https://jeonscraper.vercel.app/", {
+    // So does the "Trusted by …" badge: tag it so the hide list can reach it by text.
+    setup: async (page) => {
+      await page.evaluate(() => {
+        const match = (el) => /^Trusted by \d/.test(el.textContent?.trim() ?? "");
+        for (const el of document.querySelectorAll("body *")) {
+          if (match(el) && ![...el.children].some(match)) el.setAttribute("data-capture-hide", "");
+        }
+      });
+    },
+    hide: [...COOKIE_BANNERS, ".hero-stats", "[data-capture-hide]"],
+  }),
   publicSite("resolute-ai-site", "https://resoluteaiph.vercel.app/", { settle: 3500 }),
   // The event date has passed, so its countdown reads negative — keep it out.
+  // ── Local apps (start them first: Karaoke `npm start`, Project Genesis `npm run dev`) ──
+  publicSite("karaoke", "http://localhost:5173/", {
+    settle: 4000,
+    microphone: true,
+    // Start the first song so the stage shows the player, not an empty screen.
+    setup: async (page) => {
+      await page.getByRole("button", { name: /Sing this/i }).first().click({ timeout: 8000 }).catch(() => {});
+      await page.waitForTimeout(5000);
+    },
+  }),
+  // The Next dev badge is not part of the product.
+  publicSite("project-genesis", "http://localhost:3000/", { settle: 4000, hide: [...COOKIE_BANNERS, "nextjs-portal"] }),
   // ── Classified: address + name swaps come from the private config ──
   {
     slug: "project-balance-sheet",

@@ -71,13 +71,13 @@ async function capture(recipe) {
   const browser = await chromium.launch({
     channel: "msedge",
     // A synthetic camera, so camera-based screens (liveness checks) render without a real face.
-    args: recipe.camera ? ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"] : [],
+    args: recipe.camera || recipe.microphone ? ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"] : [],
   });
   const context = await browser.newContext({
     viewport: recipe.viewport ?? VIEWPORT,
     deviceScaleFactor: 1,
     colorScheme: recipe.colorScheme ?? "dark",
-    permissions: recipe.camera ? ["camera"] : [],
+    permissions: [...(recipe.camera ? ["camera"] : []), ...(recipe.microphone ? ["microphone"] : [])],
     recordVideo: recipe.loop ? { dir: rawDir, size: recipe.viewport ?? VIEWPORT } : undefined,
   });
   const page = await context.newPage();

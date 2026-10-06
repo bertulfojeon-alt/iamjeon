@@ -12,7 +12,7 @@ export default {
   status: "live",
   role: "Front-end developer",
   stack: ["Next.js 16", "React 19", "TypeScript", "Framer Motion", "Playwright", "Vercel"],
-  screen: { poster: "/media/screens/resolute-ai-site.webp" },
+  screen: { poster: "/media/projects/resolute-ai-site/screen.webp", loop: "/media/projects/resolute-ai-site/loop.mp4" },
   coldOpen: {
     type: "image",
     src: "/media/projects/resolute/cover.png",

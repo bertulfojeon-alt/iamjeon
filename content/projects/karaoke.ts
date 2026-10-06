@@ -14,7 +14,7 @@ export default {
   status: "local",
   role: "Solo — audio engineering, client and server",
   stack: ["Vanilla JS", "Web Audio API", "YouTube IFrame API", "Node.js http", "Server-Sent Events"],
-  screen: { poster: "/media/screens/karaoke.webp" },
+  screen: { poster: "/media/projects/karaoke/screen.webp", loop: "/media/projects/karaoke/loop.mp4" },
   features: [
     "Opens ready to sing: mic, routing and songs set up on the first click",
     "Hand-built vocal chain with no added latency and automatic mic profiles",

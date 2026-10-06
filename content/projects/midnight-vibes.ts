@@ -11,7 +11,7 @@ export default {
   status: "live",
   role: "Front-end developer",
   stack: ["TypeScript", "Vite", "React", "shadcn/ui", "Tailwind CSS"],
-  screen: { poster: "/media/screens/midnight-vibes.webp" },
+  screen: { poster: "/media/projects/midnight-vibes/screen.webp", loop: "/media/projects/midnight-vibes/loop.mp4" },
   coldOpen: {
     type: "image",
     src: "/media/projects/midnightvibes/cover.png",

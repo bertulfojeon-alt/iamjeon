@@ -14,7 +14,7 @@ export default {
   status: "live",
   role: "Solo — desktop app and marketing site",
   stack: ["Electron", "Node.js", "SQLite", "Cheerio", "Vitest", "WebGL"],
-  screen: { poster: "/media/screens/jeonscraper.webp" },
+  screen: { poster: "/media/projects/jeonscraper/screen.webp", loop: "/media/projects/jeonscraper/loop.mp4" },
   features: [
     "Scrapers for 9 e-commerce platforms with automatic platform detection",
     "Three fetch tiers: JSON API, HTML and JSON-LD, then a real Chromium window",
