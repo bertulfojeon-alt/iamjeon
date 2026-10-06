@@ -1,5 +1,8 @@
 # Night Shift — portfolio redesign (design record)
 
+> **Superseded in part (2026-10-06):** the desk and the case modal were replaced by the light screen and the
+> case takeover — see `2026-10-06-shift-assistant-design.md`.
+
 Status: approved in conversation 2026-10-05; build started the same day on branch `night-shift`.
 The previous static site is preserved at tag `v1-static`.
 

@@ -1,9 +1,11 @@
 # Night Shift — iamjeon portfolio
 
-Cinematic portfolio for Loreto "Jeon" Saquilabon Jr. Welcome loop (Jeon on a seawall bench at night)
-→ every scroll down from the welcome plays one 7 s film (sea → rooftops → window → he sits at his desk → push-in to the
-monitor) → the monitor becomes a live desktop of the work → projects open in modals.
-Design record: `docs/specs/2026-10-05-night-shift-design.md`. Old static site: tag `v1-static`.
+Cinematic portfolio for Loreto "Jeon" Saquilabon Jr. Welcome loop (Jeon on a seawall bench at night, copy
+aimed at business owners) → every scroll down from the welcome plays one 7 s film → the monitor wakes up
+as a **light** screen: the work grouped by business problem (`content/tracks.ts`), project scenes with
+spotlights, About / Side projects / Contact → a case opens as a full-screen light takeover at /work/[slug].
+Design records: `docs/specs/2026-10-05-night-shift-design.md`, `docs/specs/2026-10-06-shift-assistant-design.md`.
+Old static site: tag `v1-static`.
 
 ## Stack
 Next.js 16 App Router · React 19 (`<ViewTransition>` match cuts) · TypeScript · Tailwind v4 (tokens in
@@ -27,9 +29,14 @@ DOM projected onto the monitor with a homography (`lib/homography.ts`, `content/
 - Third parties' personal data (customers, callers, students, employees, accounts, balances) is blurred in captures.
 - Modes are decided before paint by `features/cinematic-engine/mode-script.ts` (keep in sync with `lib/mode.ts`);
   per-mode layout lives in CSS keyed off `html[data-mode]`. "still" must stay fully readable with no motion.
-- Look: palette from the scene (sodium amber `#ff9a3c` is the only accent; dawn colours only in the contact scene);
-  Big Shoulders / Hanken Grotesk; no mono labels, no 01/02/03, no count-up stats, no fade-up on every section.
+- Look: dark for the two videos and the site around them; everything on the monitor and the case view is
+  light (`.screen-light` re-scopes the tokens; accent `#a04a08` on paper `#f5f1ea`). Big Shoulders /
+  Hanken Grotesk; no mono labels, no 01/02/03, no count-up stats, no fade-up on every section.
   The sodium warm-up (`WarmTitle`) is for chapter titles only.
+- What the monitor shows is owned by `features/stage/stage.ts` (pure reducer); Phase 2's assistant
+  dispatches the same commands.
+- Every case study needs a `pitch` (track, problem, outcome; no digits); calls/trading/admin projects need
+  2–3 `spotlights` positioned on `screen.poster`.
 - Content: one file per project in `content/projects/`; registry and ordering in `content/index.ts`.
 - After replacing the film, re-run `npm run theatre` and update the monitor corners in `content/theatre.json`.
 - Classified captures: masking rules and addresses live in `F:\ME\portfolio-private\capture.json`; every
