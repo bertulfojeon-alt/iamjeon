@@ -27,11 +27,13 @@ export function FeatureScenes({ poster, title, features, spotlights, classified 
   const items = useRef<(HTMLLIElement | null)[]>([]);
 
   useEffect(() => {
+    // Inside the monitor the case scrolls in its own box; on the page, the viewport.
+    const root = items.current[0]?.closest<HTMLElement>("[data-case-scroll]") ?? null;
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.index));
       },
-      { rootMargin: "-45% 0px -45% 0px" },
+      { root, rootMargin: "-45% 0px -45% 0px" },
     );
     items.current.forEach((el) => el && io.observe(el));
     return () => io.disconnect();

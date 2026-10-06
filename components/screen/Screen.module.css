@@ -56,6 +56,14 @@
   min-height: 0;
   position: relative;
 }
+.caseSlot {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+.caseSlot:empty {
+  display: none;
+}
 /* About and Side projects are long reads: they scroll inside the screen. */
 .panel {
   height: 100%;

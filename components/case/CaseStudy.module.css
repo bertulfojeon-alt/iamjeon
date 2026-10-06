@@ -293,3 +293,11 @@
 .credits .links {
   justify-content: center;
 }
+
+/* On the monitor the screen is ~1280px wide, so viewport-based sizes are capped. */
+.page[data-in-modal="true"] .title {
+  font-size: 88px;
+}
+.page[data-in-modal="true"] .problem {
+  font-size: 26px;
+}

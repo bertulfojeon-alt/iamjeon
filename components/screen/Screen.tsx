@@ -131,6 +131,8 @@ export function Screen({ items, about, side, ready = true }: ScreenProps) {
             onOpen={(slug) => dispatch({ type: "show", slug })}
           />
         )}
+        {/* A case opened from here plays in this slot (components/case/MonitorCase). */}
+        <div id="screen-case" className={styles.caseSlot} />
       </div>
     </div>
   );

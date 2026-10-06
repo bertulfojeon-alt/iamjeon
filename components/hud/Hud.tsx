@@ -8,12 +8,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useCinematic } from "@/hooks/useCinematic";
 import styles from "./Hud.module.css";
 
 export function Hud() {
   const { motionPaused, setMotionPaused, soundOn, setSoundOn } = useCinematic();
-  const home = usePathname() === "/";
+  const pathname = usePathname();
+  // A case opened on the monitor changes the address but the visitor is still at the desk.
+  const [atDesk, setAtDesk] = useState(false);
+  useEffect(() => setAtDesk(!!document.getElementById("desk")), [pathname]);
+  const home = pathname === "/" || atDesk;
 
   const act = (name: string, detail?: string) => () =>
     window.dispatchEvent(detail ? new CustomEvent(name, { detail }) : new Event(name));

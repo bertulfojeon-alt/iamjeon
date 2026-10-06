@@ -1,0 +1,46 @@
+/* The case on the monitor: it fills the screen's view area and scrolls on its own. */
+.case {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--night);
+  outline: none;
+  animation: case-in 0.45s var(--ease-camera);
+}
+@keyframes case-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+.back {
+  position: sticky;
+  top: 12px;
+  z-index: 5;
+  display: block;
+  width: max-content;
+  margin: 12px 16px 0 auto;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--screen);
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(22, 24, 29, 0.12);
+}
+.back:hover {
+  border-color: var(--screen);
+}
+:global(html[data-mode="still"]) .case {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .case {
+    animation: none;
+  }
+}

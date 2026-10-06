@@ -200,30 +200,65 @@ test.describe("the desk", () => {
     await expect(page).toHaveURL(/\/work\//);
   });
 
-  test("a case opens full-screen and light, with its own address, and closes back to the scene", async ({ page }) => {
+  test("a case opens inside the monitor, with its own address, and closes back to the scene", async ({ page }) => {
     await toDesk(page);
     await page.locator("#desk").getByRole("button", { name: /^TG Auto Trader/ }).click();
     await page.locator("#desk").getByRole("link", { name: "How does it work?" }).click();
     await expect(page).toHaveURL(/\/work\/tg-auto-trader$/);
-    const dialog = page.getByRole("dialog", { name: "TG Auto Trader" });
-    await expect(dialog).toBeVisible();
-    await dialog.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
-    const box = await dialog.boundingBox();
-    const vp = page.viewportSize()!;
-    expect(box!.width).toBeGreaterThanOrEqual(vp.width - 1);
-    expect(box!.height).toBeGreaterThanOrEqual(vp.height - 1);
-    // The frame around the scrolling body carries the light paper colour.
-    expect(await dialog.evaluate((el) => getComputedStyle(el.querySelector("[data-modal-body]")!.parentElement!).backgroundColor)).toBe("rgb(245, 241, 234)");
+    const kase = page.locator("#desk").getByRole("region", { name: "TG Auto Trader" });
+    await expect(kase.getByRole("heading", { level: 1 })).toHaveText("TG Auto Trader");
+    // Still at the desk: no full-browser dialog, the room stays around the screen.
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(phase(page)).toHaveAttribute("data-phase", "desk");
+    // The case scrolls inside the screen, not the page.
+    const box = (await kase.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.wheel(0, 600);
+    await page.waitForTimeout(500);
+    expect(await kase.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+    await expect(phase(page)).toHaveAttribute("data-phase", "desk");
     await page.keyboard.press("Escape");
     await expect(page).toHaveURL(/\/$/);
+    await expect(kase).toHaveCount(0);
     await expect(page.locator("#desk").getByRole("article", { name: "TG Auto Trader" })).toBeVisible();
+  });
+
+  test("with a case on the monitor, the top bar stays in desk mode", async ({ page }) => {
+    await toDesk(page);
+    await page.locator("#desk").getByRole("button", { name: /^TG Auto Trader/ }).click();
+    await page.locator("#desk").getByRole("link", { name: "How does it work?" }).click();
+    await expect(page).toHaveURL(/\/work\/tg-auto-trader$/);
+    await expect(page.locator("#desk").getByRole("region", { name: "TG Auto Trader" })).toBeVisible();
+    await expect(page.getByRole("banner")).toHaveAttribute("data-surface", "dark");
+  });
+
+  test("the case's Back button returns to the scene", async ({ page }) => {
+    await toDesk(page);
+    await page.locator("#desk").getByRole("button", { name: /^247Aisupports/ }).click();
+    await page.locator("#desk").getByRole("link", { name: "How does it work?" }).click();
+    const kase = page.locator("#desk").getByRole("region", { name: "247Aisupports" });
+    await kase.getByRole("button", { name: "Back" }).click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.locator("#desk").getByRole("article", { name: "247Aisupports" })).toBeVisible();
+  });
+
+  test("inside the monitor, scrolling the features moves the spotlight", async ({ page }, info) => {
+    test.skip(info.project.name === "phone", "the pinned screen is a desktop layout");
+    await toDesk(page);
+    await page.locator("#desk").getByRole("button", { name: /^TG Auto Trader/ }).click();
+    await page.locator("#desk").getByRole("link", { name: "How does it work?" }).click();
+    const features = page.locator("#desk").getByRole("region", { name: "What it does" });
+    const item = features.getByRole("listitem").filter({ hasText: "Custom canvas chart" });
+    await item.scrollIntoViewIfNeeded();
+    await expect(item).toHaveAttribute("data-active", "true");
+    await expect(features.locator("[data-on='true']")).toHaveCount(1);
   });
 
   test("browser Back from a case returns to the same scene", async ({ page }) => {
     await toDesk(page);
     await page.locator("#desk").getByRole("button", { name: /^247Aisupports/ }).click();
     await page.locator("#desk").getByRole("link", { name: "How does it work?" }).click();
-    await expect(page.getByRole("dialog", { name: "247Aisupports" })).toBeVisible();
+    await expect(page.locator("#desk").getByRole("region", { name: "247Aisupports" })).toBeVisible();
     await page.goBack();
     await expect(page).toHaveURL(/\/$/);
     await expect(page.getByRole("dialog")).toHaveCount(0);
