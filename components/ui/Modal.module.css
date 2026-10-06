@@ -74,6 +74,32 @@
   border-color: var(--sodium);
   color: var(--sodium);
 }
+/* The case takeover: the monitor grows until it is the whole browser. */
+.dialog[data-size="takeover"] {
+  width: 100vw;
+  height: 100dvh;
+  margin: 0;
+  max-width: none;
+  max-height: none;
+}
+.dialog[data-size="takeover"] .frame {
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--night);
+}
+.dialog[data-size="takeover"][open] {
+  animation: takeover-in 0.55s var(--ease-camera);
+}
+@keyframes takeover-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+.dialog[data-size="takeover"] .close {
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--screen);
+}
 @media (max-width: 640px) {
   .dialog {
     width: 100vw;

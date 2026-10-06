@@ -84,3 +84,9 @@
     font-size: 0.8rem;
   }
 }
+
+/* Over the light pages the HUD keeps its own dark backing so it stays readable. */
+.hud[data-surface="light"] {
+  background: rgba(5, 7, 12, 0.88);
+  backdrop-filter: blur(8px);
+}

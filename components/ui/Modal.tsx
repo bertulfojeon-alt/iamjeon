@@ -15,7 +15,7 @@ interface ModalProps {
   onClose: () => void;
   label: string;
   children: ReactNode;
-  size?: "case" | "panel";
+  size?: "case" | "panel" | "takeover";
 }
 
 export function Modal({ open, onClose, label, children, size = "case" }: ModalProps) {
@@ -40,7 +40,7 @@ export function Modal({ open, onClose, label, children, size = "case" }: ModalPr
   return (
     <dialog
       ref={ref}
-      className={styles.dialog}
+      className={`${styles.dialog}${size === "takeover" ? " screen-light" : ""}`}
       data-size={size}
       aria-label={label}
       onCancel={(e) => {

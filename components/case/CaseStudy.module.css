@@ -1,6 +1,6 @@
 .page {
   padding-top: 6rem;
-  background: var(--room);
+  background: var(--night);
   min-height: 100svh;
 }
 .page[data-in-modal="true"] {

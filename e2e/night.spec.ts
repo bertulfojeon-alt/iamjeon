@@ -188,17 +188,35 @@ test.describe("the desk", () => {
     await expect(page).toHaveURL(/\/work\//);
   });
 
-  test("a project opens in a modal with its own address, and closes back to the desk", async ({ page }) => {
+  test("a case opens full-screen and light, with its own address, and closes back to the scene", async ({ page }) => {
     await toDesk(page);
     await page.locator("#desk").getByRole("button", { name: /^TG Auto Trader/ }).click();
     await page.locator("#desk").getByRole("link", { name: "How does it work?" }).click();
     await expect(page).toHaveURL(/\/work\/tg-auto-trader$/);
     const dialog = page.getByRole("dialog", { name: "TG Auto Trader" });
     await expect(dialog).toBeVisible();
-    await expect(dialog.getByRole("heading", { level: 1 })).toHaveText("TG Auto Trader");
+    await dialog.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
+    const box = await dialog.boundingBox();
+    const vp = page.viewportSize()!;
+    expect(box!.width).toBeGreaterThanOrEqual(vp.width - 1);
+    expect(box!.height).toBeGreaterThanOrEqual(vp.height - 1);
+    // The frame around the scrolling body carries the light paper colour.
+    expect(await dialog.evaluate((el) => getComputedStyle(el.querySelector("[data-modal-body]")!.parentElement!).backgroundColor)).toBe("rgb(245, 241, 234)");
     await page.keyboard.press("Escape");
     await expect(page).toHaveURL(/\/$/);
+    await expect(page.locator("#desk").getByRole("article", { name: "TG Auto Trader" })).toBeVisible();
+  });
+
+  test("browser Back from a case returns to the same scene", async ({ page }) => {
+    await toDesk(page);
+    await page.locator("#desk").getByRole("button", { name: /^247Aisupports/ }).click();
+    await page.locator("#desk").getByRole("link", { name: "How does it work?" }).click();
+    await expect(page.getByRole("dialog", { name: "247Aisupports" })).toBeVisible();
+    await page.goBack();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByRole("dialog")).toHaveCount(0);
     await expect(phase(page)).toHaveAttribute("data-phase", "desk");
+    await expect(page.locator("#desk").getByRole("article", { name: "247Aisupports" })).toBeVisible();
   });
 
   test("About, Side projects and Contact open on the screen and return to the work", async ({ page }) => {
@@ -263,6 +281,12 @@ test.describe("case pages", () => {
       const external = await page.locator("main a[href^='http']").evaluateAll((as) => as.map((a) => (a as HTMLAnchorElement).href));
       expect(external).toEqual([]);
     }
+  });
+
+  test("direct case pages are light, with a readable top bar", async ({ page }) => {
+    await page.goto("/work/tg-auto-trader");
+    expect(await page.locator("main").evaluate((el) => getComputedStyle(el).backgroundColor)).toBe("rgb(245, 241, 234)");
+    await expect(page.getByRole("banner")).toHaveAttribute("data-surface", "light");
   });
 
   test("archive projects have no case page", async ({ page }) => {

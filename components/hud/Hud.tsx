@@ -19,7 +19,7 @@ export function Hud() {
     window.dispatchEvent(detail ? new CustomEvent(name, { detail }) : new Event(name));
 
   return (
-    <header className={styles.hud}>
+    <header className={styles.hud} data-surface={home ? "dark" : "light"}>
       <Link href="/" className={styles.brand} aria-label="Jeon — back to the start">
         <img src="/media/me/avatar-64.webp" alt="" width={32} height={32} className={styles.avatar} />
         <span>Jeon</span>
