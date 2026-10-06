@@ -105,15 +105,22 @@ export function Theatre(props: ScreenProps) {
     pinnedRef.current = true;
     window.scrollTo(0, 0);
     let timer = 0;
+    let released = false;
     const release = () => {
+      if (released) return;
       timer = window.setTimeout(() => {
+        if (released) return;
+        released = true;
         window.scrollTo(0, 0);
         pinnedRef.current = false;
       }, 300);
     };
-    // The visitor's own input ends the hold at once (the browser restores before anyone can scroll).
+    // The visitor's own input ends the hold at once (the browser restores before anyone can scroll),
+    // and a late load event must not snap them back to the top afterwards.
     const onInput = () => {
+      released = true;
       window.clearTimeout(timer);
+      window.removeEventListener("load", release);
       pinnedRef.current = false;
     };
     if (document.readyState === "complete") release();

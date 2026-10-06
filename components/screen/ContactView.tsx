@@ -6,7 +6,7 @@ const EMAIL = "bertulfojeon@gmail.com";
 
 export function ContactView() {
   return (
-    <section className={styles.contact} aria-label="Contact" data-screen-view>
+    <section className={styles.contact} aria-label="Contact" data-screen-view data-lenis-prevent>
       <h2 className={`display ${styles.title}`}>Let&rsquo;s build something.</h2>
       <p className={styles.lead}>
         A system that answers your calls, runs your trading desk or takes payroll off your plate — or a live walkthrough

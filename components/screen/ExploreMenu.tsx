@@ -24,7 +24,7 @@ export function ExploreMenu({ items, focus, ready, onFocus, onOpen }: Props) {
   const current = items.find((i) => i.slug === focus) ?? items[0];
 
   return (
-    <div className={styles.menu} data-screen-view>
+    <div className={styles.menu} data-screen-view data-lenis-prevent>
       <nav className={styles.list} aria-label="Work by business problem">
         {TRACKS.map((track) => {
           const group = items.filter((i) => i.track === track);

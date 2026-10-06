@@ -39,7 +39,7 @@ export function ProjectScene({ item, trackTitle, still, hasNext, onNext, onExplo
   }, [still, held, count]);
 
   return (
-    <article className={styles.scene} aria-label={item.title} data-screen-view>
+    <article className={styles.scene} aria-label={item.title} data-screen-view data-lenis-prevent>
       <div className={styles.copy}>
         <p className={styles.kicker}>
           {trackTitle} · {item.title}

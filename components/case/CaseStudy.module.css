@@ -107,7 +107,7 @@
   letter-spacing: -0.01em;
 }
 .beatBody p {
-  color: #c4cfdc;
+  color: var(--screen);
   margin: 0 0 1rem;
 }
 .figure {
@@ -185,7 +185,7 @@
   color: var(--night);
 }
 .linkPrimary:hover {
-  background: #ffb36a;
+  background: #7d3906; /* darker amber: keeps the paper text above AA */
 }
 .linkGhost {
   border: 1px solid var(--line);
@@ -203,7 +203,7 @@
   transition: background 0.3s;
 }
 .next:hover {
-  background: #080b12;
+  background: var(--room-2);
 }
 .next :global(.wrap) {
   display: grid;

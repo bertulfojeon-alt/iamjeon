@@ -334,3 +334,106 @@ test.describe("case pages", () => {
     await expect(page.getByRole("main").getByRole("link", { name: "Back to the desk" })).toHaveAttribute("href", "/");
   });
 });
+
+test.describe("final review fixes", () => {
+  test("C1: the case story is readable on the light paper", async ({ page }) => {
+    await page.goto("/work/tg-auto-trader");
+    const para = page.getByRole("region", { name: "Behind the build" }).getByText("Retail traders who follow Telegram", { exact: false });
+    expect(await contrast(para)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  test("C1b: case calls to action stay readable on hover", async ({ page }, info) => {
+    test.skip(info.project.name === "phone", "hover is a pointer state");
+    await page.goto("/work/project-payday");
+    const cta = page.getByRole("link", { name: "Request a private screening" });
+    await cta.hover();
+    await page.waitForTimeout(400);
+    expect(await contrast(cta)).toBeGreaterThanOrEqual(4.5);
+    const next = page.getByRole("link", { name: /Next screen/ });
+    await next.hover();
+    await page.waitForTimeout(400);
+    for (const el of await next.locator("span").all()) expect(await contrast(el)).toBeGreaterThanOrEqual(4.5);
+  });
+
+  test("I2: a scroll during a slow reload is not undone when loading finishes", async ({ page }, info) => {
+    test.skip(info.project.name === "phone", "desktop wheel path");
+    await toDesk(page);
+    // Hold one image so the load event comes late.
+    await page.route("**/media/me/avatar-64.webp", async (route) => {
+      await new Promise((r) => setTimeout(r, 3000));
+      await route.continue();
+    });
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await page.waitForTimeout(300);
+    await page.mouse.wheel(0, 160);
+    await expect(phase(page)).toHaveAttribute("data-phase", /film|desk/, { timeout: 8000 });
+    await page.waitForFunction(() => document.readyState === "complete", null, { timeout: 15000 });
+    await page.waitForTimeout(700);
+    expect(await page.evaluate(() => window.scrollY > window.innerHeight * 0.5)).toBe(true);
+  });
+
+  test("I3: on phones the screen's Contact button is on screen", async ({ page }, info) => {
+    test.skip(info.project.name !== "phone", "phone layout");
+    await toDesk(page);
+    const contact = page.locator("#desk").getByRole("navigation", { name: "Screen" }).getByRole("button", { name: "Contact" });
+    const box = (await contact.boundingBox())!;
+    const vw = page.viewportSize()!.width;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(vw);
+  });
+
+  test("I4: the Contact view is not clipped on a short phone", async ({ page }, info) => {
+    test.skip(info.project.name !== "phone", "phone layout");
+    await page.setViewportSize({ width: 375, height: 667 });
+    await toDesk(page);
+    await page.locator("#desk").getByRole("navigation", { name: "Screen" }).getByRole("button", { name: "Contact" }).click();
+    const region = page.locator("#desk").getByRole("region", { name: "Contact" });
+    const r = (await region.boundingBox())!;
+    const title = (await region.getByRole("heading").boundingBox())!;
+    expect(title.y).toBeGreaterThanOrEqual(r.y - 1);
+    // Measured without scrolling: a visitor cannot scroll a clipped box.
+    const w = (await region.getByText("working with clients in any time zone").boundingBox())!;
+    expect(w.y + w.height).toBeLessThanOrEqual(r.y + r.height + 1);
+  });
+
+  test("I5: the welcome fits under the HUD on short phones", async ({ page }, info) => {
+    test.skip(info.project.name !== "phone", "phone layout");
+    for (const size of [{ width: 375, height: 667 }, { width: 360, height: 640 }]) {
+      await page.setViewportSize(size);
+      await page.goto("/");
+      await page.evaluate(() =>
+        Promise.all(document.getAnimations().filter((a) => a.effect?.getTiming().iterations !== Infinity).map((a) => a.finished)),
+      );
+      const hud = (await page.getByRole("banner").boundingBox())!;
+      const where = (await page.getByText(/in Lapu-Lapu City/).first().boundingBox())!;
+      expect(where.y, `at ${size.width}×${size.height}`).toBeGreaterThanOrEqual(hud.y + hud.height - 1);
+    }
+  });
+
+  test("phones: the menu is a plain list, without the hover preview", async ({ page }, info) => {
+    test.skip(info.project.name !== "phone", "phone layout");
+    await toDesk(page);
+    await expect(page.locator("#desk").getByRole("navigation", { name: "Work by business problem" })).toBeVisible();
+    await expect(page.locator("#desk").getByRole("region", { name: "Preview" })).toBeHidden();
+  });
+
+  test("I6: in a narrow desktop window the menu and a scene scroll with the wheel", async ({ page }, info) => {
+    test.skip(info.project.name === "phone", "desktop wheel path");
+    await page.setViewportSize({ width: 820, height: 700 });
+    await toDesk(page);
+    const view = page.locator("#desk [data-screen-view]");
+    const wheelScrolls = async (what: string) => {
+      expect(await view.evaluate((el) => el.scrollHeight > el.clientHeight + 20), `${what} overflows (test premise)`).toBe(true);
+      const box = (await view.boundingBox())!;
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.wheel(0, 400);
+      await page.waitForTimeout(600);
+      expect(await view.evaluate((el) => el.scrollTop), `${what} scrolled`).toBeGreaterThan(0);
+      await expect(phase(page)).toHaveAttribute("data-phase", "desk");
+    };
+    await wheelScrolls("menu");
+    await page.locator("#desk").getByRole("button", { name: /^TG Auto Trader/ }).click();
+    await wheelScrolls("scene");
+  });
+});

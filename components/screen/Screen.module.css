@@ -66,4 +66,16 @@
   .clock {
     display: none;
   }
+  /* Phones: the nav wraps onto its own row rather than scrolling out of sight. */
+  .bar {
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    padding: 8px 14px;
+  }
+  .nav {
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    overflow: visible;
+    margin-left: -10px;
+  }
 }
