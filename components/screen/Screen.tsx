@@ -1,24 +1,28 @@
 "use client";
 
 /**
- * The monitor's screen — light, like a bright display in a dark room — laid out as
- * a project dashboard: every project in a side nav (grouped by the business
- * problem it solves, side projects last), and the selected one in full in the
- * main pane. Opening a project gives it its own address (/work/<slug>), so it can
- * be shared and Back steps through what was opened. What the screen shows is owned
- * by the stage reducer, so the assistant (Phase 2) can drive the same commands.
+ * The monitor's screen, light like a bright display in a dark room. It opens on
+ * All work: a sidebar to browse by business problem, service or skill, and a grid
+ * of project cards. A card opens the project in full in the main pane at its own
+ * address (/work/<slug>), so it can be shared and Back returns to the grid. What
+ * the screen shows is owned by the stage reducer, so the assistant (Phase 2) can
+ * drive the same commands.
  */
 
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useReducer, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState, type ReactNode } from "react";
 import { initialStage, stageReducer, type Panel, type StageWorld } from "@/features/stage/stage";
-import { GROUP_ORDER, GROUP_TITLES, type Group } from "@/content/tracks";
+import { GROUP_TITLES, type Group } from "@/content/tracks";
+import type { Project } from "@/content/schema";
 import type { ShowcaseId } from "@/components/showcase";
 import { useCinematic } from "@/hooks/useCinematic";
 import { clockLine } from "@/lib/clock";
 import { ProjectPane } from "./ProjectPane";
 import { ContactView } from "./ContactView";
+import { ALL, Browse, WorkGrid, type Filter } from "./WorkGrid";
 import styles from "./Screen.module.css";
+
+type ProjectStatus = Project["status"];
 
 export type Spot = { feature: string; x: number; y: number; label: string };
 export type Shot = { src: string; alt: string; caption?: string };
@@ -28,12 +32,15 @@ export interface ScreenItem {
   title: string;
   group: Group;
   classified: boolean;
+  /** One line on what it is, for the All work card. */
+  summary: string;
   /** The client's problem (or the logline for side projects) and what changed. */
   problem: string;
   outcome: string | null;
   industry: string;
   year: number;
   status: string;
+  statusKey: ProjectStatus;
   role: string;
   poster: string;
   loop?: string;
@@ -72,14 +79,18 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
   const reducer = useMemo(() => stageReducer(world), [world]);
   const [view, dispatch] = useReducer(reducer, world, initialStage);
   const [zoom, setZoom] = useState<Shot | null>(null);
+  const [filter, setFilter] = useState<Filter>(ALL);
+  const [query, setQuery] = useState("");
+  const gridScroll = useRef(0);
   const time = useLocalTime();
   const pathname = usePathname();
   const bySlug = useMemo(() => new Map(items.map((i) => [i.slug, i])), [items]);
 
-  // The address leads: Back/Forward (and a project link) select the project.
+  // The address leads: Back/Forward select the project, or return to the grid.
   useEffect(() => {
     const m = pathname.match(/^\/work\/([^/]+)$/);
     if (m) dispatch({ type: "show", slug: m[1] });
+    else if (pathname === "/") dispatch({ type: "grid" });
   }, [pathname]);
 
   // About / Contact, from the HUD or the welcome buttons.
@@ -101,9 +112,20 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
     dispatch({ type: "show", slug });
     if (window.location.pathname !== `/work/${slug}`) window.history.pushState(null, "", `/work/${slug}`);
   };
+  const toGrid = () => {
+    dispatch({ type: "grid" });
+    if (window.location.pathname !== "/") window.history.pushState(null, "", "/");
+  };
+  const browse = (f: Filter) => {
+    setFilter(f);
+    if (f.kind === "service") setQuery("");
+    gridScroll.current = 0;
+    toGrid();
+  };
+  const contact = () => dispatch({ type: "panel", panel: "contact" });
 
-  const selected = view.kind === "project" ? view.slug : view.back;
-  const item = bySlug.get(selected) ?? items[0];
+  const place = view.kind === "panel" ? view.back : view;
+  const item = place.kind === "project" ? (bySlug.get(place.slug) ?? items[0]) : null;
   const panelCurrent = (panel: Panel) => (view.kind === "panel" && view.panel === panel ? "page" : undefined);
 
   return (
@@ -111,7 +133,7 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
       <header className={styles.bar}>
         <span className={styles.owner}>Jeon&rsquo;s desk</span>
         <nav className={styles.nav} aria-label="Screen">
-          <button type="button" aria-current={view.kind === "project" ? "page" : undefined} onClick={() => dispatch({ type: "back" })}>
+          <button type="button" aria-current={view.kind !== "panel" ? "page" : undefined} onClick={toGrid}>
             All work
           </button>
           <button type="button" aria-current={panelCurrent("about")} onClick={() => dispatch({ type: "panel", panel: "about" })}>
@@ -139,37 +161,29 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
             </section>
           )
         ) : (
-          <div className={styles.dashboard}>
-            <nav className={styles.side} aria-label="Projects" data-lenis-prevent>
-              {GROUP_ORDER.map((group) => {
-                const list = items.filter((i) => i.group === group);
-                if (!list.length) return null;
-                return (
-                  <section key={group} className={styles.group}>
-                    <h2 className={styles.groupTitle}>{GROUP_TITLES[group]}</h2>
-                    <ul>
-                      {list.map((i) => (
-                        <li key={i.slug}>
-                          <button
-                            type="button"
-                            className={styles.item}
-                            aria-current={i.slug === item.slug ? "true" : undefined}
-                            onClick={() => open(i.slug)}
-                          >
-                            {i.title}
-                            {i.classified && <span className={styles.chip}>NDA</span>}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                );
-              })}
-            </nav>
-            {ready ? (
-              <ProjectPane item={item} groupTitle={GROUP_TITLES[item.group]} still={still} onZoom={setZoom} />
+          <div className={styles.dashboard} data-view={view.kind} data-lenis-prevent>
+            <Browse items={items} filter={item ? null : filter} onFilter={browse} onContact={contact} />
+            {item ? (
+              ready ? (
+                <ProjectPane item={item} groupTitle={GROUP_TITLES[item.group]} still={still} onZoom={setZoom} onBack={toGrid} />
+              ) : (
+                <div className={styles.paneWait} />
+              )
             ) : (
-              <div className={styles.paneWait} />
+              <WorkGrid
+                items={items}
+                filter={filter}
+                query={query}
+                ready={ready}
+                scrollRef={gridScroll}
+                onFilter={browse}
+                onQuery={(q) => {
+                  setQuery(q);
+                  gridScroll.current = 0;
+                }}
+                onOpen={open}
+                onContact={contact}
+              />
             )}
           </div>
         )}

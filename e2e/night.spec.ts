@@ -158,32 +158,77 @@ test.describe("back to the top", () => {
 });
 
 test.describe("the desk dashboard", () => {
-  const nav = (page: Page) => page.locator("#desk").getByRole("navigation", { name: "Projects" });
+  const grid = (page: Page) => page.locator("#desk").getByRole("region", { name: "All work" });
   const pane = (page: Page, name: string) => page.locator("#desk").getByRole("region", { name });
+  const card = (page: Page, title: string) => grid(page).getByRole("link", { name: title, exact: true });
+  const chips = (page: Page) => grid(page).getByRole("group", { name: "Filter by category" });
+  const screenNav = (page: Page) => page.locator("#desk").getByRole("navigation", { name: "Screen" });
+  const openProject = async (page: Page, title: string) => {
+    await card(page, title).click();
+    await expect(pane(page, title)).toBeVisible();
+  };
 
-  test("the side nav lists all 21 projects in groups, and a click (not a hover) opens one", async ({ page }) => {
+  test("All work opens as a grid of every project; a card (not a hover) opens one at its own address", async ({ page }) => {
     await toDesk(page);
-    // Phones show the nav as a row of chips without group headings.
-    if (test.info().project.name !== "phone") {
-      for (const group of ["Calls & messages", "Trading", "Admin & back-office", "More work", "Side projects"]) {
-        await expect(nav(page).getByRole("heading", { name: group })).toBeVisible();
-      }
-    }
-    await expect(nav(page).getByRole("button")).toHaveCount(21);
-    const first = nav(page).getByRole("button").first();
-    await expect(first).toHaveAttribute("aria-current", "true");
-    await nav(page).getByRole("button", { name: /^TG Auto Trader/ }).hover();
+    await expect(grid(page).getByRole("heading", { level: 2 })).toHaveText("Projects");
+    await expect(grid(page).getByRole("listitem")).toHaveCount(21);
+    await card(page, "TG Auto Trader").hover();
     await page.waitForTimeout(300);
-    await expect(first).toHaveAttribute("aria-current", "true");
-    await nav(page).getByRole("button", { name: /^TG Auto Trader/ }).click();
+    await expect(grid(page)).toBeVisible();
+    await openProject(page, "TG Auto Trader");
     await expect(pane(page, "TG Auto Trader").getByRole("heading", { level: 2 }).first()).toHaveText("TG Auto Trader");
     await expect(page).toHaveURL(/\/work\/tg-auto-trader$/);
     await expect(page.getByRole("banner")).toHaveAttribute("data-surface", "dark");
   });
 
+  test("each card shows its status, a short summary and its main tools", async ({ page }) => {
+    await toDesk(page);
+    const tg = grid(page).getByRole("listitem").filter({ has: page.getByRole("link", { name: "TG Auto Trader", exact: true }) });
+    await expect(tg).toContainText("Built");
+    await expect(tg).toContainText("Telegram-to-MT5 trading desk");
+    await expect(tg).toContainText("Next.js 14");
+    await expect(grid(page).getByRole("listitem").filter({ has: page.getByRole("link", { name: "Project Payday", exact: true }) })).toContainText("NDA");
+  });
+
+  test("category filters narrow the grid and show how many projects each holds", async ({ page }) => {
+    await toDesk(page);
+    await chips(page).getByRole("button", { name: /^Trading/ }).click();
+    await expect(grid(page).getByRole("listitem")).toHaveCount(5);
+    await expect(chips(page).getByRole("button", { name: /^Trading/ })).toHaveAttribute("aria-pressed", "true");
+    await chips(page).getByRole("button", { name: /^Side projects/ }).click();
+    await expect(grid(page).getByRole("listitem")).toHaveCount(7);
+    await chips(page).getByRole("button", { name: /^All/ }).click();
+    await expect(grid(page).getByRole("listitem")).toHaveCount(21);
+  });
+
+  test("search finds projects by name, purpose or tool, and says when nothing matches", async ({ page }) => {
+    await toDesk(page);
+    const search = grid(page).getByRole("searchbox", { name: "Search projects" });
+    await search.fill("payroll");
+    await expect(card(page, "Project Payday")).toBeVisible();
+    await expect(card(page, "TG Auto Trader")).toHaveCount(0);
+    await search.fill("MQL5");
+    await expect(card(page, "Merc SMC Pro")).toBeVisible();
+    await search.fill("zzqx");
+    await expect(grid(page).getByRole("listitem")).toHaveCount(0);
+    await expect(grid(page).getByText(/No projects match/)).toBeVisible();
+  });
+
+  test("a service explains what it covers, lists the projects behind it, and leads to Contact", async ({ page }, info) => {
+    test.skip(info.project.name === "phone", "services sit below the grid on phones; covered by the phone test");
+    await toDesk(page);
+    const browse = page.locator("#desk").getByRole("complementary", { name: "Browse" });
+    await browse.getByRole("button", { name: "Back-office systems" }).click();
+    await expect(grid(page).getByRole("heading", { level: 2 })).toHaveText("Back-office systems");
+    await expect(grid(page).getByRole("listitem").filter({ has: page.getByRole("link") })).toHaveCount(3);
+    await expect(card(page, "Project Payday")).toBeVisible();
+    await grid(page).getByRole("button", { name: "Talk to me about this" }).click();
+    await expect(page.locator("#desk").getByRole("region", { name: "Contact" })).toBeVisible();
+  });
+
   test("the pane holds everything: text buttons jump to sections, the story waits behind a button", async ({ page }) => {
     await toDesk(page);
-    await nav(page).getByRole("button", { name: /^TG Auto Trader/ }).click();
+    await openProject(page, "TG Auto Trader");
     const p = pane(page, "TG Auto Trader");
     for (const section of ["Screens", "Features", "Numbers", "Built with"]) {
       await expect(p.getByRole("button", { name: section, exact: true })).toBeVisible();
@@ -199,75 +244,82 @@ test.describe("the desk dashboard", () => {
 
   test("live products link to their site; classified ones never link out", async ({ page }) => {
     await toDesk(page);
-    await nav(page).getByRole("button", { name: /^247Aisupports/ }).click();
+    await openProject(page, "247Aisupports");
     await expect(pane(page, "247Aisupports").getByRole("link", { name: /Visit live site/ })).toHaveAttribute("href", "https://247aisupports.com");
-    await nav(page).getByRole("button", { name: /^Project Payday/ }).click();
+    await pane(page, "247Aisupports").getByRole("button", { name: "All projects" }).click();
+    await openProject(page, "Project Payday");
     const payday = pane(page, "Project Payday");
     await expect(payday.getByText("Client work under NDA", { exact: false }).first()).toBeVisible();
     expect(await payday.locator("a[href^='http']").count()).toBe(0);
   });
 
-  test("Back steps back through the projects that were opened", async ({ page }) => {
+  test("Back returns from a project to the grid; Forward opens it again", async ({ page }) => {
     await toDesk(page);
-    await nav(page).getByRole("button", { name: /^TG Auto Trader/ }).click();
-    await nav(page).getByRole("button", { name: /^Karaoke/ }).click();
+    await openProject(page, "TG Auto Trader");
+    await pane(page, "TG Auto Trader").getByRole("button", { name: "All projects" }).click();
+    await openProject(page, "Karaoke");
     await expect(page).toHaveURL(/\/work\/karaoke$/);
     await page.goBack();
+    await expect(grid(page)).toBeVisible();
+    await page.goBack();
     await expect(page).toHaveURL(/\/work\/tg-auto-trader$/);
-    await expect(nav(page).getByRole("button", { name: /^TG Auto Trader/ })).toHaveAttribute("aria-current", "true");
+    await expect(pane(page, "TG Auto Trader")).toBeVisible();
     await expect(phase(page)).toHaveAttribute("data-phase", "desk");
   });
 
   test("each project ends with a clear way to get in touch, on the screen", async ({ page }) => {
     await toDesk(page);
-    await nav(page).getByRole("button", { name: /^TG Auto Trader/ }).click();
+    await openProject(page, "TG Auto Trader");
     const p = pane(page, "TG Auto Trader");
     await expect(p.getByText("Ask me about this build")).toHaveCount(0);
     await p.getByRole("button", { name: "Want something like this? Let's talk" }).click();
     await expect(page.locator("#desk").getByRole("region", { name: "Contact" })).toBeVisible();
-    await page.locator("#desk").getByRole("navigation", { name: "Screen" }).getByRole("button", { name: "All work" }).click();
-    await nav(page).getByRole("button", { name: /^Project Payday/ }).click();
+    await screenNav(page).getByRole("button", { name: "All work" }).click();
+    await openProject(page, "Project Payday");
     await expect(pane(page, "Project Payday").getByRole("button", { name: "Request a private walkthrough" })).toBeVisible();
   });
 
-  test("the pane scrolls inside the monitor with the wheel", async ({ page }) => {
+  test("the grid scrolls inside the monitor with the wheel", async ({ page }) => {
     await toDesk(page);
-    const p = pane(page, "247Aisupports");
-    const box = (await p.boundingBox())!;
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    const g = grid(page);
+    const box = (await g.boundingBox())!;
+    // On phones the grid is taller than the screen: aim at its visible top.
+    await page.mouse.move(box.x + box.width / 2, Math.min(box.y + box.height / 2, box.y + 200));
     await page.mouse.wheel(0, 500);
     await page.waitForTimeout(600);
-    expect(await p.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+    // Desktop scrolls the grid itself; phones scroll the grid and the services below it together.
+    expect(await g.evaluate((el) => Math.max(el.scrollTop, el.parentElement!.scrollTop))).toBeGreaterThan(0);
     await expect(phase(page)).toHaveAttribute("data-phase", "desk");
   });
 
   test("the screen is light and readable", async ({ page }) => {
     await toDesk(page);
-    expect(await contrast(nav(page).getByRole("button", { name: /^TG Auto Trader/ }))).toBeGreaterThanOrEqual(4.5);
+    expect(await contrast(card(page, "TG Auto Trader"))).toBeGreaterThanOrEqual(4.5);
+    expect(await contrast(chips(page).getByRole("button", { name: /^Trading/ }))).toBeGreaterThanOrEqual(4.5);
     const bg = await page.locator("#desk [data-screen]").evaluate((el) => getComputedStyle(el).backgroundColor);
     expect(bg).toBe("rgb(245, 241, 234)");
   });
 
-  test("keyboard: Tab reaches the side nav and Enter opens a project", async ({ page }) => {
+  test("keyboard: Tab reaches a card and Enter opens the project", async ({ page }) => {
     await toDesk(page);
-    const target = nav(page).getByRole("button", { name: /^TG Auto Trader/ });
-    for (let i = 0; i < 60 && !(await target.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press("Tab");
+    const target = card(page, "TG Auto Trader");
+    for (let i = 0; i < 80 && !(await target.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press("Tab");
     await expect(target).toBeFocused();
     await page.keyboard.press("Enter");
     await expect(pane(page, "TG Auto Trader")).toBeVisible();
   });
 
-  test("About and Contact open on the screen and return to the project", async ({ page }) => {
+  test("About and Contact open on the screen; All work returns to the grid", async ({ page }) => {
     await toDesk(page);
     const desk = page.locator("#desk");
     for (const [button, region] of [
       ["About", "About Jeon"],
       ["Contact", "Contact"],
     ] as const) {
-      await desk.getByRole("navigation", { name: "Screen" }).getByRole("button", { name: button }).click();
+      await screenNav(page).getByRole("button", { name: button }).click();
       await expect(desk.getByRole("region", { name: region })).toBeVisible();
-      await desk.getByRole("navigation", { name: "Screen" }).getByRole("button", { name: "All work" }).click();
-      await expect(pane(page, "247Aisupports")).toBeVisible();
+      await screenNav(page).getByRole("button", { name: "All work" }).click();
+      await expect(grid(page)).toBeVisible();
     }
   });
 
@@ -463,12 +515,20 @@ test.describe("final review fixes", () => {
     }
   });
 
-  test("phones: the side nav is a row of project chips above the pane", async ({ page }, info) => {
+  test("phones: category chips sit above a one-column grid, services follow it, and a card opens the project", async ({ page }, info) => {
     test.skip(info.project.name !== "phone", "phone layout");
     await toDesk(page);
-    const nav = page.locator("#desk").getByRole("navigation", { name: "Projects" });
-    await nav.getByRole("button", { name: /^TG Auto Trader/ }).click();
-    await expect(page.locator("#desk").getByRole("region", { name: "TG Auto Trader" })).toBeVisible();
+    const grid = page.locator("#desk").getByRole("region", { name: "All work" });
+    const cards = grid.getByRole("listitem");
+    const [a, b] = [(await cards.nth(0).boundingBox())!, (await cards.nth(1).boundingBox())!];
+    expect(b.y).toBeGreaterThan(a.y + a.height - 1);
+    const vw = page.viewportSize()!.width;
+    expect(a.x + a.width).toBeLessThanOrEqual(vw);
+    const browse = page.locator("#desk").getByRole("complementary", { name: "Browse" });
+    await browse.getByRole("button", { name: "Back-office systems" }).click();
+    await expect(grid.getByRole("heading", { level: 2 })).toHaveText("Back-office systems");
+    await grid.getByRole("link", { name: "Project Payday", exact: true }).click();
+    await expect(page.locator("#desk").getByRole("region", { name: "Project Payday" })).toBeVisible();
   });
 
 });

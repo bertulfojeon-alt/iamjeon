@@ -4,7 +4,7 @@
  * Everything about one project, in the monitor's main pane, like a product
  * dashboard: the problem and result up top with a link to the live site, the
  * product's video, then sections the visitor scrolls through or jumps to with the
- * text buttons — Screens, Features, Numbers, Built with. The long write-up waits
+ * text buttons (Screens, Features, Numbers, Built with). The long write-up waits
  * behind "Read the story". The pane scrolls on its own inside the monitor.
  */
 
@@ -20,9 +20,10 @@ interface Props {
   groupTitle: string;
   still: boolean;
   onZoom: (shot: Shot) => void;
+  onBack: () => void;
 }
 
-export function ProjectPane({ item, groupTitle, still, onZoom }: Props) {
+export function ProjectPane({ item, groupTitle, still, onZoom, onBack }: Props) {
   const pane = useRef<HTMLElement>(null);
   const [spot, setSpot] = useState<number | null>(null);
   const [story, setStory] = useState(false);
@@ -54,6 +55,9 @@ export function ProjectPane({ item, groupTitle, still, onZoom }: Props) {
   return (
     <section ref={pane} className={styles.pane} aria-label={item.title} data-screen-view data-lenis-prevent>
       <header className={styles.head}>
+        <button type="button" className={styles.back} onClick={onBack}>
+          <span aria-hidden="true">←</span> All projects
+        </button>
         <p className={styles.kicker}>
           {groupTitle} · {item.industry} · {item.year} · {item.status}
         </p>
