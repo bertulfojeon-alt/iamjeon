@@ -181,7 +181,7 @@ export function CaseStudy({ project: p, inModal = false }: { project: Project; i
                 className={styles.linkGhost}
                 href={`mailto:${EMAIL}?subject=${encodeURIComponent(`About ${p.title}`)}`}
               >
-                Ask me about this build
+                Email me about a project like this
               </a>
             )}
           </div>

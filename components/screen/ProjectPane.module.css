@@ -56,8 +56,13 @@
   background: #7d3906;
 }
 .ghost {
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
   border: 1px solid var(--line);
+  background: transparent;
   color: var(--screen);
+  cursor: pointer;
 }
 .ghost:hover {
   border-color: var(--screen);

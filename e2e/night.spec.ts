@@ -84,6 +84,11 @@ test.describe("the film", () => {
     await expect(page.getByRole("button", { name: "Skip" })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("hidden");
     await expect(phase(page)).toHaveAttribute("data-phase", "desk", { timeout: 15000 });
+    // The desk keeps the page itself still (only the screen's panels scroll)…
+    expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("hidden");
+    // …until the back-to-top button releases it.
+    await page.getByRole("button", { name: "Back to the top" }).click();
+    await expect(phase(page)).toHaveAttribute("data-phase", "welcome");
     expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("");
   });
 
@@ -211,6 +216,18 @@ test.describe("the desk dashboard", () => {
     await expect(page).toHaveURL(/\/work\/tg-auto-trader$/);
     await expect(nav(page).getByRole("button", { name: /^TG Auto Trader/ })).toHaveAttribute("aria-current", "true");
     await expect(phase(page)).toHaveAttribute("data-phase", "desk");
+  });
+
+  test("each project ends with a clear way to get in touch, on the screen", async ({ page }) => {
+    await toDesk(page);
+    await nav(page).getByRole("button", { name: /^TG Auto Trader/ }).click();
+    const p = pane(page, "TG Auto Trader");
+    await expect(p.getByText("Ask me about this build")).toHaveCount(0);
+    await p.getByRole("button", { name: "Want something like this? Let's talk" }).click();
+    await expect(page.locator("#desk").getByRole("region", { name: "Contact" })).toBeVisible();
+    await page.locator("#desk").getByRole("navigation", { name: "Screen" }).getByRole("button", { name: "All work" }).click();
+    await nav(page).getByRole("button", { name: /^Project Payday/ }).click();
+    await expect(pane(page, "Project Payday").getByRole("button", { name: "Request a private walkthrough" })).toBeVisible();
   });
 
   test("the pane scrolls inside the monitor with the wheel", async ({ page }) => {

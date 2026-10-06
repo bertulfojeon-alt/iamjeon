@@ -81,7 +81,8 @@ export const recipes = [
     hide: [...COOKIE_BANNERS, "[data-capture-hide]"],
   }),
   publicSite("ezvibe-landing", "https://ezvibe.vercel.app/", { settle: 2500 }),
-  publicSite("unified-cx-landing", "https://aibpo-eight.vercel.app/", { settle: 3500 }),
+  // Unified CX runs locally (its hosting is paused): `npx next dev -p 3011` in its repo first.
+  publicSite("unified-cx-landing", "http://localhost:3011/", { settle: 6000, hide: [...COOKIE_BANNERS, "nextjs-portal"] }),
   // ── Local apps (start it first: Karaoke `npm start`) ──
   publicSite("karaoke", "http://localhost:5173/", {
     settle: 4000,

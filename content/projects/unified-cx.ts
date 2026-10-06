@@ -36,10 +36,10 @@ export default {
     {
       type: "image",
       src: "/media/projects/unified-cx-landing/screen.webp",
-      alt: "AI CX landing page: The queue never sleeps. Your people should.",
+      alt: "Unified CX landing page: Answered. Understood. Routed.",
       width: 1280,
       height: 800,
-      caption: "The public landing page.",
+      caption: "The landing page, run locally (hosting is paused).",
     },
   ],
   spotlights: [
@@ -122,6 +122,6 @@ export default {
       source: `wc -l of worker/sip-gemini-bridge.js, ${SRC} (work-b.md §2F)`,
     },
   ],
-  links: [{ label: "AI CX", href: "https://aibpo-eight.vercel.app", kind: "live" }],
+  links: [],
   order: 10,
 } satisfies ProjectInput;

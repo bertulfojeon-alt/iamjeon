@@ -14,7 +14,6 @@ import type { ScreenItem, Shot } from "./Screen";
 import { Spotlights } from "./Spotlights";
 import styles from "./ProjectPane.module.css";
 
-const EMAIL = "bertulfojeon@gmail.com";
 
 interface Props {
   item: ScreenItem;
@@ -186,12 +185,13 @@ export function ProjectPane({ item, groupTitle, still, onZoom }: Props) {
       )}
 
       <footer className={styles.foot}>
-        <a
+        <button
+          type="button"
           className={styles.ghost}
-          href={`mailto:${EMAIL}?subject=${encodeURIComponent(item.classified ? `Private screening — ${item.title}` : `About ${item.title}`)}`}
+          onClick={() => window.dispatchEvent(new CustomEvent("ns:open", { detail: "contact" }))}
         >
-          {item.classified ? "Request a private screening" : "Ask me about this build"}
-        </a>
+          {item.classified ? "Request a private walkthrough" : "Want something like this? Let's talk"}
+        </button>
       </footer>
     </section>
   );
