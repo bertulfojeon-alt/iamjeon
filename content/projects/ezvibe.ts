@@ -32,6 +32,16 @@ export default {
     problem: "Running several AI coding agents at once means one of them eventually pushes code with the wrong account.",
     outcome: "A Windows terminal where every tab carries its own identity, so each agent works, signs and deploys as the right account.",
   },
+  gallery: [
+    {
+      type: "image",
+      src: "/media/projects/ezvibe-landing/screen.webp",
+      alt: "EZVibe landing page: Every terminal tab, its own identity",
+      width: 1280,
+      height: 800,
+      caption: "The public landing page with the waitlist.",
+    },
+  ],
   features: [
     "One profile per tab: Claude Code, GitHub, git author, Vercel, Supabase and browser",
     "Folders pinned to profiles, with a warning bar when a tab wanders into another's folder",

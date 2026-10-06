@@ -28,7 +28,7 @@ function toItem(p: Project): ScreenItem {
     poster: p.screen.poster,
     loop: p.screen.loop,
     showcase: p.showcase,
-    live: p.links.filter((l) => l.kind === "live" || l.kind === "demo").map((l) => ({ label: l.label, href: l.href })),
+    live: p.links.filter((l) => l.kind === "live" || l.kind === "demo" || l.kind === "waitlist").map((l) => ({ label: l.label, href: l.href })),
     shots,
     features: p.features,
     spotlights: p.spotlights,

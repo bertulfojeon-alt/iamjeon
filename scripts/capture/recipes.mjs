@@ -66,6 +66,22 @@ export const recipes = [
   }),
   publicSite("resolute-ai-site", "https://resoluteaiph.vercel.app/", { settle: 3500 }),
   // The event date has passed, so its countdown reads negative — keep it out.
+  // ── Landing pages of products whose main screen is their app (kept in their own folders) ──
+  publicSite("the-alpha-room-landing", "https://www.alphavault.trade/", {
+    settle: 3500,
+    // Its cookie notice has no cookie/consent class: tag it by text for the hide list.
+    setup: async (page) => {
+      await page.evaluate(() => {
+        for (const el of document.querySelectorAll("body *")) {
+          const t = el.textContent?.trim() ?? "";
+          if (/^Essential cookies only/.test(t) && el.getBoundingClientRect().bottom >= innerHeight - 4) el.setAttribute("data-capture-hide", "");
+        }
+      });
+    },
+    hide: [...COOKIE_BANNERS, "[data-capture-hide]"],
+  }),
+  publicSite("ezvibe-landing", "https://ezvibe.vercel.app/", { settle: 2500 }),
+  publicSite("unified-cx-landing", "https://aibpo-eight.vercel.app/", { settle: 3500 }),
   // ── Local apps (start them first: Karaoke `npm start`, Project Genesis `npm run dev`) ──
   publicSite("karaoke", "http://localhost:5173/", {
     settle: 4000,

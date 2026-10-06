@@ -32,6 +32,16 @@ export default {
     problem: "Callers ring one hotline for many different providers and wait on hold while staff work out who they need.",
     outcome: "An AI front desk finds the right company, verifies the caller and hands the call to that company's agent, in Tagalog, Bisaya or English.",
   },
+  gallery: [
+    {
+      type: "image",
+      src: "/media/projects/unified-cx-landing/screen.webp",
+      alt: "AI CX landing page: The queue never sleeps. Your people should.",
+      width: 1280,
+      height: 800,
+      caption: "The public landing page.",
+    },
+  ],
   spotlights: [
     { feature: "Universal front desk that hands the caller to a company's own agent on the same call", x: 48, y: 45, label: "Routes callers to the right company" },
     { feature: "Tagalog, Bisaya and English, including code-switching mid-sentence", x: 24, y: 66, label: "Tagalog, Bisaya and English" },
@@ -112,6 +122,6 @@ export default {
       source: `wc -l of worker/sip-gemini-bridge.js, ${SRC} (work-b.md §2F)`,
     },
   ],
-  links: [],
+  links: [{ label: "AI CX", href: "https://aibpo-eight.vercel.app", kind: "live" }],
   order: 10,
 } satisfies ProjectInput;
