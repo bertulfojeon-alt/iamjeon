@@ -1,7 +1,7 @@
 # Night Shift — iamjeon portfolio
 
 Cinematic portfolio for Loreto "Jeon" Saquilabon Jr. Welcome loop (Jeon on a seawall bench at night)
-→ first scroll plays one 7 s film (sea → rooftops → window → he sits at his desk → push-in to the
+→ every scroll down from the welcome plays one 7 s film (sea → rooftops → window → he sits at his desk → push-in to the
 monitor) → the monitor becomes a live desktop of the work → projects open in modals.
 Design record: `docs/specs/2026-10-05-night-shift-design.md`. Old static site: tag `v1-static`.
 

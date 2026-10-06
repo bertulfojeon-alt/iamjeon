@@ -8,7 +8,8 @@
  *   film    — the moment the copy is gone the one-shot film plays (sea → rooftops →
  *             window → desk → monitor). Its first frame matches the welcome shot, so
  *             it reads as one take. The page holds still while it runs; Skip or Esc
- *             ends it early. It plays once per visit.
+ *             ends it early. It plays every time the visitor scrolls down from the
+ *             welcome; "See the work" and the HUD "Work" link go straight to the desk.
  *   desk    — the film's last frame holds; the work is projected onto the monitor's
  *             screen (lib/homography) as a live desktop.
  *
@@ -27,7 +28,6 @@ type Phase = "welcome" | "film" | "desk";
 
 export const DESK_W = 1280;
 export const DESK_H = 736;
-const SEEN_KEY = "ns-film-seen";
 const MONITOR = theatre.monitor as Quad;
 // True until the stage first mounts after a full page load; client navigations back home keep their place.
 let firstMount = true;
@@ -45,6 +45,7 @@ export function Theatre(props: DesktopProps) {
   const [deskReady, setDeskReady] = useState(false);
   const phaseRef = useRef<Phase>("welcome");
   phaseRef.current = phase;
+  const skipFilmRef = useRef(false); // the next trip to the desk skips the film
 
   const animated = ready && mode !== "still";
   const mobile = mode === "lite";
@@ -61,20 +62,15 @@ export function Theatre(props: DesktopProps) {
 
   const toDesk = useCallback(() => {
     filmRef.current?.pause();
-    try {
-      sessionStorage.setItem(SEEN_KEY, "1");
-    } catch {}
     setPhase("desk");
     lock(false);
   }, [lock]);
 
   const playFilm = useCallback(() => {
     const film = filmRef.current;
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem(SEEN_KEY) === "1";
-    } catch {}
-    if (!animated || !film || seen) {
+    const skip = skipFilmRef.current;
+    skipFilmRef.current = false;
+    if (!animated || !film || skip) {
       setPhase("desk");
       return;
     }
@@ -83,10 +79,15 @@ export function Theatre(props: DesktopProps) {
     film.currentTime = 0;
     film.muted = !soundOn;
     // A play() interrupted by loading (AbortError) is retried once the film can
-    // play; anything else (autoplay refused, decode error) falls back to the desk.
+    // play; refused with sound (NotAllowedError) it retries muted; anything else
+    // (decode error) falls back to the desk.
     film.play().catch((err: DOMException) => {
-      if (err?.name !== "AbortError") return toDesk();
-      film.addEventListener("canplay", () => film.play().catch(() => toDesk()), { once: true });
+      if (err?.name === "AbortError") {
+        film.addEventListener("canplay", () => film.play().catch(() => toDesk()), { once: true });
+      } else if (err?.name === "NotAllowedError" && !film.muted) {
+        film.muted = true;
+        film.play().catch(() => toDesk());
+      } else toDesk();
     });
   }, [animated, lock, soundOn, toDesk]);
 
@@ -152,6 +153,7 @@ export function Theatre(props: DesktopProps) {
         glide(vh, playFilm);
       } else if (p === "desk" && !down && y < vh * 0.92) {
         // Scrolling back up returns to the bench; the copy slides back in.
+        skipFilmRef.current = false;
         setPhase("welcome");
         glide(0, () => {});
       }
@@ -176,9 +178,7 @@ export function Theatre(props: DesktopProps) {
     const onGo = () => {
       if (phaseRef.current === "film") return toDesk();
       const vh = window.innerHeight;
-      try {
-        sessionStorage.setItem(SEEN_KEY, "1");
-      } catch {}
+      if (phaseRef.current === "welcome") skipFilmRef.current = true;
       if (lenis) lenis.scrollTo(vh, { duration: 1, force: true });
       else window.scrollTo({ top: vh, behavior: "smooth" });
     };

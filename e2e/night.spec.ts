@@ -2,6 +2,12 @@ import { expect, test, type Page } from "@playwright/test";
 
 const phase = (page: Page) => page.locator("section[data-phase]");
 
+/** Back at the top, with the glide there finished (Lenis ignores input while it runs). */
+async function topOfPage(page: Page) {
+  await page.waitForFunction(() => window.scrollY === 0, null, { timeout: 5000 });
+  await page.waitForTimeout(400); // the eased glide's last stretch, all under a pixel
+}
+
 /** First scroll from the welcome screen: the copy leaves and the film starts. */
 async function scrollIntoFilm(page: Page) {
   await page.goto("/");
@@ -45,12 +51,22 @@ test.describe("the film", () => {
     await page.getByRole("button", { name: "Skip" }).click();
     await expect(phase(page)).toHaveAttribute("data-phase", "desk");
 
-    // Seen once this visit: a new tab replays it, and Esc skips.
-    const fresh = await page.context().newPage();
-    await fresh.evaluate(() => sessionStorage.clear()).catch(() => {});
-    await scrollIntoFilm(fresh);
-    await fresh.keyboard.press("Escape");
-    await expect(phase(fresh)).toHaveAttribute("data-phase", "desk");
+    // Back up to the welcome and down again: it plays again, and Esc skips.
+    await page.mouse.move(20, 400);
+    await page.mouse.wheel(0, -200);
+    await expect(phase(page)).toHaveAttribute("data-phase", "welcome");
+    await topOfPage(page);
+    await page.mouse.wheel(0, 200);
+    await expect(phase(page)).toHaveAttribute("data-phase", "film", { timeout: 8000 });
+    await page.keyboard.press("Escape");
+    await expect(phase(page)).toHaveAttribute("data-phase", "desk");
+  });
+
+  test("See the work goes straight to the desk", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "See the work" }).click();
+    await expect(phase(page)).toHaveAttribute("data-phase", "desk", { timeout: 5000 });
+    await expect(page.getByRole("button", { name: "Skip" })).toHaveCount(0);
   });
 });
 
@@ -60,9 +76,8 @@ test.describe("going back to the welcome", () => {
     await page.getByRole("button", { name: "Skip" }).click().catch(() => {});
     await expect(phase(page)).toHaveAttribute("data-phase", "desk");
   };
-  const topOfPage = (page: Page) => page.waitForFunction(() => window.scrollY < 4, null, { timeout: 5000 });
 
-  test("scrolling up from the desk returns to the welcome, and down goes back to the desk", async ({ page }) => {
+  test("scrolling up from the desk returns to the welcome, and down plays the film again", async ({ page }) => {
     await atDesk(page);
     await page.mouse.move(20, 400); // over the picture, not the scrollable desk grid
     await page.mouse.wheel(0, -200);
@@ -72,9 +87,10 @@ test.describe("going back to the welcome", () => {
     expect(await page.evaluate(() => window.scrollY)).toBeLessThan(4);
     await expect(page.getByRole("heading", { level: 1 })).toBeInViewport();
 
-    // The film has been seen this visit, so scrolling down goes straight to the desk.
     await page.mouse.wheel(0, 200);
-    await expect(phase(page)).toHaveAttribute("data-phase", "desk", { timeout: 5000 });
+    await expect(phase(page)).toHaveAttribute("data-phase", "film", { timeout: 8000 });
+    await page.getByRole("button", { name: "Skip" }).click();
+    await expect(phase(page)).toHaveAttribute("data-phase", "desk");
   });
 
   test("a reload starts at the welcome", async ({ page }) => {
@@ -84,6 +100,8 @@ test.describe("going back to the welcome", () => {
     await topOfPage(page);
     await page.waitForTimeout(800);
     await expect(phase(page)).toHaveAttribute("data-phase", "welcome");
+    await page.mouse.wheel(0, 160);
+    await expect(phase(page)).toHaveAttribute("data-phase", "film", { timeout: 8000 });
   });
 });
 
