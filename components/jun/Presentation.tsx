@@ -15,7 +15,7 @@ import { ABOUT_LEAD } from "@/content/about";
 import { SERVICES } from "@/content/services";
 import { GROUP_TITLES } from "@/content/tracks";
 import type { PresentationState, Slide } from "@/features/jun/presentation";
-import { mailtoHref, viberHref, whatsappHref } from "@/lib/contact";
+import { EMAIL, VIBER, WHATSAPP, mailtoHref, viberHref, whatsappHref } from "@/lib/contact";
 import styles from "./Presentation.module.css";
 
 export interface PresentationProps {
@@ -143,12 +143,12 @@ function Contact({ summary }: { summary?: string }) {
         </div>
       )}
       <div className={styles.links}>
-        <a href={mailtoHref(summary)}>Email</a>
+        <a href={mailtoHref(summary)}>Email · {EMAIL}</a>
         <a href={whatsappHref(summary)} target="_blank" rel="noopener" data-jun-whatsapp>
-          WhatsApp
+          WhatsApp · {WHATSAPP.label}
         </a>
         <a href={viberHref()} onClick={() => summary && navigator.clipboard?.writeText(summary).catch(() => {})}>
-          Viber
+          Viber · {VIBER.label}
         </a>
       </div>
     </div>
@@ -186,9 +186,9 @@ export function Presentation({ state, items, still, subtitle, muted, onMute, onE
   }, [onClose]);
 
   return (
-    <div ref={ref} className={`screen-light ${styles.stage}`} role="dialog" aria-modal="true" aria-label="Jun's presentation" tabIndex={-1} data-still={still}>
+    <div ref={ref} className={`screen-light ${styles.stage}`} role="dialog" aria-modal="true" aria-label="Jeon's AI presentation" tabIndex={-1} data-still={still}>
       <header className={styles.top}>
-        <span className={styles.who}>Jun · Jeon&rsquo;s AI twin</span>
+        <span className={styles.who}>Jeon&rsquo;s AI twin</span>
         {state.slides.length > 1 && (
           <span className={styles.rail} aria-hidden="true">
             {state.slides.map((s, i) => (

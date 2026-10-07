@@ -5,7 +5,7 @@ import { runTool, type ToolContext } from "./tools";
 const items = screenItems();
 const withAll = items.find((i) => i.spotlights.length && i.metrics.length)!;
 const noMetrics = items.find((i) => i.metrics.length === 0)!;
-const ctx = (presenting = false): ToolContext => ({ items, presenting });
+const ctx = (presenting = false, showing: string | null = null): ToolContext => ({ items, presenting, showing });
 
 describe("look-ups", () => {
   it("lists every project, or one group", () => {
@@ -21,6 +21,17 @@ describe("look-ups", () => {
     const note = runTool("get_project", { slug: withAll.slug }, ctx()).response.note as string;
     expect(note).toMatch(/only/i);
     expect(note).toMatch(/connector/i);
+  });
+
+  it("while presenting, looking up another project puts that project on screen", () => {
+    const other = items.find((i) => i.slug !== withAll.slug)!;
+    expect(runTool("get_project", { slug: withAll.slug }, ctx(true, other.slug)).effect).toEqual({
+      type: "present",
+      cmd: { type: "show", slide: { slug: withAll.slug, kind: "hero" } },
+    });
+    // Already on screen, or not presenting: the screen stays as it is.
+    expect(runTool("get_project", { slug: withAll.slug }, ctx(true, withAll.slug)).effect).toBeUndefined();
+    expect(runTool("get_project", { slug: withAll.slug }, ctx(false, other.slug)).effect).toBeUndefined();
   });
 
   it("returns a project's detail, and an error for an unknown slug", () => {

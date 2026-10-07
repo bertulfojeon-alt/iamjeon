@@ -50,6 +50,7 @@ const QUESTIONS = [
 async function ask(ai: GoogleGenAI, question: string): Promise<{ said: string; tools: string[] }> {
   const items = screenItems();
   let presenting = false;
+  let showing: string | null = null;
   let said = "";
   const tools: string[] = [];
   let done: () => void = () => {};
@@ -65,8 +66,13 @@ async function ask(ai: GoogleGenAI, question: string): Promise<{ said: string; t
         const calls = m?.toolCall?.functionCalls ?? [];
         if (calls.length) {
           const functionResponses = calls.map((call: any) => {
-            const { response, effect } = runTool(call.name, call.args ?? {}, { items, presenting });
-            if (effect?.type === "present") presenting = effect.cmd.type === "end" ? false : true;
+            const { response, effect } = runTool(call.name, call.args ?? {}, { items, presenting, showing });
+            // The eval stands in for the visitor: it accepts the offer of the big screen.
+            if (effect?.type === "offer-presentation") presenting = true;
+            if (effect?.type === "present") {
+              if (effect.cmd.type === "end") presenting = false;
+              if (effect.cmd.type === "show") showing = effect.cmd.slide.slug;
+            }
             tools.push(`${call.name}(${JSON.stringify(call.args ?? {})})${response.error ? ` → error: ${response.error}` : ""}`);
             return { id: call.id, name: call.name, response };
           });

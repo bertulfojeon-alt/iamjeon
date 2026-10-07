@@ -12,9 +12,16 @@ describe("Jun's system instruction", () => {
     for (const item of screenItems()) expect(instruction).toContain(item.slug);
   });
 
-  it("speaks as Jeon's AI twin and says it is an AI", () => {
-    expect(instruction).toMatch(/AI twin/);
+  it("speaks as Jeon's AI twin, called Jeon, and says it is an AI", () => {
+    expect(instruction).toMatch(/You are Jeon's AI twin/);
     expect(instruction).toMatch(/you are an AI/i);
+    expect(instruction).not.toMatch(/Jun/);
+  });
+
+  it("mirrors the visitor's language and invites them to use their own (Google lists 99 languages)", () => {
+    expect(instruction).toMatch(/nearly a hundred languages/i);
+    expect(instruction).toMatch(/whatever language the visitor speaks/i);
+    expect(instruction).not.toMatch(/more than (a )?(100|hundred)/i);
   });
 
   it("carries the résumé as written", () => {

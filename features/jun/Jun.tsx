@@ -106,7 +106,9 @@ export function Jun({ items, where }: JunProps) {
       },
       onSubtitle: setSubtitle,
       onTool: (name, args) => {
-        const { response, effect } = runTool(name, args, { items: itemsRef.current, presenting: presRef.current.open });
+        const pres = presRef.current;
+        const showing = pres.open ? (pres.slides[pres.current]?.slug ?? null) : null;
+        const { response, effect } = runTool(name, args, { items: itemsRef.current, presenting: pres.open, showing });
         if (effect) apply(effect);
         return response;
       },

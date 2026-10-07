@@ -59,20 +59,31 @@ test.describe("the badge's geometry", () => {
         page.evaluate(() => {
           const r = (el: Element) => el.getBoundingClientRect();
           const ring = r(document.querySelector("[data-ring-front]")!);
-          const pill = r(document.querySelector("[data-jun-pill]")!);
+          const pill = r(document.querySelector("[data-jun-mic]")!);
           const up = r(document.querySelector('[aria-label="Back to the top"]')!);
           return { ring: [ring.left, ring.right], pill: [pill.left, pill.right], upRight: up.right, sw: document.documentElement.scrollWidth, iw: innerWidth };
         });
       const check = async (state: string) => {
         const m = await measure();
-        expect(m.pill[0], `${state}: pill inside the ring (left)`).toBeGreaterThanOrEqual(m.ring[0] - 0.5);
-        expect(m.pill[1], `${state}: pill inside the ring (right)`).toBeLessThanOrEqual(m.ring[1] + 0.5);
+        expect(m.pill[0], `${state}: mic inside the ring (left)`).toBeGreaterThanOrEqual(m.ring[0] - 0.5);
+        expect(m.pill[1], `${state}: mic inside the ring (right)`).toBeLessThanOrEqual(m.ring[1] + 0.5);
         expect(m.ring[0], `${state}: ring on screen`).toBeGreaterThanOrEqual(0);
         expect(m.ring[1], `${state}: ring on screen`).toBeLessThanOrEqual(m.iw);
         expect(m.ring[0] - m.upRight, `${state}: clear of the ↑ button`).toBeGreaterThanOrEqual(12);
         expect(m.sw, `${state}: no sideways scroll`).toBe(m.iw);
       };
       await page.waitForTimeout(800);
+      // At rest: only the glowing microphone shows; the ring and mini Jeon are hidden.
+      const rest = await page.evaluate(() => ({
+        ring: getComputedStyle(document.querySelector("[data-ring-front]")!.closest("svg")!).opacity,
+        person: getComputedStyle(document.querySelector("[data-jun-badge] img")!.parentElement!).opacity,
+        pill: document.querySelectorAll("[data-jun-pill]").length,
+        mic: (() => { const r = document.querySelector("[data-jun-mic]")!.getBoundingClientRect(); return [r.width, r.height]; })(),
+      }));
+      expect(rest.ring, "resting: ring hidden").toBe("0");
+      expect(rest.person, "resting: mini Jeon hidden").toBe("0");
+      expect(rest.pill, "no Talk to me pill").toBe(0);
+      expect(rest.mic[0], "resting: a mic button big enough to tap").toBeGreaterThanOrEqual(44);
       await check("resting");
       await expect(badge(page)).toHaveAttribute("data-up", "true", { timeout: 9000 });
       await page.waitForTimeout(800); // the rise and the growth finish
@@ -107,8 +118,10 @@ test.describe("the wave", () => {
 test.describe("starting a call", () => {
   test("Not now closes the card", async ({ page }) => {
     await toDesk(page);
-    await badge(page).locator("[data-jun-pill]").click();
+    await badge(page).locator("[data-jun-mic]").click();
     await expect(page.locator("[data-jun-card=intro]")).toBeVisible();
+    await expect(page.locator("[data-jun-card=intro]")).toContainText(/Jeon.s AI twin/);
+    await expect(page.locator("[data-jun-card=intro]")).not.toContainText("Google");
     await page.getByRole("button", { name: "Not now" }).click();
     await expect(page.locator("[data-jun-card]")).toHaveCount(0);
   });
@@ -118,13 +131,17 @@ test.describe("starting a call", () => {
       await stubMic(page, mode);
       const live = await mockLive(page);
       await toDesk(page);
-      await badge(page).locator("[data-jun-pill]").click();
+      await badge(page).locator("[data-jun-mic]").click();
       await page.getByRole("button", { name: "Start" }).click();
       // Playwright's WebKit on Windows has no Web Audio at all: there the call cannot start,
       // and the visitor is told the browser cannot hold a call (real Safari has Web Audio).
       const noWebAudio = browserName === "webkit" && !(await page.evaluate(() => "AudioContext" in window || "webkitAudioContext" in window));
       await expect(page.locator(`[data-jun-failure=${noWebAudio ? "unsupported" : mode}]`)).toBeVisible();
-      await expect(page.locator("[data-jun-card=error] [data-jun-links] a")).toHaveCount(3);
+      const links = page.locator("[data-jun-card=error] [data-jun-links]");
+      await expect(links.locator("a")).toHaveCount(3);
+      await expect(links).toContainText("bertulfojeon@gmail.com");
+      await expect(links).toContainText("+63 968 4333 479");
+      await expect(links).toContainText("+63474660563");
       expect(live.tokenRequests).toHaveLength(0);
     });
   }
@@ -140,23 +157,23 @@ test.describe("a call with Jun (mock Live service)", () => {
     const list = await items(page);
     const p = list.find((i) => i.spotlights.length && i.metrics.length)!;
 
-    await badge(page).locator("[data-jun-pill]").click();
+    await badge(page).locator("[data-jun-mic]").click();
     await page.getByRole("button", { name: "Start" }).click();
     await expect.poll(() => live.tokenRequests.map((r) => r.model)).toEqual(["primary"]);
     await expect(page.locator("[data-jun-card=call]")).toBeVisible();
     await expect(page.locator("[data-status=listening]")).toBeVisible({ timeout: 10000 });
 
-    live.say("Hi, I'm Jun, Jeon's AI twin.");
-    await expect(page.locator("[data-jun-subtitle]")).toHaveText("Hi, I'm Jun, Jeon's AI twin.");
+    live.say("Hi, I'm Jeon's AI twin.");
+    await expect(page.locator("[data-jun-subtitle]")).toHaveText("Hi, I'm Jeon's AI twin.");
 
     // A slide before the stage is open is refused, and nothing opens.
     live.call("show_slide", { kind: "hero", slug: p.slug });
     await expect.poll(() => live.toolResponses.at(-1)?.response.error).toBeTruthy();
-    await expect(page.getByRole("dialog", { name: "Jun's presentation" })).toHaveCount(0);
+    await expect(page.getByRole("dialog", { name: "Jeon's AI presentation" })).toHaveCount(0);
 
     // Jun only offers the big screen; the visitor opens it with a tap.
     live.call("start_presentation");
-    const stage = page.getByRole("dialog", { name: "Jun's presentation" });
+    const stage = page.getByRole("dialog", { name: "Jeon's AI presentation" });
     await expect(page.locator("[data-jun-offer]")).toBeVisible();
     await expect(stage).toHaveCount(0);
     await page.getByRole("button", { name: "Show me on the big screen" }).click();
@@ -164,12 +181,12 @@ test.describe("a call with Jun (mock Live service)", () => {
     await expect(page.locator("[data-jun-offer]")).toHaveCount(0);
     // The stage covers everything, the site's top bar included.
     const topmost = await page.evaluate(() => {
-      const close = [...document.querySelectorAll(`[aria-label="Jun's presentation"] button`)].find((b) => b.textContent === "Close")!;
+      const close = [...document.querySelectorAll(`[aria-label="Jeon's AI presentation"] button`)].find((b) => b.textContent === "Close")!;
       const r = close.getBoundingClientRect();
       const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
-      const who = document.querySelector(`[aria-label="Jun's presentation"] header span`)!.getBoundingClientRect();
+      const who = document.querySelector(`[aria-label="Jeon's AI presentation"] header span`)!.getBoundingClientRect();
       const hit2 = document.elementFromPoint(who.left + 4, who.top + who.height / 2);
-      return [close.contains(hit), !!hit2?.closest(`[aria-label="Jun's presentation"]`)];
+      return [close.contains(hit), !!hit2?.closest(`[aria-label="Jeon's AI presentation"]`)];
     });
     expect(topmost).toEqual([true, true]);
 
@@ -210,7 +227,7 @@ test.describe("a call with Jun (mock Live service)", () => {
     await stubMic(page, "ok");
     const live = await mockLive(page, { refuse: 1 });
     await toDesk(page);
-    await badge(page).locator("[data-jun-pill]").click();
+    await badge(page).locator("[data-jun-mic]").click();
     await page.getByRole("button", { name: "Start" }).click();
     await expect(page.locator("[data-status=listening]")).toBeVisible({ timeout: 10000 });
     expect(live.tokenRequests.map((r) => r.model)).toEqual(["primary", "fallback"]);
@@ -220,7 +237,7 @@ test.describe("a call with Jun (mock Live service)", () => {
     await stubMic(page, "ok");
     const live = await mockLive(page, { refuse: 2 });
     await toDesk(page);
-    await badge(page).locator("[data-jun-pill]").click();
+    await badge(page).locator("[data-jun-mic]").click();
     await page.getByRole("button", { name: "Start" }).click();
     await expect(page.locator("[data-jun-failure=busy]")).toBeVisible({ timeout: 10000 });
     expect(live.tokenRequests.map((r) => r.model)).toEqual(["primary", "fallback"]);

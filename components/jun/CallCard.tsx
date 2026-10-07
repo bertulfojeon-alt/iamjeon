@@ -9,7 +9,7 @@
 
 import { useState } from "react";
 import type { JunFailure, JunStatus } from "@/features/jun/live/session";
-import { mailtoHref, viberHref, whatsappHref } from "@/lib/contact";
+import { EMAIL, VIBER, WHATSAPP, mailtoHref, viberHref, whatsappHref } from "@/lib/contact";
 import styles from "./CallCard.module.css";
 
 export type CardView = "intro" | "call" | "error" | "after";
@@ -53,9 +53,11 @@ function Links({ note }: { note: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <div className={styles.links} data-jun-links>
-      <a href={mailtoHref(note)}>Email</a>
+      <a href={mailtoHref(note)}>
+        <strong>Email</strong> {EMAIL}
+      </a>
       <a href={whatsappHref(note)} target="_blank" rel="noopener">
-        WhatsApp
+        <strong>WhatsApp</strong> {WHATSAPP.label}
       </a>
       <a
         href={viberHref()}
@@ -63,7 +65,8 @@ function Links({ note }: { note: string }) {
           if (note) navigator.clipboard?.writeText(note).then(() => setCopied(true), () => {});
         }}
       >
-        {copied ? "Viber (note copied)" : "Viber"}
+        <strong>Viber</strong> {VIBER.label}
+        {copied && " (note copied)"}
       </a>
     </div>
   );
@@ -81,14 +84,13 @@ function Note({ note }: { note: string }) {
 
 export function CallCard({ view, status, subtitle, muted, failure, note, offer, onOffer, onStart, onClose, onMute, onEnd }: CallCardProps) {
   return (
-    <section className={styles.card} role="dialog" aria-label="Talk to Jun" data-jun-card={view}>
+    <section className={styles.card} role="dialog" aria-label="Talk to Jeon's AI twin" data-jun-card={view}>
       {view === "intro" && (
         <>
-          <h2 className={styles.title}>I&rsquo;m Jun, Jeon&rsquo;s AI twin.</h2>
-          <p>I talk by voice, so I&rsquo;ll need your microphone. Ask me anything about Jeon&rsquo;s work, or I can walk you through it.</p>
-          <p className={styles.fine}>
-            Our conversation is processed by Google&rsquo;s Gemini. While Jun is in testing, Google may use it to improve its models, so please
-            don&rsquo;t share anything private.
+          <h2 className={styles.title}>I&rsquo;m Jeon&rsquo;s AI twin.</h2>
+          <p>
+            I talk by voice, so I&rsquo;ll need your microphone. Ask me anything about Jeon&rsquo;s work, or I can walk you through it, in
+            whatever language you&rsquo;re most comfortable with.
           </p>
           <div className={styles.actions}>
             <button type="button" className={styles.primary} onClick={onStart}>

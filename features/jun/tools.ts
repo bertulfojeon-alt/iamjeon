@@ -15,6 +15,8 @@ import type { PresentationCommand } from "./presentation";
 export interface ToolContext {
   items: ScreenItem[];
   presenting: boolean;
+  /** The project on the presentation screen now, if any. */
+  showing: string | null;
 }
 
 export type Channel = "email" | "whatsapp" | "viber";
@@ -55,7 +57,14 @@ export function runTool(name: string, args: Record<string, unknown>, ctx: ToolCo
 
     case "get_project": {
       const item = find(args.slug);
-      return item ? { response: { project: projectDetail(item), note: ONLY_LISTED } } : unknown(args.slug);
+      if (!item) return unknown(args.slug);
+      // The screen follows the talk: a project looked up mid-presentation goes up at once, so
+      // the visitor never hears about one project while looking at another.
+      const follow = ctx.presenting && ctx.showing !== item.slug;
+      return {
+        response: { project: projectDetail(item), note: follow ? `${ONLY_LISTED} Its hero slide is on screen now.` : ONLY_LISTED },
+        effect: follow ? { type: "present", cmd: { type: "show", slide: { slug: item.slug, kind: "hero" } } } : undefined,
+      };
     }
 
     // The live test caught Jun asking "would you like to see it?" and opening it in the same

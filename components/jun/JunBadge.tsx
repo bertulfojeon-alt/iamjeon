@@ -1,15 +1,15 @@
 "use client";
 
 /**
- * Jun's badge: mini Jeon in a glowing ring in the bottom-right corner, with a small
- * "Talk to me" pill on the front of the ring. Once a minute he rises out of the ring,
- * waves (the stacked-alpha clip), and sinks back. The ring is drawn in two halves,
+ * The AI twin's badge: at rest, only a glowing microphone in the bottom-right corner.
+ * Once a minute the ring appears around it, mini Jeon rises out of the ring, waves (the
+ * stacked-alpha clip), sinks back, and the ring fades, leaving the microphone. The ring is drawn in two halves,
  * back behind him and front in front of him, and he is clipped below the ring's centre
  * line, so he appears to come up out of an opening.
  *
  * No wave in still mode, while the tab is hidden, or during a call. If the clip cannot
  * play (iOS Low Power Mode refuses even muted video), the rest frame stays and the
- * wave is skipped; the pill still says what a tap does.
+ * wave is skipped; the microphone still says what a tap does.
  */
 
 import { useEffect, useRef, useState } from "react";
@@ -98,7 +98,7 @@ export function JunBadge({ still, calling, level, onTap }: JunBadgeProps) {
       data-level={level}
       data-still={still}
       onClick={onTap}
-      aria-label="Talk to me: Jun, Jeon's AI twin"
+      aria-label="Talk to Jeon's AI twin"
       data-jun-badge
     >
       <svg className={styles.ring} viewBox="0 0 240 250" aria-hidden="true">
@@ -126,12 +126,11 @@ export function JunBadge({ still, calling, level, onTap }: JunBadgeProps) {
         <path className={styles.front} data-ring-front d="M16 208 A104 26 0 0 0 224 208" />
       </svg>
 
-      <span className={styles.pill} aria-hidden="true" data-jun-pill>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+      <span className={styles.mic} aria-hidden="true" data-jun-mic>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
           <rect x="9" y="3" width="6" height="11" rx="3" />
           <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
         </svg>
-        Talk to me
       </span>
 
       {!still && <video ref={videoRef} className={styles.source} src="/media/jun/wave.mp4" muted playsInline preload="auto" aria-hidden="true" />}

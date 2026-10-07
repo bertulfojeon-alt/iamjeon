@@ -1,8 +1,8 @@
 /*
  * Geometry from the approved prototype, measured at 1280, 430, 390, 375 and 360 px:
  * the box is 240 × 250 and is scaled about the ring's right end (224, 230), so the ring
- * keeps its place in the corner as the badge grows. The pill is counter-scaled so it
- * always reads at 20 px. On phones the ring must clear the centred ↑ button by 12 px:
+ * keeps its place in the corner as the badge grows. At rest only the microphone shows;
+ * it is counter-scaled so it is always the same size, and sits on the ring's front. On phones the ring must clear the centred ↑ button by 12 px:
  * a screen w px wide holds a ring of (w / 2 − 45) px.
  */
 
@@ -26,12 +26,12 @@
   transform: scale(1);
 }
 
-/* The box is mostly empty: only the ring, the figure and the pill take taps. */
+/* The box is mostly empty: only the microphone takes taps, plus the ring and figure while they show. */
 .badge {
   pointer-events: none;
 }
 .person,
-.pill,
+.mic,
 .ring path {
   pointer-events: auto;
 }
@@ -42,6 +42,17 @@
   width: 100%;
   height: 100%;
   overflow: visible;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+/* At rest only the microphone shows (and takes taps); the ring and mini Jeon appear for the wave. */
+.badge:not([data-up="true"]) .person,
+.badge:not([data-up="true"]) .ring path {
+  pointer-events: none;
+}
+.badge[data-up="true"] .ring,
+.badge[data-up="true"] .figure {
+  opacity: 1;
 }
 .back,
 .front {
@@ -70,6 +81,8 @@
 .figure {
   position: absolute;
   inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s;
   clip-path: path("M0 0 H240 V208 A104 26 0 0 1 16 208 V208 H0 Z");
 }
 .person {
@@ -88,43 +101,49 @@
   visibility: hidden;
 }
 
-.pill {
+.mic {
   position: absolute;
   left: 120px;
   top: 214px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px 6px 11px;
-  border-radius: 999px;
-  white-space: nowrap;
-  font: 600 20px/1.2 var(--font-body);
-  letter-spacing: 0.01em;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
   color: #eaf3ff;
-  background: #0a1636e6;
-  border: 1px solid #6fb2ff99;
-  box-shadow: 0 0 12px #3b82ff66;
+  background: radial-gradient(circle at 50% 35%, #2f6fff, #0d2a6b 75%);
+  border: 1px solid #9fd8ff99;
+  box-shadow: 0 0 14px #3b82ffaa, 0 0 32px #3b82ff66;
   transform: translate(-50%, -50%) scale(1.333);
-  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2), border-color 0.2s, box-shadow 0.2s;
+  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.3s;
+  animation: glow 2.6s ease-in-out infinite;
 }
-.pill svg {
-  width: 17px;
-  height: 17px;
-  flex: none;
+.mic svg {
+  width: 24px;
+  height: 24px;
 }
-.badge[data-up="true"] .pill {
+@keyframes glow {
+  50% {
+    box-shadow: 0 0 20px #6fb2ffcc, 0 0 44px #3b82ff88;
+  }
+}
+.badge[data-up="true"] .mic {
   transform: translate(-50%, -50%) scale(1);
 }
-.badge:hover .pill,
-.badge:focus-visible .pill {
-  border-color: #9fd8ff;
-  box-shadow: 0 0 16px #3b82ffaa;
+.badge:hover .mic,
+.badge:focus-visible .mic {
+  box-shadow: 0 0 22px #9fd8ffcc, 0 0 48px #3b82ffaa;
+}
+/* During a call the microphone is the state: brighter while the AI twin speaks. */
+.badge[data-level="speaking"] .mic {
+  box-shadow: 0 0 26px #9fd8ff, 0 0 56px #3b82ffcc;
+}
+.badge[data-level="listening"] .mic {
+  animation: none;
+  box-shadow: 0 0 10px #3b82ff99;
 }
 .badge:focus-visible {
   outline: none;
-}
-.badge:focus-visible .front {
-  filter: drop-shadow(0 0 10px #9fd8ff) drop-shadow(0 0 22px #3b82ff);
 }
 
 /* The clip plays offscreen; the canvas shows it. */
@@ -143,8 +162,8 @@
     bottom: calc(8px + env(safe-area-inset-bottom));
     transform: scale(0.72);
   }
-  .pill,
-  .badge[data-up="true"] .pill {
+  .mic,
+  .badge[data-up="true"] .mic {
     transform: translate(-50%, -50%) scale(1.389);
   }
 }
@@ -153,27 +172,32 @@
   .badge[data-up="true"] {
     transform: scale(0.645);
   }
-  .pill,
-  .badge[data-up="true"] .pill {
+  .mic,
+  .badge[data-up="true"] .mic {
     transform: translate(-50%, -50%) scale(1.378);
   }
 }
-/* Below 360 px (down to 320): the ring holds 115 px, so ring and pill shrink together. */
+/* Below 360 px (down to 320): the ring holds 115 px; the microphone stays at least 44 px. */
 @media (max-width: 359px) {
   .badge,
   .badge[data-up="true"] {
     transform: scale(0.55);
   }
-  .pill,
-  .badge[data-up="true"] .pill {
-    transform: translate(-50%, -50%) scale(1.36);
+  .mic,
+  .badge[data-up="true"] .mic {
+    transform: translate(-50%, -50%) scale(1.45);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .badge,
   .person,
-  .pill {
+  .mic,
+  .ring,
+  .figure {
     transition: none;
+  }
+  .mic {
+    animation: none;
   }
 }
