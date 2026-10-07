@@ -17,7 +17,6 @@
 }
 .owner {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 72;
   font-weight: 800;
   text-transform: uppercase;
   font-size: 18px;

@@ -3,7 +3,6 @@
 }
 .title {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 72;
   font-weight: 800;
   text-transform: uppercase;
   font-size: clamp(2rem, 4vw, 3rem);

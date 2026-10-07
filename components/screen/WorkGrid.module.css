@@ -20,7 +20,6 @@
   gap: 8px;
   margin: 12px 0 2px;
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 72;
   font-weight: 800;
   text-transform: uppercase;
   font-size: 15px;
@@ -262,7 +261,6 @@
   flex: 1;
   margin: 0;
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 72;
   font-weight: 800;
   text-transform: uppercase;
   font-size: 22px;

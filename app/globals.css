@@ -120,7 +120,6 @@ a {
 /* ───────────────────────── Type ───────────────────────── */
 .display {
   font-family: var(--font-display);
-  font-variation-settings: "opsz" 72;
   font-weight: 800;
   line-height: 0.88;
   letter-spacing: -0.01em;

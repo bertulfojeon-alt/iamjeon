@@ -1,15 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Big_Shoulders, Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Hanken_Grotesk, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { CinematicProvider } from "@/features/cinematic-engine/CinematicProvider";
 import { modeScript } from "@/features/cinematic-engine/mode-script";
 import { Hud } from "@/components/hud/Hud";
 import "./globals.css";
 
-const bigShoulders = Big_Shoulders({
-  subsets: ["latin"],
-  axes: ["opsz"],
+// Headlines use exactly two styles of Big Shoulders (700 and 800, display optical size), cut from the
+// variable font as fixed files (app/fonts/README.md): every browser draws them the same, including
+// engines that ignore variable-font axes, and the two together are half the size of the variable file.
+const bigShoulders = localFont({
+  src: [
+    { path: "./fonts/big-shoulders-display-700.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/big-shoulders-display-800.woff2", weight: "800", style: "normal" },
+  ],
   variable: "--font-big-shoulders",
   display: "swap",
+  fallback: ["Arial Narrow", "sans-serif"],
 });
 const hanken = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken", display: "swap" });
 // Only case-study code uses it, so it is not preloaded on every page.
