@@ -78,7 +78,7 @@ Design records: `docs/specs/2026-10-05-night-shift-design.md` (the site) and
 
 ## What to build next
 
-**Jun, Jeon's AI twin: built on `night-shift`, not on the live site.** Design:
+**Jun (shown as "Jeon's AI twin"): live on `main` since 2026-10-07 (commit 0b6342e), on the owner's "merge to live deployment".** Design:
 `docs/specs/2026-10-07-jun-voice-twin-design.md` (it replaces the pre-voiced tour of the 2026-10-06 spec).
 Plan and record: `docs/superpowers/plans/2026-10-07-jun-voice-twin.md`.
 
@@ -115,7 +115,7 @@ Plan and record: `docs/superpowers/plans/2026-10-07-jun-voice-twin.md`.
   call through the whole presentation, quota fallback and busy.
 
 **Waiting on the owner:**
-1. `GEMINI_API_KEY` in Vercel (Production and Preview). It is in `.env.local` locally as of 2026-10-07.
+1. `GEMINI_API_KEY` in Vercel for **Production** (and Preview), then a redeploy. On 2026-10-07 the live token route still answered `unconfigured`. It is in `.env.local` locally.
 2. The voice pick from `media-src/jun/audition/`, which becomes `JUN_VOICE`.
 3. A Vercel WAF rule: `/api/jun/token`, 5 requests per 10 minutes per IP, answered with 429.
 4. Read the eval transcript (`test-results/jun-eval.md`) before Jun goes further.
