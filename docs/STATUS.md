@@ -5,7 +5,7 @@ Last updated 2026-10-07. The owner is Loreto "Jeon" Saquilabon Jr. (repo `bertul
 ## Where things stand
 
 - **Live:** https://iamjeon.vercel.app serves `main`, pushed 2026-10-07 on the owner's explicit
-  "push to main". The last code change is `d6e97d9` (phones: full-page desk; headline font as fixed files). `main` and `night-shift`
+  "push to main". The last code change is `2fa72cc` (iOS video fixes, below). `main` and `night-shift`
   point at the same commit.
 - **Work branch:** `night-shift` gets a Vercel preview on every push. Production changes only when `main`
   moves, and only on the owner's explicit say-so.
@@ -49,7 +49,13 @@ Design records: `docs/specs/2026-10-05-night-shift-design.md` (the site) and
    once left, so it never peeks in behind the top bar when a phone's toolbar shrinks the viewport.
    Headlines use two fixed-weight Big Shoulders files (`app/fonts/`), because WebKit on Windows (the
    Playwright Safari engine) draws the variable font hairline-thin.
-8. **Devices:** iOS page hold, safe areas, no zoom on input, a compact welcome for landscape phones,
+8. **iOS video rules** (learned on the owner's iPhone, iOS 16):
+   - never hide a video that is waiting to start, because iOS refuses to start a hidden one;
+   - starting media and turning sound on happen only inside a tap or key press (a swipe is not a tap),
+     so a tap starts a welcome loop that Low Power Mode refused, and approves the film;
+   - `e2e/night.spec.ts` imitates these rules in Chromium (`iosMediaRules`).
+   iOS Reduce Motion gives still mode on purpose.
+9. **Devices:** iOS page hold, safe areas, no zoom on input, a compact welcome for landscape phones,
    a slow-network film skip, and media cached for a day. First paint on a throttled 4G phone
    (4× CPU) is about 1.5 to 1.8 s; first load is about 374 KB, and the videos come after it.
 
