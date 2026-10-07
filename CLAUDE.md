@@ -9,6 +9,7 @@ features with spotlights, numbers, stack, story behind a button); About / Contac
 pushes /work/<slug> (shareable; direct visits get the full page); "All projects" and Back return to the grid. At the desk, scrolling never returns to the hero — the ↑ button does.
 Design records: `docs/specs/2026-10-05-night-shift-design.md`, `docs/specs/2026-10-06-shift-assistant-design.md`.
 Old static site: tag `v1-static`.
+**Current status, what is built, what to build next and the open owner decisions: `docs/STATUS.md` (read it first).**
 
 ## Stack
 Next.js 16 App Router · React 19 (`<ViewTransition>` match cuts) · TypeScript · Tailwind v4 (tokens in
