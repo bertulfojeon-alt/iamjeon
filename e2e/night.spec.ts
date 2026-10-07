@@ -449,6 +449,16 @@ test.describe("iOS media rules (Low Power Mode, tap-only sound)", () => {
     await expect(welcome).toHaveAttribute("data-playing", "true");
   });
 
+  test("a welcome video that has not started stays rendered (iOS never starts or keeps a hidden video)", async ({ page }) => {
+    await iosMediaRules(page);
+    await page.goto("/");
+    await page.waitForTimeout(2500);
+    const welcome = page.locator("video[src*='welcome']");
+    await expect(welcome).not.toHaveAttribute("data-playing", "true");
+    expect(await welcome.evaluate((v) => getComputedStyle(v).visibility)).toBe("visible");
+    expect(Number(await welcome.evaluate((v) => getComputedStyle(v).opacity))).toBeGreaterThan(0.5);
+  });
+
   test("after that tap the film plays on the next scroll instead of skipping to the desk", async ({ page }) => {
     await iosMediaRules(page);
     await page.goto("/");

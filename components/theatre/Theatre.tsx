@@ -425,7 +425,7 @@ export function Theatre(props: ScreenProps) {
         {animated && mediaReady && (
           <video
             ref={welcomeRef}
-            className={`${styles.layer} ${styles.welcome} ${styles.welcomeVideo}`}
+            className={`${styles.layer} ${styles.welcome}`}
             src={welcomeSrc}
             onPlaying={(e) => (e.currentTarget.dataset.playing = "true")}
             poster={mobile ? theatre.welcome.posterMobile : theatre.welcome.poster}
