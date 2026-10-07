@@ -13,6 +13,8 @@
     "leak-check": "node scripts/leak-check.mjs",
     "theatre": "node scripts/theatre-media.mjs",
     "jun-media": "node scripts/jun-media.mjs",
+    "jun:audition": "node scripts/jun-audition.mjs",
+    "jun:eval": "vitest run --config vitest.eval.config.ts",
     "capture": "node scripts/capture/run.mjs"
   },
   "dependencies": {

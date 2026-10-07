@@ -78,26 +78,60 @@ Design records: `docs/specs/2026-10-05-night-shift-design.md` (the site) and
 
 ## What to build next
 
-**Jun, Jeon's AI twin** (owner decisions 2026-10-07). Design: `docs/specs/2026-10-07-jun-voice-twin-design.md`,
-which replaces the pre-voiced tour and the separate live conversation of the 2026-10-06 spec. Not built yet;
-an implementation plan comes next.
+**Jun, Jeon's AI twin: built on `night-shift`, not on the live site.** Design:
+`docs/specs/2026-10-07-jun-voice-twin-design.md` (it replaces the pre-voiced tour of the 2026-10-06 spec).
+Plan and record: `docs/superpowers/plans/2026-10-07-jun-voice-twin.md`.
 
+**What it is:**
 - Voice only (Gemini Live, no chat). It knows the whole portfolio and offers a full-screen presentation of
   the work, driven by function calls.
-- A floating badge, bottom right, shows a mini Jeon in a glowing ring. He waves once a minute, with a
-  "Talk to me" pill. It appears only at the desk and on `/work/<slug>`.
-- Owner decisions:
-  - **name:** Jun;
-  - **persona:** first person as Jeon's AI twin, always says it is an AI;
-  - **voice:** calm male, from an audition of Charon, Iapetus, Algieba, Orus and Schedar;
-  - **tier:** free for development, with `gemini-3.8-live` first and the native-audio model as fallback;
-  - **résumé:** as is.
-- Still needed from the owner:
-  - `GEMINI_API_KEY` in `.env.local` and in Vercel;
-  - the voice pick;
-  - a billing decision before Jun moves from the previews to `main`.
-- The badge clip's source is `media-src/jun/` (copy of the owner's
-  `Young_man_waving_at_camera_20261007125012.mp4`); the encoding recipe is in the spec, section 1.
+- A floating badge, bottom right: mini Jeon in a glowing ring with a "Talk to me" pill. He waves 4 s after
+  the desk appears, then once a minute. Only at the desk and on `/work/<slug>`. The ↑ button is
+  bottom centre on every layout.
+
+**Owner decisions:**
+- **name:** Jun;
+- **persona:** first person as Jeon's AI twin, always says it is an AI;
+- **voice:** calm male; `Charon` until the owner picks from the audition;
+- **tier:** free for development, with `gemini-3.8-live` first and the native-audio model as fallback;
+- **résumé:** as is (`content/resume.md`).
+
+**How it is built:**
+- `app/api/jun/token`: a single-use Live token that locks the model, voice, instruction and tools. It
+  checks the origin and has a kill switch (`JUN_KILL=1`).
+- `lib/jun/instruction.ts`: the persona, the rules and the project index. A unit test runs the leak check's
+  denylists over it, because the build check skips server code.
+- `features/jun/`: the tool bridge (`tools.ts`, every call checked), the presentation reducer, the live
+  session (mic worklet, quota fallback, 5-minute cap), and `Jun.tsx`.
+- `components/jun/`: the badge, the call card and the presentation stage.
+- `/work` pages do not embed the project list: a classified case page may not carry other projects'
+  names. Jun fetches `/api/jun/items` when the card opens.
+- The badge clip: `npm run jun-media` encodes `media-src/jun/wave-source.mp4` (the owner's green-screen
+  clip) into a stacked-alpha H.264 file, joined on a canvas.
+
+**Tests:**
+- unit: config, route, instruction, tools, reducer, session, audio, stacked alpha;
+- `e2e/jun.spec.ts`: placement, geometry at five widths, wave, still mode, mic refusals, and a mock Live
+  call through the whole presentation, quota fallback and busy.
+
+**Waiting on the owner:**
+1. `GEMINI_API_KEY`:
+   - in `.env.local` (then run `npm run jun:audition` and `npm run jun:eval`);
+   - in Vercel (Production and Preview).
+
+   Without it the call card says it could not connect.
+2. The voice pick from `media-src/jun/audition/`, which becomes `JUN_VOICE`.
+3. A Vercel WAF rule: `/api/jun/token`, 5 requests per 10 minutes per IP, answered with 429.
+4. Read the eval transcript (`test-results/jun-eval.md`) before Jun goes further.
+5. Billing, before Jun moves to `main`. On the free tier Google may use what visitors say to train its
+   models; the call card says so.
+
+**Not verified yet:**
+- a real call against Google (no key yet);
+- `gemini-3.8-live` accepting the locked setup;
+- Safari and iPhone audio. Playwright's Windows WebKit has no Web Audio; there the card says the
+  browser cannot hold a call.
+
 - **Also open:** a check on a real Mac (the iPhone was checked on 2026-10-07). The automated Safari runs
   use WebKit on Windows, which cannot reproduce touch momentum, Low Power Mode or iOS toolbar resizing,
   and in iPhone emulation the film starts but does not advance.

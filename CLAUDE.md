@@ -25,6 +25,9 @@ DOM projected onto the monitor with a homography (`lib/homography.ts`, `content/
   `%LOCALAPPDATA%\ms-playwright\webkit-<rev>` with an empty `INSTALLATION_COMPLETE` file.
 - `npm run theatre` — encode `media-src/flow/{welcome,film}.mp4` (gitignored sources) into
   `public/media/theatre/` and print the monitor corners for `content/theatre.json`
+- `npm run jun-media` — encode Jun's badge clip (`media-src/jun/wave-source.mp4`, gitignored) into
+  `public/media/jun/` · `npm run jun:audition` / `npm run jun:eval` — voice samples and the live eval (need
+  `GEMINI_API_KEY` in `.env.local`; never open or print that file)
 - `npm run capture [slug]` — record public sites; `scripts/capture/live-session.mjs` records dashboards
   from an Edge window the owner logged into (debug port 9333, profile in `F:\ME\portfolio-private`)
 
@@ -43,6 +46,9 @@ DOM projected onto the monitor with a homography (`lib/homography.ts`, `content/
   The sodium warm-up (`WarmTitle`) is for chapter titles only.
 - What the monitor shows is owned by `features/stage/stage.ts` (pure reducer); Jun (the voice assistant)
   dispatches the same commands.
+- Jun (voice assistant): its instruction is built on the server and sent to the browser, so
+  `lib/jun/instruction.test.ts` runs the denylists over it; `/work` pages never embed the full project list
+  (classified pages must not carry other projects' names). Every Jun tool call goes through `features/jun/tools.ts`.
 - Every case study needs a `pitch` (track, problem, outcome; no digits); calls/trading/admin projects need
   2–3 `spotlights` positioned on `screen.poster`.
 - Content: one file per project in `content/projects/`; registry and ordering in `content/index.ts`.
