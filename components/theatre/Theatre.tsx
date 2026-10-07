@@ -48,22 +48,50 @@ export function Theatre(props: ScreenProps) {
   phaseRef.current = phase;
   const skipFilmRef = useRef(false); // the next trip to the desk skips the film
 
-  // Sound follows the toggle from the visitor's first gesture (browsers refuse sound before one).
-  // Only events that count as a user activation unlock it: a touchstart or a scroll does not
-  // (iOS Safari would pause a video that is unmuted without one).
   const [gestured, setGestured] = useState(false);
-  useEffect(() => {
-    const on = () => setGestured(true);
-    const types = ["click", "keydown", "touchend"] as const;
-    types.forEach((t) => window.addEventListener(t, on, { once: true, passive: true }));
-    return () => types.forEach((t) => window.removeEventListener(t, on));
-  }, []);
   const audible = soundOn && gestured;
   const animated = ready && mode !== "still";
   // Read when the film is due to start, not when the scroll that leads to it began: a swipe
   // in the first moments after load starts before the engine is ready and ends after.
   const animatedRef = useRef(animated);
   animatedRef.current = animated;
+  const soundOnRef = useRef(soundOn);
+  soundOnRef.current = soundOn;
+  const filmApprovedRef = useRef(false);
+
+  // ── A tap or key press: the only moment iOS lets a page start a video or turn its sound on ──
+  // (a swipe's touchend is not one). Low Power Mode refuses even silent autoplay, so the tap
+  // starts the welcome loop if it is still waiting, and plays the film for an instant, unseen,
+  // which approves it for the scroll that will run it. Sound is switched on here too: a video
+  // unmuted any other time is paused by iOS.
+  useEffect(() => {
+    const onTap = () => {
+      setGestured(true);
+      const welcome = welcomeRef.current;
+      const film = filmRef.current;
+      const atWelcome = phaseRef.current === "welcome";
+      if (welcome && atWelcome && welcome.paused && animatedRef.current) welcome.play().catch(() => {});
+      if (film && atWelcome && animatedRef.current && !filmApprovedRef.current) {
+        filmApprovedRef.current = true;
+        film.muted = true;
+        film
+          .play()
+          .then(() => {
+            if (phaseRef.current !== "welcome") return;
+            film.pause();
+            film.currentTime = 0;
+          })
+          .catch(() => (filmApprovedRef.current = false));
+      }
+      if (soundOnRef.current) {
+        if (welcome) welcome.muted = false;
+        if (film && !atWelcome) film.muted = false;
+      }
+    };
+    const types = ["click", "keydown"] as const;
+    types.forEach((t) => window.addEventListener(t, onTap, { passive: true }));
+    return () => types.forEach((t) => window.removeEventListener(t, onTap));
+  }, []);
   const mobile = mode === "lite";
 
   // ── Scroll lock while the film runs ──
@@ -329,10 +357,11 @@ export function Theatre(props: ScreenProps) {
     return () => window.clearInterval(id);
   }, [phase, toDesk]);
 
-  // ── Sound follows the toggle ──
+  // ── Sound off follows the toggle at once; sound on is switched inside the tap (above) ──
   useEffect(() => {
-    if (welcomeRef.current) welcomeRef.current.muted = !audible;
-    if (filmRef.current) filmRef.current.muted = !audible;
+    if (audible) return;
+    if (welcomeRef.current) welcomeRef.current.muted = true;
+    if (filmRef.current) filmRef.current.muted = true;
   }, [audible, phase, mediaReady]);
 
   // The welcome loop only runs while it is on screen.

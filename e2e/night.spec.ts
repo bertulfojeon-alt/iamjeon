@@ -398,6 +398,81 @@ test.describe("the desk dashboard", () => {
   });
 });
 
+/**
+ * iOS Safari's media rules, imitated in Chromium: a video may start only inside a tap or key press
+ * (Low Power Mode refuses even silent autoplay), and once started that way it is approved for good.
+ * Unmuting an unapproved video outside a tap pauses it. A swipe's touchend is not a tap.
+ */
+async function iosMediaRules(page: Page) {
+  await page.addInitScript(() => {
+    const w = window as unknown as { __tap: boolean };
+    w.__tap = false;
+    for (const type of ["click", "keydown"]) {
+      window.addEventListener(type, () => { w.__tap = true; setTimeout(() => (w.__tap = false), 0); }, { capture: true });
+    }
+    // The autoplay attribute is refused too (it starts a video without calling play()).
+    const setAttribute = Element.prototype.setAttribute;
+    Element.prototype.setAttribute = function (this: Element, name: string, value: string) {
+      if (this instanceof HTMLMediaElement && name.toLowerCase() === "autoplay") return;
+      return setAttribute.call(this, name, value);
+    };
+    Object.defineProperty(HTMLMediaElement.prototype, "autoplay", { get: () => false, set: () => {} });
+    const approved = new WeakSet<HTMLMediaElement>();
+    const proto = HTMLMediaElement.prototype;
+    const play = proto.play;
+    proto.play = function (this: HTMLMediaElement) {
+      if (!w.__tap && !approved.has(this)) return Promise.reject(new DOMException("refused", "NotAllowedError"));
+      approved.add(this);
+      return play.call(this);
+    };
+    const muted = Object.getOwnPropertyDescriptor(proto, "muted")!;
+    Object.defineProperty(proto, "muted", {
+      get() { return muted.get!.call(this); },
+      set(v: boolean) {
+        muted.set!.call(this, v);
+        if (!v && !w.__tap && !approved.has(this) && !this.paused) this.pause();
+      },
+    });
+  });
+}
+
+test.describe("iOS media rules (Low Power Mode, tap-only sound)", () => {
+  test.beforeEach(async ({ browserName }) => test.skip(browserName !== "chromium", "imitated in Chromium"));
+
+  test("when autoplay is refused, the visitor's first tap starts the welcome loop", async ({ page }) => {
+    await iosMediaRules(page);
+    await page.goto("/");
+    await page.waitForTimeout(2500);
+    const welcome = page.locator("video[src*='welcome']");
+    await expect(welcome).not.toHaveAttribute("data-playing", "true");
+    await page.getByRole("heading", { level: 1 }).click();
+    await expect(welcome).toHaveAttribute("data-playing", "true");
+  });
+
+  test("after that tap the film plays on the next scroll instead of skipping to the desk", async ({ page }) => {
+    await iosMediaRules(page);
+    await page.goto("/");
+    await page.waitForTimeout(1500);
+    await page.getByRole("heading", { level: 1 }).click();
+    await wheel(page, 200);
+    await expect(phase(page)).toHaveAttribute("data-phase", "film", { timeout: 8000 });
+    await page.waitForTimeout(1500);
+    expect(await page.locator("video[src*='film']").evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0.5)).toBe(true);
+  });
+
+  test("a swipe (touchend without a tap) never unmutes, so the film keeps playing", async ({ page }) => {
+    await iosMediaRules(page);
+    await page.goto("/");
+    await page.waitForTimeout(1500);
+    await page.getByRole("heading", { level: 1 }).click(); // approves the welcome loop only
+    await page.evaluate(() => window.dispatchEvent(new Event("touchend")));
+    await wheel(page, 200);
+    await expect(phase(page)).toHaveAttribute("data-phase", "film", { timeout: 8000 });
+    await page.waitForTimeout(1500);
+    expect(await page.locator("video[src*='film']").evaluate((v: HTMLVideoElement) => !v.paused)).toBe(true);
+  });
+});
+
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
 
