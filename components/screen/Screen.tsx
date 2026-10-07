@@ -95,9 +95,12 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
     else if (pathname === "/") dispatch({ type: "grid" });
   }, [pathname]);
 
-  // About / Contact, from the HUD or the welcome buttons.
+  // About / Contact, from the HUD or the welcome buttons; Jun sends Contact with a note.
   useEffect(() => {
-    const onOpen = (e: Event) => dispatch({ type: "panel", panel: (e as CustomEvent<Panel>).detail });
+    const onOpen = (e: Event) => {
+      const d = (e as CustomEvent<Panel | { panel: Panel; summary?: string }>).detail;
+      dispatch(typeof d === "string" ? { type: "panel", panel: d } : { type: "panel", panel: d.panel, summary: d.summary });
+    };
     window.addEventListener("ns:open", onOpen);
     return () => window.removeEventListener("ns:open", onOpen);
   }, []);
@@ -114,6 +117,14 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
     dispatch({ type: "show", slug });
     if (window.location.pathname !== `/work/${slug}`) window.history.pushState(null, "", `/work/${slug}`);
   };
+  // Jun opens a project the same way a card does.
+  const openRef = useRef(open);
+  openRef.current = open;
+  useEffect(() => {
+    const onShow = (e: Event) => openRef.current((e as CustomEvent<string>).detail);
+    window.addEventListener("ns:show", onShow);
+    return () => window.removeEventListener("ns:show", onShow);
+  }, []);
   const toGrid = () => {
     dispatch({ type: "grid" });
     if (window.location.pathname !== "/") window.history.pushState(null, "", "/");
@@ -156,7 +167,7 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
       <div className={styles.view}>
         {view.kind === "panel" ? (
           view.panel === "contact" ? (
-            <ContactView />
+            <ContactView summary={view.summary} />
           ) : (
             <section className={styles.panel} aria-label="About Jeon" data-screen-view data-lenis-prevent>
               {about}

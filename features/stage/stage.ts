@@ -11,12 +11,13 @@ export type Panel = (typeof PANELS)[number];
 /** A place in the work: the grid of every project, or one project. */
 export type Place = { kind: "grid" } | { kind: "project"; slug: string };
 
-export type StageView = Place | { kind: "panel"; panel: Panel; back: Place };
+/** A panel remembers where it was opened from; Contact may carry Jun's note to Jeon. */
+export type StageView = Place | { kind: "panel"; panel: Panel; back: Place; summary?: string };
 
 export type StageCommand =
   | { type: "grid" }
   | { type: "show"; slug: string }
-  | { type: "panel"; panel: Panel }
+  | { type: "panel"; panel: Panel; summary?: string }
   | { type: "back" };
 
 export interface StageWorld {
@@ -39,8 +40,11 @@ export function stageReducer(world: StageWorld) {
         return state.kind === "grid" ? state : { kind: "grid" };
       case "show":
         return slugs.has(command.slug) ? { kind: "project", slug: command.slug } : state;
-      case "panel":
-        return panels.has(command.panel) ? { kind: "panel", panel: command.panel, back: place(state) } : state;
+      case "panel": {
+        if (!panels.has(command.panel)) return state;
+        const view: StageView = { kind: "panel", panel: command.panel, back: place(state) };
+        return command.panel === "contact" && command.summary ? { ...view, summary: command.summary } : view;
+      }
       case "back":
         return state.kind === "panel" ? state.back : state;
     }

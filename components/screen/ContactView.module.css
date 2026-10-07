@@ -233,3 +233,25 @@
     font-size: 64px;
   }
 }
+
+/* Jun's note to Jeon, when the conversation ends at contact. */
+.note {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--sodium) 40%, transparent);
+  background: color-mix(in srgb, var(--sodium) 7%, transparent);
+  max-width: 520px;
+}
+.note strong {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
+.note p {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+.note small {
+  opacity: 0.72;
+}

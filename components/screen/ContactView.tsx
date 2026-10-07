@@ -1,14 +1,16 @@
+"use client";
+
 /**
  * Contact on the light screen: the invitation and direct links on the left, Jeon's
  * photo on the right, then one row per channel (email, WhatsApp, Viber) and a
- * large outlined sign-off.
+ * large outlined sign-off. When Jun opens it with a note (a summary of the visitor's
+ * conversation), the note is shown and the email and WhatsApp links carry it; Viber
+ * cannot, so its link copies the note first.
  */
 
+import { useState } from "react";
+import { EMAIL, VIBER, WHATSAPP, mailtoHref, viberHref, whatsappHref } from "@/lib/contact";
 import styles from "./ContactView.module.css";
-
-const EMAIL = "bertulfojeon@gmail.com";
-const WHATSAPP = { label: "+63 968 4333 479", href: "https://wa.me/639684333479" };
-const VIBER = { label: "+63474660563", href: "viber://chat?number=%2B63474660563" };
 
 const Arrow = () => (
   <svg className={styles.arrow} viewBox="0 0 16 16" aria-hidden="true">
@@ -70,20 +72,37 @@ const PinIcon = () => (
   </svg>
 );
 
-export function ContactView() {
+export function ContactView({ summary }: { summary?: string }) {
+  const [copied, setCopied] = useState(false);
+  const mail = mailtoHref(summary);
+  const whatsapp = whatsappHref(summary);
+  const viber = viberHref();
+  // The note must reach the clipboard before the Viber app takes over.
+  const copyForViber = () => {
+    if (!summary) return;
+    navigator.clipboard?.writeText(summary).then(() => setCopied(true), () => {});
+  };
+
   return (
     <section className={styles.contact} aria-label="Contact" data-screen-view data-lenis-prevent>
       <div className={styles.top}>
         <div className={styles.copy}>
           <h2 className={`display ${styles.title}`}>Let&rsquo;s build something.</h2>
           <p className={styles.lead}>Have a project, an automation idea, or a system that needs building? Let&rsquo;s talk.</p>
+          {summary && (
+            <div className={styles.note} data-jun-note>
+              <strong>Your note to Jeon</strong>
+              <p>{summary}</p>
+              <small>{copied ? "Copied. Paste it into Viber." : "Email and WhatsApp open with it filled in; you can edit it before sending."}</small>
+            </div>
+          )}
           <div className={styles.actions}>
-            <a className={styles.primary} href={`mailto:${EMAIL}?subject=Project%20enquiry`} aria-label={`Email ${EMAIL}`}>
+            <a className={styles.primary} href={mail} aria-label={`Email ${EMAIL}`}>
               <MailIcon />
               {EMAIL}
               <Arrow />
             </a>
-            <a className={styles.secondary} href={WHATSAPP.href} target="_blank" rel="noopener" aria-label={`WhatsApp ${WHATSAPP.label}`}>
+            <a className={styles.secondary} href={whatsapp} target="_blank" rel="noopener" aria-label={`WhatsApp ${WHATSAPP.label}`}>
               <WhatsAppIcon />
               {WHATSAPP.label}
               <Arrow />
@@ -115,7 +134,7 @@ export function ContactView() {
 
       <ul className={styles.channels}>
         <li>
-          <a href={`mailto:${EMAIL}?subject=Project%20enquiry`} aria-label="Email: drop me a message">
+          <a href={mail} aria-label="Email: drop me a message">
             <MailIcon />
             <span>
               <strong>Email</strong>
@@ -125,7 +144,7 @@ export function ContactView() {
           </a>
         </li>
         <li>
-          <a href={WHATSAPP.href} target="_blank" rel="noopener" aria-label={`WhatsApp: ${WHATSAPP.label}`}>
+          <a href={whatsapp} target="_blank" rel="noopener" aria-label={`WhatsApp: ${WHATSAPP.label}`}>
             <WhatsAppIcon />
             <span>
               <strong>WhatsApp</strong>
@@ -135,7 +154,7 @@ export function ContactView() {
           </a>
         </li>
         <li>
-          <a href={VIBER.href} aria-label={`Viber: ${VIBER.label}`}>
+          <a href={viber} onClick={copyForViber} aria-label={`Viber: ${VIBER.label}`}>
             <ViberIcon />
             <span>
               <strong>Viber</strong>

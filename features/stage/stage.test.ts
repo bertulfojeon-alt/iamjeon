@@ -42,4 +42,13 @@ describe("stage", () => {
     expect(reduce(other, { type: "back" })).toEqual({ kind: "project", slug: "trade-a" });
     expect(reduce(shown, { type: "back" })).toBe(shown);
   });
+  it("keeps a summary on the contact panel only (Jun's note to Jeon)", () => {
+    const s0 = initialStage(world);
+    const contact = reduce(s0, { type: "panel", panel: "contact", summary: "Runs a call centre, needs after-hours answers." });
+    expect(contact).toMatchObject({ kind: "panel", panel: "contact", summary: "Runs a call centre, needs after-hours answers." });
+    const about = reduce(s0, { type: "panel", panel: "about", summary: "ignored" });
+    expect(about).not.toHaveProperty("summary");
+    const plain = reduce(reduce(contact, { type: "back" }), { type: "panel", panel: "contact" });
+    expect(plain).not.toHaveProperty("summary");
+  });
 });
