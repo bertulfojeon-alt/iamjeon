@@ -4,8 +4,9 @@ Last updated 2026-10-07. The owner is Loreto "Jeon" Saquilabon Jr. (repo `bertul
 
 ## Where things stand
 
-- **Live:** https://iamjeon.vercel.app serves `main` at commit `6019f2f` (pushed 2026-10-07 on the owner's
-  explicit "push to main"). `main` and `night-shift` point at the same commit.
+- **Live:** https://iamjeon.vercel.app serves `main`, pushed 2026-10-07 on the owner's explicit
+  "push to main". The last code change is `6019f2f`; only docs changed after it. `main` and `night-shift`
+  point at the same commit.
 - **Work branch:** `night-shift` gets a Vercel preview on every push. Production changes only when `main`
   moves, and only on the owner's explicit say-so.
 - **Push** (the default credential helper is not logged in to this account):
