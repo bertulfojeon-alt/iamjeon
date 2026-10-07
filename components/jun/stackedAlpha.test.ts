@@ -36,3 +36,15 @@ describe("joinStacked", () => {
     expect([top[3], top[7]]).toEqual([0, 255]);
   });
 });
+
+describe("drawStackedFrame", () => {
+  it("skips a frame too small to split (WebKit reports 1×1 before decoding) without touching the canvas", async () => {
+    const { drawStackedFrame } = await import("./stackedAlpha");
+    let reads = 0;
+    const work = { canvas: { width: 0, height: 0 }, drawImage: () => {}, getImageData: () => (reads++, { data: new Uint8ClampedArray(4) }) };
+    const video = { videoWidth: 1, videoHeight: 1 } as HTMLVideoElement;
+    const canvas = { width: 0, height: 0, getContext: () => ({ putImageData: () => {} }) } as unknown as HTMLCanvasElement;
+    expect(drawStackedFrame(video, canvas, work as unknown as CanvasRenderingContext2D)).toBe(false);
+    expect(reads).toBe(0);
+  });
+});

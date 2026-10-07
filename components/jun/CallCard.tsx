@@ -18,6 +18,7 @@ const FAILURE: Record<JunFailure, string> = {
   denied: "Your browser blocked the microphone. Allow it for this site in the address bar, then try again, or reach Jeon directly.",
   missing: "I couldn't find a microphone on this device. You can reach Jeon directly.",
   insecure: "Voice needs a secure connection. You can reach Jeon directly.",
+  unsupported: "This browser can't hold a voice call. You can reach Jeon directly.",
   busy: "My line is busy right now. Here is how to reach Jeon directly.",
   off: "I'm offline right now. Here is how to reach Jeon directly.",
   unavailable: "I couldn't connect just now. Here is how to reach Jeon directly.",

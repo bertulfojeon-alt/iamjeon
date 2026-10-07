@@ -13,7 +13,7 @@ import { INPUT_SAMPLE_RATE, OUTPUT_SAMPLE_RATE, base64ToBytes, bufferToBase64, p
 import { isQuotaError } from "./quota";
 
 export type JunStatus = "connecting" | "listening" | "speaking" | "ended" | "capped";
-export type JunFailure = "denied" | "missing" | "insecure" | "busy" | "off" | "unavailable";
+export type JunFailure = "denied" | "missing" | "insecure" | "unsupported" | "busy" | "off" | "unavailable";
 
 export interface JunCallbacks {
   onStatus: (status: JunStatus) => void;
@@ -27,6 +27,17 @@ export const CALL_LIMIT_MS = 5 * 60_000;
 export const WRAP_UP_MS = 4.5 * 60_000;
 const SETUP_TIMEOUT_MS = 10_000;
 const WRAP_UP = "(About thirty seconds of the call are left. Wrap up in one or two sentences and offer to pass a note to Jeon.)";
+
+/** Web Audio, under its older Safari name if need be; a browser without it cannot hold a call. */
+function audioContext(options?: AudioContextOptions): AudioContext {
+  const Ctor = globalThis.AudioContext ?? (globalThis as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!Ctor) throw new Failure("unsupported");
+  try {
+    return new Ctor(options);
+  } catch {
+    throw new Failure("unsupported");
+  }
+}
 
 class Failure extends Error {
   constructor(readonly kind: JunFailure, readonly quota = false) {
@@ -58,10 +69,10 @@ export class JunSession {
 
   /** Call from the tap that starts the call. Resolves once the call is live (or has failed). */
   async start(): Promise<void> {
-    this.outCtx = new AudioContext({ sampleRate: OUTPUT_SAMPLE_RATE });
-    void this.outCtx.resume();
     this.cb.onStatus("connecting");
     try {
+      this.outCtx = audioContext({ sampleRate: OUTPUT_SAMPLE_RATE });
+      void this.outCtx.resume();
       await this.openMic();
       try {
         await this.connect("primary");
@@ -128,7 +139,7 @@ export class JunSession {
       const name = (e as DOMException)?.name;
       throw new Failure(name === "NotAllowedError" || name === "SecurityError" ? "denied" : "missing");
     }
-    this.inCtx = new AudioContext();
+    this.inCtx = audioContext();
     await this.inCtx.audioWorklet.addModule("/jun-recorder-worklet.js");
   }
 

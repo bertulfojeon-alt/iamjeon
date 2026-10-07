@@ -23,8 +23,9 @@ export function joinStacked(top: Uint8ClampedArray, mask: Uint8ClampedArray): vo
 /** Draws the video's current frame, joined, onto `canvas`. Returns false if the frame is not ready. */
 export function drawStackedFrame(video: HTMLVideoElement, canvas: HTMLCanvasElement, work: CanvasRenderingContext2D): boolean {
   const w = video.videoWidth;
-  const h = video.videoHeight / 2;
-  if (!w || !h) return false;
+  const h = Math.floor(video.videoHeight / 2);
+  // Before it decodes, WebKit can report a 1×1 frame: nothing to split yet.
+  if (w < 2 || h < 1) return false;
   if (work.canvas.width !== w || work.canvas.height !== h * 2) {
     work.canvas.width = w;
     work.canvas.height = h * 2;
