@@ -64,6 +64,10 @@ describe("Jun's system instruction", () => {
     expect(instruction).toMatch(/stop and wait for their answer/i);
   });
 
+  it("mentions the button only once it is on screen", () => {
+    expect(instruction).toMatch(/never mention the button before you call start_presentation/i);
+  });
+
   it("forbids linking classified work to any named company", () => {
     expect(instruction).toMatch(/never connect a classified project to any company/i);
   });

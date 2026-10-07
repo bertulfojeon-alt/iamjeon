@@ -85,12 +85,12 @@ Plan and record: `docs/superpowers/plans/2026-10-07-jun-voice-twin.md`.
 **What it is:**
 - Voice only (Gemini Live, no chat). It knows the whole portfolio and offers a full-screen presentation of
   the work, driven by function calls.
-- A floating badge, bottom right: mini Jeon in a glowing ring with a "Talk to me" pill. He waves 4 s after
+- A floating badge, bottom right: at rest a glowing microphone; mini Jeon rises out of a ring and waves 4 s after
   the desk appears, then once a minute. Only at the desk and on `/work/<slug>`. The ↑ button is
   bottom centre on every layout.
 
 **Owner decisions:**
-- **name:** Jun;
+- **name:** shown to visitors as **Jeon's AI twin** (renamed from Jun on 2026-10-07; code and files keep `jun`);
 - **persona:** first person as Jeon's AI twin, always says it is an AI;
 - **voice:** calm male; `Charon` until the owner picks from the audition;
 - **tier:** free for development, with `gemini-3.8-live` first and the native-audio model as fallback;
