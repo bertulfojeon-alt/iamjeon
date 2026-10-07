@@ -74,6 +74,8 @@ export class JunSession {
       this.outCtx = audioContext({ sampleRate: OUTPUT_SAMPLE_RATE });
       void this.outCtx.resume();
       await this.openMic();
+      // End pressed while the browser asked for the microphone: release it, go no further.
+      if (this.stopped) return this.release();
       try {
         await this.connect("primary");
       } catch (e) {
@@ -81,12 +83,13 @@ export class JunSession {
         await this.connect("fallback");
       }
     } catch (e) {
-      if (this.stopped) return;
+      if (this.stopped) return this.release();
       this.teardown();
       this.cb.onFailure(e instanceof Failure ? e.kind : "unavailable");
       return;
     }
-    if (this.stopped) return;
+    // End pressed while connecting: the socket opened after stop() closed nothing.
+    if (this.stopped) return this.release();
     this.cb.onStatus("listening");
     this.pumpMic();
     this.timers.push(
@@ -110,6 +113,17 @@ export class JunSession {
 
   stop(): void {
     this.end("ended");
+  }
+
+  /** Closes whatever opened after stop(): the mic, the contexts and the socket. */
+  private release(): void {
+    try {
+      this.session?.close();
+    } catch {
+      /* already closed */
+    }
+    this.session = null;
+    this.teardown();
   }
 
   private end(status: "ended" | "capped"): void {
