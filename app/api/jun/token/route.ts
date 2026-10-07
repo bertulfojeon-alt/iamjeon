@@ -23,12 +23,18 @@ const ALLOWED = [
   // This project's previews: per-deployment and per-branch hosts on the owner's team.
   /^https:\/\/iamjeon-[a-z0-9-]+-bertulfojeon-alts-projects\.vercel\.app$/,
 ];
-const DEV = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/;
+const LOCAL_ORIGIN = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/;
+const LOCAL_HOST = /^(localhost|127\.0\.0\.1)(:\d+)?$/;
 
-function allowed(origin: string | null): boolean {
+/**
+ * The live site and its previews; and this machine, when the server itself runs here
+ * (`next dev`, or the production build under `next start`). A deployed server is never
+ * reached at localhost, so a forged localhost origin does not pass there.
+ */
+function allowed(origin: string | null, host: string | null): boolean {
   if (!origin) return false;
   if (ALLOWED.some((re) => re.test(origin))) return true;
-  return process.env.NODE_ENV !== "production" && DEV.test(origin);
+  return LOCAL_ORIGIN.test(origin) && (process.env.NODE_ENV !== "production" || LOCAL_HOST.test(host ?? ""));
 }
 
 const json = (body: unknown, status = 200) => Response.json(body, { status, headers: { "cache-control": "no-store" } });
@@ -37,7 +43,7 @@ const json = (body: unknown, status = 200) => Response.json(body, { status, head
 let instruction: string | null = null;
 
 export async function POST(req: Request) {
-  if (!allowed(req.headers.get("origin"))) return json({ error: "forbidden" }, 403);
+  if (!allowed(req.headers.get("origin"), req.headers.get("host"))) return json({ error: "forbidden" }, 403);
   if (process.env.JUN_KILL === "1") return json({ error: "off" }, 503);
 
   const body = (await req.json().catch(() => null)) as { model?: unknown } | null;

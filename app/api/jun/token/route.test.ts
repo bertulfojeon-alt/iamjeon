@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const call = async (body: unknown, origin = "https://iamjeon.vercel.app") => {
+const call = async (body: unknown, origin = "https://iamjeon.vercel.app", host = "iamjeon.vercel.app") => {
   const { POST } = await import("./route");
-  return POST(new Request("https://iamjeon.vercel.app/api/jun/token", { method: "POST", headers: { origin, "content-type": "application/json" }, body: JSON.stringify(body) }));
+  return POST(new Request(`https://${host}/api/jun/token`, { method: "POST", headers: { origin, host, "content-type": "application/json" }, body: JSON.stringify(body) }));
 };
 
 describe("POST /api/jun/token", () => {
@@ -57,6 +57,16 @@ describe("POST /api/jun/token", () => {
   it("accepts this project's preview hosts", async () => {
     expect((await call({ model: "primary" }, "https://iamjeon-git-night-shift-bertulfojeon-alts-projects.vercel.app")).status).toBe(200);
     expect((await call({ model: "primary" }, "https://iamjeon-k2j3h4-bertulfojeon-alts-projects.vercel.app")).status).toBe(200);
+  });
+
+  it("lets the production build run on this machine (next start on localhost)", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    expect((await call({ model: "primary" }, "http://localhost:3737", "localhost:3737")).status).toBe(200);
+  });
+
+  it("never accepts a localhost origin on a deployed host", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    expect((await call({ model: "primary" }, "http://localhost:3737", "iamjeon.vercel.app")).status).toBe(403);
   });
 
   it("is off when the kill switch is set", async () => {
