@@ -54,7 +54,11 @@ Design records: `docs/specs/2026-10-05-night-shift-design.md` (the site) and
    - starting media and turning sound on happen only inside a tap or key press (a swipe is not a tap),
      so a tap starts a welcome loop that Low Power Mode refused, and approves the film;
    - `e2e/night.spec.ts` imitates these rules in Chromium (`iosMediaRules`).
-   iOS Reduce Motion gives still mode on purpose.
+   iOS Reduce Motion gives still mode on purpose (a still hero, and no film).
+   **Verified on a real iPhone (iOS 16, Safari and Brave) on 2026-10-07:** the owner's phone had Reduce
+   Motion on, which was why the hero looked static and the film was skipped. With it off, the welcome
+   loop and the film play. If a visitor reports "no video on iPhone", check Reduce Motion and Low
+   Power Mode first.
 9. **Devices:** iOS page hold, safe areas, no zoom on input, a compact welcome for landscape phones,
    a slow-network film skip, and media cached for a day. First paint on a throttled 4G phone
    (4× CPU) is about 1.5 to 1.8 s; first load is about 374 KB, and the videos come after it.
@@ -92,7 +96,7 @@ The owner has asked about the AI assistant. It is **not started**. It follows th
   3. Gemini billing enabled, plus the daily budget cap amount. Phase 3 must not go live on the free tier:
      free-tier data may be used for training, and visitors' voices are personal data.
   4. a reviewed `content/resume.md`, the text of the public résumé, for the knowledge pack.
-- **Also open:** the owner should check the live site on a real iPhone and Mac. The automated Safari runs
+- **Also open:** a check on a real Mac (the iPhone was checked on 2026-10-07). The automated Safari runs
   use WebKit on Windows, which cannot reproduce touch momentum, Low Power Mode or iOS toolbar resizing,
   and in iPhone emulation the film starts but does not advance.
 
