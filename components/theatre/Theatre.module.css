@@ -1,13 +1,15 @@
 .theatre {
   position: relative;
   height: 200vh;
-  height: 200svh;
+  /* One screen of welcome copy (100svh) to scroll past, then the stage at the real visible height,
+     so the desk always sits at the end of the scroll range, whatever the phone's toolbars do. */
+  height: calc(100svh + 100dvh);
 }
 .stage {
   position: sticky;
   top: 0;
   height: 100vh;
-  height: 100svh;
+  height: 100dvh;
   overflow: hidden;
   background: var(--night);
 }
@@ -155,5 +157,32 @@
   .desktopWrap[data-fit="panel"] {
     inset: calc(3.3rem + env(safe-area-inset-top)) calc(0.75rem + env(safe-area-inset-right))
       calc(4rem + env(safe-area-inset-bottom)) calc(0.75rem + env(safe-area-inset-left));
+  }
+}
+
+/* Phones and small tablets: the monitor cannot sit beside anything, so the screen is the page,
+   edge to edge under the top bar, and Back to the top floats in the corner. */
+@media (max-width: 899px), (max-height: 520px) and (orientation: landscape) {
+  .desktopWrap[data-fit="panel"] {
+    inset: calc(4.5rem + env(safe-area-inset-top)) 0 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .theatre[data-phase="desk"] .desktopWrap[data-fit="panel"] {
+    box-shadow: none;
+  }
+  .desktopWrap[data-fit="panel"] ~ .top {
+    left: auto;
+    right: calc(12px + env(safe-area-inset-right));
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    transform: none;
+    width: 42px;
+    height: 42px;
+    box-shadow: 0 6px 20px rgba(5, 7, 12, 0.35);
+  }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .desktopWrap[data-fit="panel"] {
+    inset: calc(3.3rem + env(safe-area-inset-top)) 0 0;
   }
 }

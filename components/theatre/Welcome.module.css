@@ -10,6 +10,11 @@
   pointer-events: none;
   background: linear-gradient(90deg, rgba(5, 7, 12, 0.78) 0%, rgba(5, 7, 12, 0.35) 45%, transparent 65%);
 }
+/* Gone once the visitor leaves the welcome: on phones the browser's toolbar can leave the page a
+   few pixels short of a full screen down, and the copy's last lines would peek in at the top. */
+.copy:not([data-active]) {
+  visibility: hidden;
+}
 .inner {
   pointer-events: auto;
   padding: 0 var(--gutter);

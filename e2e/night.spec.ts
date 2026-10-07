@@ -549,6 +549,26 @@ test.describe("final review fixes", () => {
     }
   });
 
+  test("at the desk the welcome copy is gone, so none of it can show behind the top bar", async ({ page }) => {
+    await toDesk(page);
+    // (The desk has its own "Get in touch"; these two exist only in the welcome copy.)
+    await expect(page.getByRole("heading", { level: 1 })).toBeHidden();
+    await expect(page.getByRole("button", { name: "See what I'd build for you" })).toBeHidden();
+  });
+
+  test("phones: the desk is a full page under the top bar, not a floating window", async ({ page }, info) => {
+    test.skip(!/phone/.test(info.project.name), "phone layout");
+    await toDesk(page);
+    const box = (await page.locator("#desk").boundingBox())!;
+    const vp = page.viewportSize()!;
+    const hud = (await page.getByRole("banner").boundingBox())!;
+    expect(box.x).toBeLessThanOrEqual(1);
+    expect(box.width).toBeGreaterThanOrEqual(vp.width - 1);
+    expect(box.y + box.height).toBeGreaterThanOrEqual(vp.height - 1);
+    expect(box.y).toBeLessThanOrEqual(hud.y + hud.height + 1);
+    expect(await page.locator("#desk").evaluate((el) => getComputedStyle(el).borderTopLeftRadius)).toBe("0px");
+  });
+
   test("phones: category chips sit above a one-column grid, services follow it, and a card opens the project", async ({ page }, info) => {
     test.skip(!/phone/.test(info.project.name), "phone layout");
     await toDesk(page);

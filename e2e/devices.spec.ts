@@ -84,10 +84,17 @@ for (const d of DEVICES) {
       const scale = await screen.evaluate((el) => el.getBoundingClientRect().width / (el as HTMLElement).offsetWidth);
       expect(scale, "screen scale").toBeGreaterThanOrEqual(0.6);
       expect(box.height, "enough screen to work with").toBeGreaterThanOrEqual(Math.min(300, d.height * 0.55));
-      // Back to the top sits clear of the screen.
+      // Back to the top: clear of the projected monitor; on a full-page screen (phones) it sits in a
+      // corner, inside the viewport and clear of the screen's own menu.
       const top = (await page.getByRole("button", { name: "Back to the top" }).boundingBox())!;
-      expect(top.y + top.height <= box.y + 1 || top.y >= box.y + box.height - 1, "↑ clear of the screen").toBe(true);
       expect(top.y + top.height).toBeLessThanOrEqual(d.height);
+      expect(top.x + top.width).toBeLessThanOrEqual(d.width);
+      if (box.width < d.width - 2) {
+        expect(top.y + top.height <= box.y + 1 || top.y >= box.y + box.height - 1, "↑ clear of the screen").toBe(true);
+      } else {
+        const menu = (await page.locator("#desk").getByRole("navigation", { name: "Screen" }).boundingBox())!;
+        expect(top.y, "↑ clear of the screen menu").toBeGreaterThan(menu.y + menu.height);
+      }
 
       // A project opens and its pane is on screen.
       const grid = page.locator("#desk").getByRole("region", { name: "All work" });

@@ -29,7 +29,7 @@ export function Welcome({ active }: { active: boolean }) {
   const clock = useClock();
 
   return (
-    <div className={styles.copy} inert={!active}>
+    <div className={styles.copy} inert={!active} data-active={active || undefined}>
       <div className={styles.inner}>
         <p className={styles.where}>
           {clock ? (
