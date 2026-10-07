@@ -115,7 +115,7 @@ Plan and record: `docs/superpowers/plans/2026-10-07-jun-voice-twin.md`.
   call through the whole presentation, quota fallback and busy.
 
 **Waiting on the owner:**
-1. `GEMINI_API_KEY` in Vercel for **Production** (and Preview), then a redeploy. On 2026-10-07 the live token route still answered `unconfigured`. It is in `.env.local` locally.
+1. Done 2026-10-07: the key is in Vercel as `Gemini_Key` (Production and Preview), which the token route also reads; `GEMINI_API_KEY` in `.env.local` locally.
 2. The voice pick from `media-src/jun/audition/`, which becomes `JUN_VOICE`.
 3. A Vercel WAF rule: `/api/jun/token`, 5 requests per 10 minutes per IP, answered with 429.
 4. Read the eval transcript (`test-results/jun-eval.md`) before Jun goes further.

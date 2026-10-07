@@ -51,7 +51,8 @@ export async function POST(req: Request) {
   const which = body && typeof body === "object" ? body.model : undefined;
   if (which !== "primary" && which !== "fallback") return json({ error: "bad request" }, 400);
 
-  const key = process.env.GEMINI_API_KEY;
+  // GEMINI_API_KEY locally; the owner named it Gemini_Key in Vercel.
+  const key = process.env.GEMINI_API_KEY || process.env.Gemini_Key;
   if (!key) return json({ error: "unconfigured" }, 500);
 
   instruction ??= buildInstruction();

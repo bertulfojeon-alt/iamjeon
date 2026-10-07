@@ -77,6 +77,13 @@ describe("POST /api/jun/token", () => {
     expect(await res.json()).toEqual({ error: "off" });
   });
 
+  it("also reads the key under the name it has in Vercel (Gemini_Key)", async () => {
+    vi.stubEnv("GEMINI_API_KEY", "");
+    vi.stubEnv("Gemini_Key", "vercel-key");
+    expect((await call({ model: "primary" })).status).toBe(200);
+    expect(fetchMock.mock.calls[0][1].headers["x-goog-api-key"]).toBe("vercel-key");
+  });
+
   it("says unconfigured without a key", async () => {
     vi.stubEnv("GEMINI_API_KEY", "");
     expect((await call({ model: "primary" })).status).toBe(500);
