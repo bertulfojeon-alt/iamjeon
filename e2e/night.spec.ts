@@ -2,6 +2,15 @@ import { expect, test, type Page } from "@playwright/test";
 
 const phase = (page: Page) => page.locator("section[data-phase]");
 
+/** A wheel turn; mobile WebKit has no wheel, so there the page scrolls the way a swipe moves it. */
+async function wheel(page: Page, dy: number) {
+  try {
+    await page.mouse.wheel(0, dy);
+  } catch {
+    await page.evaluate((d) => window.scrollBy(0, d), dy);
+  }
+}
+
 /** Back at the top, with the glide there finished (Lenis ignores input while it runs). */
 async function topOfPage(page: Page) {
   await page.waitForFunction(() => window.scrollY === 0, null, { timeout: 5000 });
@@ -16,7 +25,7 @@ async function toDesk(page: Page) {
   else {
     // Phones hide the HUD's Work link: scroll into the film and skip it.
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await page.mouse.wheel(0, 160);
+    await wheel(page, 160);
     await page.getByRole("button", { name: "Skip" }).click({ timeout: 8000 }).catch(() => {});
   }
   await expect(phase(page)).toHaveAttribute("data-phase", "desk", { timeout: 8000 });
@@ -43,7 +52,7 @@ function contrast(locator: ReturnType<Page["locator"]>) {
 async function scrollIntoFilm(page: Page) {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await page.mouse.wheel(0, 160);
+  await wheel(page, 160);
   await expect(phase(page)).toHaveAttribute("data-phase", /film|desk/, { timeout: 8000 });
 }
 
@@ -65,7 +74,7 @@ test.describe("welcome", () => {
   test("picks the right viewing mode", async ({ page }, info) => {
     await page.goto("/");
     const mode = await page.evaluate(() => document.documentElement.dataset.mode);
-    expect(mode).toBe(info.project.name === "phone" ? "lite" : "full");
+    expect(mode).toBe(/phone/.test(info.project.name) ? "lite" : "full");
   });
 });
 
@@ -92,6 +101,13 @@ test.describe("the film", () => {
     expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("");
   });
 
+  test("a film that stalls (a connection that never delivers it) gives way to the desk", async ({ page }) => {
+    await page.route("**/media/theatre/film-*.mp4", () => {}); // never answered
+    await scrollIntoFilm(page);
+    await expect(phase(page)).toHaveAttribute("data-phase", "film");
+    await expect(phase(page)).toHaveAttribute("data-phase", "desk", { timeout: 13000 });
+  });
+
   test("Skip and Esc end it straight away", async ({ page }) => {
     await scrollIntoFilm(page);
     await page.getByRole("button", { name: "Skip" }).click();
@@ -101,7 +117,7 @@ test.describe("the film", () => {
     await page.getByRole("button", { name: "Back to the top" }).click();
     await expect(phase(page)).toHaveAttribute("data-phase", "welcome");
     await topOfPage(page);
-    await page.mouse.wheel(0, 200);
+    await wheel(page, 200);
     await expect(phase(page)).toHaveAttribute("data-phase", "film", { timeout: 8000 });
     await page.keyboard.press("Escape");
     await expect(phase(page)).toHaveAttribute("data-phase", "desk");
@@ -121,24 +137,27 @@ test.describe("back to the top", () => {
   test("at the desk, scrolling up never returns to the hero; the back-to-top button does", async ({ page }) => {
     await toDesk(page);
     await page.mouse.move(20, 400);
-    await page.mouse.wheel(0, -600);
+    await wheel(page, -600);
     await page.waitForTimeout(1500);
     await expect(phase(page)).toHaveAttribute("data-phase", "desk");
+    // The page itself holds at the desk (iOS ignores overflow: hidden on touch), so the hero never shows.
+    expect(await page.evaluate(() => window.scrollY >= window.innerHeight - 2)).toBe(true);
+    await expect(page.getByRole("heading", { level: 1 })).not.toBeInViewport();
     await page.getByRole("button", { name: "Back to the top" }).click();
     await expect(phase(page)).toHaveAttribute("data-phase", "welcome");
     await topOfPage(page);
     await expect(page.getByRole("heading", { level: 1 })).toBeInViewport();
     // From the hero, scrolling down plays the film again.
-    await page.mouse.wheel(0, 200);
+    await wheel(page, 200);
     await expect(phase(page)).toHaveAttribute("data-phase", "film", { timeout: 8000 });
   });
 
   test("at the desk the page itself stays put: scrolling over the top bar never reveals the hero copy", async ({ page }, info) => {
-    test.skip(info.project.name === "phone", "desktop wheel path");
+    test.skip(/phone/.test(info.project.name), "desktop wheel path");
     await toDesk(page);
     const y0 = await page.evaluate(() => window.scrollY);
     await page.mouse.move(700, 20); // over the HUD, outside every scrolling panel
-    await page.mouse.wheel(0, -800);
+    await wheel(page, -800);
     await page.waitForTimeout(1200);
     expect(await page.evaluate(() => window.scrollY)).toBe(y0);
     await expect(page.getByRole("heading", { level: 1 })).not.toBeInViewport();
@@ -152,7 +171,7 @@ test.describe("back to the top", () => {
     await topOfPage(page);
     await page.waitForTimeout(800);
     await expect(phase(page)).toHaveAttribute("data-phase", "welcome");
-    await page.mouse.wheel(0, 160);
+    await wheel(page, 160);
     await expect(phase(page)).toHaveAttribute("data-phase", "film", { timeout: 8000 });
   });
 });
@@ -192,7 +211,7 @@ test.describe("the desk dashboard", () => {
 
   test("category filters narrow the grid and show how many projects each holds", async ({ page }, info) => {
     await toDesk(page);
-    const phone = info.project.name === "phone";
+    const phone = /phone/.test(info.project.name);
     // Desktop filters from the sidebar alone; phones, where the sidebar sits below the grid, keep chips above it.
     await expect(chips(page)).toHaveCount(phone ? 1 : 0);
     const filters = phone ? chips(page) : page.locator("#desk").getByRole("complementary", { name: "Browse" });
@@ -219,7 +238,7 @@ test.describe("the desk dashboard", () => {
   });
 
   test("a service explains what it covers, lists the projects behind it, and leads to Contact", async ({ page }, info) => {
-    test.skip(info.project.name === "phone", "services sit below the grid on phones; covered by the phone test");
+    test.skip(/phone/.test(info.project.name), "services sit below the grid on phones; covered by the phone test");
     await toDesk(page);
     const browse = page.locator("#desk").getByRole("complementary", { name: "Browse" });
     await browse.getByRole("button", { name: "Back-office systems" }).click();
@@ -291,7 +310,8 @@ test.describe("the desk dashboard", () => {
     await expect(pane(page, "Project Payday").getByRole("button", { name: "Request a private walkthrough" })).toBeVisible();
   });
 
-  test("the grid scrolls inside the monitor with the wheel", async ({ page }) => {
+  test("the grid scrolls inside the monitor with the wheel", async ({ page }, info) => {
+    test.skip(info.project.name === "iphone", "mobile WebKit cannot synthesise wheel or touch scrolling");
     await toDesk(page);
     const g = grid(page);
     const box = (await g.boundingBox())!;
@@ -308,12 +328,13 @@ test.describe("the desk dashboard", () => {
     await toDesk(page);
     expect(await contrast(card(page, "TG Auto Trader"))).toBeGreaterThanOrEqual(4.5);
     const browse = page.locator("#desk").getByRole("complementary", { name: "Browse" });
-    if (test.info().project.name !== "phone") expect(await contrast(browse.getByRole("button", { name: /^Trading\s*\d/ }))).toBeGreaterThanOrEqual(4.5);
+    if (!/phone/.test(test.info().project.name)) expect(await contrast(browse.getByRole("button", { name: /^Trading\s*\d/ }))).toBeGreaterThanOrEqual(4.5);
     const bg = await page.locator("#desk [data-screen]").evaluate((el) => getComputedStyle(el).backgroundColor);
     expect(bg).toBe("rgb(245, 241, 234)");
   });
 
-  test("keyboard: Tab reaches a card and Enter opens the project", async ({ page }) => {
+  test("keyboard: Tab reaches a card and Enter opens the project", async ({ page, browserName }) => {
+    test.skip(browserName === "webkit", "Safari only tabs to links with a setting on; Playwright's Windows WebKit cannot turn it on");
     await toDesk(page);
     const target = card(page, "TG Auto Trader");
     for (let i = 0; i < 80 && !(await target.evaluate((el) => el === document.activeElement)); i++) await page.keyboard.press("Tab");
@@ -361,7 +382,7 @@ test.describe("the desk dashboard", () => {
     await page.getByRole("button", { name: /^Pause/ }).click();
     await expect(page.locator("html")).toHaveAttribute("data-mode", "still");
     await page.reload();
-    await expect(page.locator("html")).toHaveAttribute("data-mode", info.project.name === "phone" ? "lite" : "full");
+    await expect(page.locator("html")).toHaveAttribute("data-mode", /phone/.test(info.project.name) ? "lite" : "full");
     await expect(page.getByRole("button", { name: /^Pause/ })).toHaveAttribute("aria-pressed", "false");
   });
 
@@ -390,7 +411,7 @@ test.describe("reduced motion", () => {
     await page.goto("/");
     await expect(page.locator("html")).toHaveAttribute("data-mode", "still");
     expect(await page.locator("video").count()).toBe(0);
-    await page.mouse.wheel(0, 160);
+    await wheel(page, 160);
     await expect(phase(page)).toHaveAttribute("data-phase", "desk", { timeout: 4000 });
   });
 });
@@ -430,7 +451,7 @@ test.describe("case pages", () => {
   });
 
   test("scrolling the features moves the spotlight on the pinned screen", async ({ page }, info) => {
-    test.skip(info.project.name === "phone", "the pinned screen is a desktop layout");
+    test.skip(/phone/.test(info.project.name), "the pinned screen is a desktop layout");
     await page.goto("/work/tg-auto-trader");
     const features = page.getByRole("region", { name: "What it does" });
     const item = features.getByRole("listitem").filter({ hasText: "Custom canvas chart" });
@@ -460,7 +481,7 @@ test.describe("final review fixes", () => {
   });
 
   test("C1b: case calls to action stay readable on hover", async ({ page }, info) => {
-    test.skip(info.project.name === "phone", "hover is a pointer state");
+    test.skip(/phone/.test(info.project.name), "hover is a pointer state");
     await page.goto("/work/project-payday");
     const cta = page.getByRole("link", { name: "Request a private screening" });
     await cta.hover();
@@ -473,7 +494,7 @@ test.describe("final review fixes", () => {
   });
 
   test("I2: a scroll during a slow reload is not undone when loading finishes", async ({ page }, info) => {
-    test.skip(info.project.name === "phone", "desktop wheel path");
+    test.skip(/phone/.test(info.project.name), "desktop wheel path");
     await toDesk(page);
     // Hold one image so the load event comes late.
     await page.route("**/media/me/avatar-64.webp", async (route) => {
@@ -483,7 +504,7 @@ test.describe("final review fixes", () => {
     await page.reload({ waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await page.waitForTimeout(300);
-    await page.mouse.wheel(0, 160);
+    await wheel(page, 160);
     await expect(phase(page)).toHaveAttribute("data-phase", /film|desk/, { timeout: 8000 });
     await page.waitForFunction(() => document.readyState === "complete", null, { timeout: 15000 });
     await page.waitForTimeout(700);
@@ -491,7 +512,7 @@ test.describe("final review fixes", () => {
   });
 
   test("I3: on phones the screen's Contact button is on screen", async ({ page }, info) => {
-    test.skip(info.project.name !== "phone", "phone layout");
+    test.skip(!/phone/.test(info.project.name), "phone layout");
     await toDesk(page);
     const contact = page.locator("#desk").getByRole("navigation", { name: "Screen" }).getByRole("button", { name: "Contact" });
     const box = (await contact.boundingBox())!;
@@ -501,7 +522,7 @@ test.describe("final review fixes", () => {
   });
 
   test("I4: the Contact view is not clipped on a short phone", async ({ page }, info) => {
-    test.skip(info.project.name !== "phone", "phone layout");
+    test.skip(!/phone/.test(info.project.name), "phone layout");
     await page.setViewportSize({ width: 375, height: 667 });
     await toDesk(page);
     await page.locator("#desk").getByRole("navigation", { name: "Screen" }).getByRole("button", { name: "Contact" }).click();
@@ -515,7 +536,7 @@ test.describe("final review fixes", () => {
   });
 
   test("I5: the welcome fits under the HUD on short phones", async ({ page }, info) => {
-    test.skip(info.project.name !== "phone", "phone layout");
+    test.skip(!/phone/.test(info.project.name), "phone layout");
     for (const size of [{ width: 375, height: 667 }, { width: 360, height: 640 }]) {
       await page.setViewportSize(size);
       await page.goto("/");
@@ -529,7 +550,7 @@ test.describe("final review fixes", () => {
   });
 
   test("phones: category chips sit above a one-column grid, services follow it, and a card opens the project", async ({ page }, info) => {
-    test.skip(info.project.name !== "phone", "phone layout");
+    test.skip(!/phone/.test(info.project.name), "phone layout");
     await toDesk(page);
     const grid = page.locator("#desk").getByRole("region", { name: "All work" });
     const cards = grid.getByRole("listitem");

@@ -26,7 +26,7 @@ export function BehindTheDesk() {
     <section id="about" className={styles.about} aria-labelledby="about-title">
       <div className={`wrap ${styles.grid}`}>
         <figure className={styles.portrait}>
-          <img src="/media/me/me-about.png" alt="Loreto “Jeon” Saquilabon Jr. at his desk" loading="lazy" />
+          <img src="/media/me/me-about.webp" width={960} height={638} alt="Loreto “Jeon” Saquilabon Jr. at his desk" loading="lazy" />
           <div className={styles.glow} aria-hidden="true" />
         </figure>
         <div className={styles.text}>

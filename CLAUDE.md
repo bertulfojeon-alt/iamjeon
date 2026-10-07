@@ -17,7 +17,10 @@ DOM projected onto the monitor with a homography (`lib/homography.ts`, `content/
 
 ## Commands
 - `npm run dev` / `npm run build` (build runs the leak check) / `npm start`
-- `npm test` (Vitest: content rules, homography, modes) · `npm run test:e2e` (Playwright, system Edge; build first)
+- `npm test` (Vitest: content rules, homography, modes) · `npm run test:e2e` (Playwright; build first): Edge desktop +
+  phone, WebKit iPhone 15 + MacBook (`e2e/devices.spec.ts` sweeps phones, iPads, laptops and desktops). WebKit comes
+  from `npx playwright install webkit`; if its downloader times out, curl the zip it names into
+  `%LOCALAPPDATA%\ms-playwright\webkit-<rev>` with an empty `INSTALLATION_COMPLETE` file.
 - `npm run theatre` — encode `media-src/flow/{welcome,film}.mp4` (gitignored sources) into
   `public/media/theatre/` and print the monitor corners for `content/theatre.json`
 - `npm run capture [slug]` — record public sites; `scripts/capture/live-session.mjs` records dashboards

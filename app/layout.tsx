@@ -47,6 +47,8 @@ export const viewport: Viewport = {
   themeColor: "#05070c",
   width: "device-width",
   initialScale: 1,
+  // Full-bleed on notched iPhones; the HUD and corner buttons pad themselves with the safe areas.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

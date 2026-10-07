@@ -2,6 +2,7 @@
 .copy {
   position: absolute;
   inset: 0 0 auto 0;
+  height: 100vh;
   height: 100svh;
   z-index: 3;
   display: flex;
@@ -12,6 +13,8 @@
 .inner {
   pointer-events: auto;
   padding: 0 var(--gutter);
+  padding-left: max(var(--gutter), env(safe-area-inset-left));
+  padding-right: max(var(--gutter), env(safe-area-inset-right));
   max-width: 760px;
 }
 .actions {
@@ -135,9 +138,11 @@
 .inner > :nth-child(5) {
   animation-delay: 2s;
 }
+/* From 1% rather than 0: text that first paints fully transparent is never counted by the
+   browser's load metric (LCP), so the headline would not register as painted. */
 @keyframes title-in {
   from {
-    opacity: 0;
+    opacity: 0.01;
     transform: translateY(12px);
     filter: blur(6px);
   }
@@ -166,5 +171,40 @@
   }
   .actions {
     margin-top: 1.1rem;
+  }
+}
+
+/* Phones held sideways (and other very short screens): everything on one screen, under the HUD. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .copy {
+    align-items: center;
+    padding: 3.4rem 0 0.4rem;
+  }
+  .where {
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+  }
+  .headline {
+    font-size: clamp(1.5rem, 8.5svh, 2.4rem);
+    max-width: 20ch;
+  }
+  .rotating {
+    margin-top: 0.35rem;
+    min-height: 1.3em;
+    font-size: 1rem;
+  }
+  .credit {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+  }
+  .actions {
+    margin-top: 0.8rem;
+  }
+  .primary,
+  .ghost {
+    min-height: 40px;
+  }
+  .cue {
+    display: none;
   }
 }

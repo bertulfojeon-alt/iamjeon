@@ -49,15 +49,21 @@ export function Theatre(props: ScreenProps) {
   const skipFilmRef = useRef(false); // the next trip to the desk skips the film
 
   // Sound follows the toggle from the visitor's first gesture (browsers refuse sound before one).
+  // Only events that count as a user activation unlock it: a touchstart or a scroll does not
+  // (iOS Safari would pause a video that is unmuted without one).
   const [gestured, setGestured] = useState(false);
   useEffect(() => {
     const on = () => setGestured(true);
-    const types = ["pointerdown", "keydown", "touchstart"] as const;
+    const types = ["click", "keydown", "touchend"] as const;
     types.forEach((t) => window.addEventListener(t, on, { once: true, passive: true }));
     return () => types.forEach((t) => window.removeEventListener(t, on));
   }, []);
   const audible = soundOn && gestured;
   const animated = ready && mode !== "still";
+  // Read when the film is due to start, not when the scroll that leads to it began: a swipe
+  // in the first moments after load starts before the engine is ready and ends after.
+  const animatedRef = useRef(animated);
+  animatedRef.current = animated;
   const mobile = mode === "lite";
 
   // ── Scroll lock while the film runs ──
@@ -70,21 +76,29 @@ export function Theatre(props: ScreenProps) {
     [lenis],
   );
 
+  // The ref changes at once (scroll handlers read it before React re-renders), then the state.
+  const go = useCallback((next: Phase) => {
+    phaseRef.current = next;
+    setPhase(next);
+  }, []);
+
+  // The desk holds the page as well (see below), so the film's lock carries straight over.
   const toDesk = useCallback(() => {
     filmRef.current?.pause();
-    setPhase("desk");
-    lock(false);
-  }, [lock]);
+    go("desk");
+  }, [go]);
 
   const playFilm = useCallback(() => {
+    // Only from the welcome: a second glide finishing late must not restart anything.
+    if (phaseRef.current !== "welcome") return;
     const film = filmRef.current;
     const skip = skipFilmRef.current;
     skipFilmRef.current = false;
-    if (!animated || !film || skip) {
-      setPhase("desk");
+    if (!animatedRef.current || !film || skip) {
+      go("desk");
       return;
     }
-    setPhase("film");
+    go("film");
     lock(true);
     film.currentTime = 0;
     film.muted = !audible;
@@ -99,7 +113,7 @@ export function Theatre(props: ScreenProps) {
         film.play().catch(() => toDesk());
       } else toDesk();
     });
-  }, [animated, lock, audible, toDesk]);
+  }, [go, lock, audible, toDesk]);
 
   // ── A refresh (or Back into the site from elsewhere) opens on the welcome ──
   // The browser restores the old scroll position while the page loads; until it
@@ -145,15 +159,25 @@ export function Theatre(props: ScreenProps) {
 
   // ── Phase from scroll position and direction ──
   const movingRef = useRef(false); // a glide is running (kept across re-subscriptions)
+  const arrivedRef = useRef(false); // the on-arrival checks below have run (once per mount)
   useEffect(() => {
     let lastY = window.scrollY;
     const glide = (top: number, done: () => void) => {
       movingRef.current = true;
+      let finished = false;
+      let timer = 0;
       const end = () => {
+        if (finished) return;
+        finished = true;
+        window.clearTimeout(timer);
         movingRef.current = false;
         lastY = window.scrollY;
         done();
       };
+      // Safari does not always report the end of a glide that starts at (or next to) its
+      // target, so a timer guarantees it finishes.
+      timer = window.setTimeout(end, animated ? 1250 : 60);
+      if (Math.abs(window.scrollY - top) < 2) return end();
       if (lenis && animated) lenis.scrollTo(top, { duration: 1, lock: true, force: true, onComplete: end });
       else {
         window.scrollTo({ top, behavior: animated ? "smooth" : "auto" });
@@ -180,11 +204,14 @@ export function Theatre(props: ScreenProps) {
     if (!pinnedRef.current && !movingRef.current) {
       const y = window.scrollY;
       const vh = window.innerHeight;
-      // Arriving mid-page (back button within the site): go straight to the desk.
-      if (y >= vh * 0.5) setPhase("desk");
+      // Arriving mid-page (back button within the site): go straight to the desk. On arrival
+      // only: a later re-subscription (the first click changing the sound) must not undo
+      // Back to the top while it glides up.
+      if (!arrivedRef.current && y >= vh * 0.5) setPhase("desk");
       // Scrolled before this listener was attached (a fast first scroll while the page hydrates).
       else if (phaseRef.current === "welcome" && y > vh * 0.04) glide(vh, playFilm);
     }
+    arrivedRef.current = true;
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [animated, lenis, playFilm]);
@@ -192,18 +219,35 @@ export function Theatre(props: ScreenProps) {
   // ── At the desk the page itself holds still: only the screen's own panels scroll, so
   //    no wheel or swipe outside them can slide the hero copy back over the monitor ──
   useEffect(() => {
-    if (phase !== "desk") return;
+    if (phase === "welcome") return;
     lock(true);
-    return () => lock(false);
+    // iOS Safari ignores overflow: hidden for touch scrolling, so whenever the page moves
+    // during the film or at the desk it is put straight back (the end of the scroll range,
+    // which is one screen down unless the browser's toolbars changed the viewport height).
+    const hold = () => {
+      if (phaseRef.current === "welcome" || movingRef.current) return;
+      const target = Math.min(window.innerHeight, document.documentElement.scrollHeight - window.innerHeight);
+      if (Math.abs(window.scrollY - target) > 1) window.scrollTo(0, target);
+    };
+    window.addEventListener("scroll", hold, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", hold);
+      lock(false);
+    };
   }, [phase, lock]);
 
   // ── Back to the top: from the desk to the bench (and the home address) ──
   const toTop = useCallback(() => {
     skipFilmRef.current = false;
     lock(false);
+    phaseRef.current = "welcome"; // the desk's hold lets go before React re-renders
     setPhase("welcome");
     if (window.location.pathname !== "/") window.history.pushState(null, "", "/");
-    if (lenis && animated) lenis.scrollTo(0, { duration: 1, lock: true, force: true });
+    // The glide up counts as moving, so nothing reads it as a scroll on the way.
+    movingRef.current = true;
+    const end = () => (movingRef.current = false);
+    window.setTimeout(end, animated ? 1250 : 60);
+    if (lenis && animated) lenis.scrollTo(0, { duration: 1, lock: true, force: true, onComplete: end });
     else window.scrollTo({ top: 0, behavior: animated ? "smooth" : "auto" });
   }, [animated, lenis, lock]);
 
@@ -269,6 +313,22 @@ export function Theatre(props: ScreenProps) {
     return () => window.clearTimeout(id);
   }, [mediaReady]);
 
+  // A film that stops making progress (a stalled connection) gives way to the desk
+  // rather than leaving the visitor on a frozen frame.
+  useEffect(() => {
+    if (phase !== "film") return;
+    let last = -1;
+    let still = 0;
+    const id = window.setInterval(() => {
+      const film = filmRef.current;
+      if (!film) return;
+      still = film.currentTime === last ? still + 1 : 0;
+      last = film.currentTime;
+      if (still >= 8) toDesk();
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [phase, toDesk]);
+
   // ── Sound follows the toggle ──
   useEffect(() => {
     if (welcomeRef.current) welcomeRef.current.muted = !audible;
@@ -287,6 +347,9 @@ export function Theatre(props: ScreenProps) {
   // ready by the first scroll without competing with first paint.
   useEffect(() => {
     if (!animated || !mediaReady) return;
+    // On a slow connection the film is not fetched ahead (it still plays, from a cold start).
+    const conn = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection;
+    if (conn?.effectiveType && /(^|-)2g$|^3g$/.test(conn.effectiveType)) return;
     const id = window.setTimeout(() => {
       const film = filmRef.current;
       // Only kick off loading if nothing has started it yet — load() aborts a pending play().
@@ -307,7 +370,10 @@ export function Theatre(props: ScreenProps) {
       const quad = mapQuad(MONITOR, t);
       const visible = quad.every(([x, y]) => x >= -2 && y >= -2 && x <= width + 2 && y <= height + 2);
       const wide = width / height >= 1.25;
-      if (visible && wide) setDesk({ fit: "mapped", matrix: toCssMatrix3d(rectToQuadMatrix(DESK_W, DESK_H, quad)) });
+      // Projected smaller than this, the screen's text is too small to read: use the panel.
+      const xs = quad.map(([x]) => x);
+      const readable = (Math.max(...xs) - Math.min(...xs)) / DESK_W >= 0.62;
+      if (visible && wide && readable) setDesk({ fit: "mapped", matrix: toCssMatrix3d(rectToQuadMatrix(DESK_W, DESK_H, quad)) });
       else setDesk({ fit: "panel", matrix: "none" });
     };
     compute();
@@ -330,8 +396,9 @@ export function Theatre(props: ScreenProps) {
         {animated && mediaReady && (
           <video
             ref={welcomeRef}
-            className={`${styles.layer} ${styles.welcome}`}
+            className={`${styles.layer} ${styles.welcome} ${styles.welcomeVideo}`}
             src={welcomeSrc}
+            onPlaying={(e) => (e.currentTarget.dataset.playing = "true")}
             poster={mobile ? theatre.welcome.posterMobile : theatre.welcome.poster}
             muted
             loop

@@ -1,10 +1,12 @@
 .theatre {
   position: relative;
+  height: 200vh;
   height: 200svh;
 }
 .stage {
   position: sticky;
   top: 0;
+  height: 100vh;
   height: 100svh;
   overflow: hidden;
   background: var(--night);
@@ -64,7 +66,8 @@
   transform-origin: 0 0;
 }
 .desktopWrap[data-fit="panel"] {
-  inset: 4.6rem 0.75rem 4.4rem;
+  inset: calc(4.6rem + env(safe-area-inset-top)) calc(0.75rem + env(safe-area-inset-right))
+    calc(4.4rem + env(safe-area-inset-bottom)) calc(0.75rem + env(safe-area-inset-left));
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 0 0 1px var(--line), 0 30px 80px rgba(0, 0, 0, 0.6);
@@ -87,8 +90,8 @@
 
 .skip {
   position: absolute;
-  right: var(--gutter);
-  bottom: 2rem;
+  right: calc(var(--gutter) + env(safe-area-inset-right));
+  bottom: calc(2rem + env(safe-area-inset-bottom));
   z-index: 5;
   font: inherit;
   font-size: 0.9rem;
@@ -108,7 +111,7 @@
 .top {
   position: absolute;
   left: 50%;
-  bottom: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom));
   z-index: 5;
   transform: translateX(-50%);
   width: 46px;
@@ -138,5 +141,19 @@
 @media (max-aspect-ratio: 4/5) {
   .welcome {
     object-position: 74% center;
+  }
+}
+
+/* The welcome loop stays hidden until it really plays (the poster underneath is the same
+   frame), so a refused autoplay never shows a stalled or decorated video. */
+.welcomeVideo:not([data-playing]) {
+  visibility: hidden;
+}
+
+/* Phones held sideways: a slimmer HUD above, so the panel can take more of the height. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .desktopWrap[data-fit="panel"] {
+    inset: calc(3.3rem + env(safe-area-inset-top)) calc(0.75rem + env(safe-area-inset-right))
+      calc(4rem + env(safe-area-inset-bottom)) calc(0.75rem + env(safe-area-inset-left));
   }
 }

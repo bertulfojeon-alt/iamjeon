@@ -38,7 +38,9 @@ export function Welcome({ active }: { active: boolean }) {
               {clock.there && <span className={styles.there}> · {clock.there} where you are</span>}
             </>
           ) : (
-            " "
+            // Painted with the first HTML (it is the largest early text, so it sets the load
+            // score); the clock replaces it once the page runs.
+            "Lapu-Lapu City, Cebu"
           )}
         </p>
         <h1 className={`display ${styles.headline}`}>While your office sleeps, your systems keep working.</h1>

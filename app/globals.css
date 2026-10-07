@@ -51,6 +51,7 @@
 html {
   background: var(--night);
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 body {
   margin: 0;
@@ -377,4 +378,19 @@ html[data-mode="still"] .grain {
 }
 .skip-link:focus {
   top: 1rem;
+}
+
+/* iOS (Low Power Mode) draws a play button over autoplay videos it refuses to start.
+   Videos without controls are decoration: never show it. */
+video:not([controls])::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+/* iOS zooms the page into any text field under 16px: touch screens get 16px. */
+@media (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
 }
