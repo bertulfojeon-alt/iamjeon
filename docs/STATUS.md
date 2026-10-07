@@ -78,24 +78,26 @@ Design records: `docs/specs/2026-10-05-night-shift-design.md` (the site) and
 
 ## What to build next
 
-The owner has asked about the AI assistant. It is **not started**. It follows the assistant spec, Parts 3–4.
+**Jun, Jeon's AI twin** (owner decisions 2026-10-07). Design: `docs/specs/2026-10-07-jun-voice-twin-design.md`,
+which replaces the pre-voiced tour and the separate live conversation of the 2026-10-06 spec. Not built yet;
+an implementation plan comes next.
 
-- **Phase 2, the guided tour:** a greeting after the film, a branching script (`content/tour.ts`) with a
-  pre-voiced TTS voice and subtitles, answer buttons, and a contact handoff. The tour drives the screen
-  through the stage reducer, so add tour commands there rather than a second path.
-  The spec's stage names (`greeting | tour | scene | case | explore | contact`) predate the current
-  dashboard: map them onto `grid / show / panel` plus whatever the tour needs.
-- **Phase 3, the live conversation:** the Gemini Live API from the browser, with these pieces:
-  - an ephemeral-token route `app/api/shift/token`;
-  - function calls into the same stage commands;
-  - a knowledge pack of public fields only, under about 6K tokens, scanned by the leak check;
-  - a 5-minute cap, a Vercel WAF rate limit, and an eval script.
-- **Waiting on the owner before Phase 2 or 3 can start:**
-  1. the assistant's name ("Shift" is a placeholder);
-  2. the voice, picked from a short audition Claude prepares in Phase 2;
-  3. Gemini billing enabled, plus the daily budget cap amount. Phase 3 must not go live on the free tier:
-     free-tier data may be used for training, and visitors' voices are personal data.
-  4. a reviewed `content/resume.md`, the text of the public résumé, for the knowledge pack.
+- Voice only (Gemini Live, no chat). It knows the whole portfolio and offers a full-screen presentation of
+  the work, driven by function calls.
+- A floating badge, bottom right, shows a mini Jeon in a glowing ring. He waves once a minute, with a
+  "Talk to me" pill. It appears only at the desk and on `/work/<slug>`.
+- Owner decisions:
+  - **name:** Jun;
+  - **persona:** first person as Jeon's AI twin, always says it is an AI;
+  - **voice:** calm male, from an audition of Charon, Iapetus, Algieba, Orus and Schedar;
+  - **tier:** free for development, with `gemini-3.8-live` first and the native-audio model as fallback;
+  - **résumé:** as is.
+- Still needed from the owner:
+  - `GEMINI_API_KEY` in `.env.local` and in Vercel;
+  - the voice pick;
+  - a billing decision before Jun moves from the previews to `main`.
+- The badge clip's source is `media-src/jun/` (copy of the owner's
+  `Young_man_waving_at_camera_20261007125012.mp4`); the encoding recipe is in the spec, section 1.
 - **Also open:** a check on a real Mac (the iPhone was checked on 2026-10-07). The automated Safari runs
   use WebKit on Windows, which cannot reproduce touch momentum, Low Power Mode or iOS toolbar resizing,
   and in iPhone emulation the film starts but does not advance.

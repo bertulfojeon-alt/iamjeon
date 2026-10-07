@@ -7,7 +7,8 @@ from `content/tracks.ts`, services and skills from `content/services.ts`, a get-
 project cards with category chips and search. A card opens the project in full in the pane (video, screens,
 features with spotlights, numbers, stack, story behind a button); About / Contact are panels. Opening a project
 pushes /work/<slug> (shareable; direct visits get the full page); "All projects" and Back return to the grid. At the desk, scrolling never returns to the hero — the ↑ button does.
-Design records: `docs/specs/2026-10-05-night-shift-design.md`, `docs/specs/2026-10-06-shift-assistant-design.md`.
+Design records: `docs/specs/2026-10-05-night-shift-design.md`, `docs/specs/2026-10-06-shift-assistant-design.md`,
+`docs/specs/2026-10-07-jun-voice-twin-design.md` (Jun, the voice assistant; replaces the 10-06 tour).
 Old static site: tag `v1-static`.
 **Current status, what is built, what to build next and the open owner decisions: `docs/STATUS.md` (read it first).**
 
@@ -40,7 +41,7 @@ DOM projected onto the monitor with a homography (`lib/homography.ts`, `content/
   light (`.screen-light` re-scopes the tokens; accent `#a04a08` on paper `#f5f1ea`). Big Shoulders /
   Hanken Grotesk; no mono labels, no 01/02/03, no count-up stats, no fade-up on every section.
   The sodium warm-up (`WarmTitle`) is for chapter titles only.
-- What the monitor shows is owned by `features/stage/stage.ts` (pure reducer); Phase 2's assistant
+- What the monitor shows is owned by `features/stage/stage.ts` (pure reducer); Jun (the voice assistant)
   dispatches the same commands.
 - Every case study needs a `pitch` (track, problem, outcome; no digits); calls/trading/admin projects need
   2–3 `spotlights` positioned on `screen.poster`.
