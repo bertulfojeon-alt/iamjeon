@@ -1,0 +1,179 @@
+/*
+ * Geometry from the approved prototype, measured at 1280, 430, 390, 375 and 360 px:
+ * the box is 240 × 250 and is scaled about the ring's right end (224, 230), so the ring
+ * keeps its place in the corner as the badge grows. The pill is counter-scaled so it
+ * always reads at 20 px. On phones the ring must clear the centred ↑ button by 12 px:
+ * a screen w px wide holds a ring of (w / 2 − 45) px.
+ */
+
+.badge {
+  position: fixed;
+  right: calc(18px + env(safe-area-inset-right));
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  z-index: 70;
+  width: 240px;
+  height: 250px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform-origin: 224px 230px;
+  transform: scale(0.75);
+  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  -webkit-tap-highlight-color: transparent;
+}
+.badge[data-up="true"] {
+  transform: scale(1);
+}
+
+/* The box is mostly empty: only the ring, the figure and the pill take taps. */
+.badge {
+  pointer-events: none;
+}
+.person,
+.pill,
+.ring path {
+  pointer-events: auto;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.back,
+.front {
+  fill: none;
+  stroke: url(#jun-ring);
+  transition: filter 0.3s;
+}
+.back {
+  stroke-width: 7;
+  opacity: 0.7;
+  filter: drop-shadow(0 0 6px #3b82ff);
+}
+.front {
+  stroke-width: 8;
+  filter: drop-shadow(0 0 6px #3b82ff) drop-shadow(0 0 16px #3b82ff);
+}
+/* During a call the ring is the state: brighter while Jun speaks, softer while it listens. */
+.badge[data-level="speaking"] .front {
+  filter: drop-shadow(0 0 10px #6fb2ff) drop-shadow(0 0 26px #3b82ff);
+}
+.badge[data-level="listening"] .front {
+  filter: drop-shadow(0 0 4px #3b82ff);
+}
+
+/* Everything above the ring's centre line, plus the ring's lower half: he rises out of the opening. */
+.figure {
+  position: absolute;
+  inset: 0;
+  clip-path: path("M0 0 H240 V208 A104 26 0 0 1 16 208 V208 H0 Z");
+}
+.person {
+  position: absolute;
+  left: 22px;
+  top: 30px;
+  width: 200px;
+  height: auto;
+  transform: translateY(82px);
+  transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+}
+.badge[data-up="true"] .person {
+  transform: translateY(0);
+}
+.person[data-hidden="true"] {
+  visibility: hidden;
+}
+
+.pill {
+  position: absolute;
+  left: 120px;
+  top: 214px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px 6px 11px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font: 600 20px/1.2 var(--font-body);
+  letter-spacing: 0.01em;
+  color: #eaf3ff;
+  background: #0a1636e6;
+  border: 1px solid #6fb2ff99;
+  box-shadow: 0 0 12px #3b82ff66;
+  transform: translate(-50%, -50%) scale(1.333);
+  transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2), border-color 0.2s, box-shadow 0.2s;
+}
+.pill svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+}
+.badge[data-up="true"] .pill {
+  transform: translate(-50%, -50%) scale(1);
+}
+.badge:hover .pill,
+.badge:focus-visible .pill {
+  border-color: #9fd8ff;
+  box-shadow: 0 0 16px #3b82ffaa;
+}
+.badge:focus-visible {
+  outline: none;
+}
+.badge:focus-visible .front {
+  filter: drop-shadow(0 0 10px #9fd8ff) drop-shadow(0 0 22px #3b82ff);
+}
+
+/* The clip plays offscreen; the canvas shows it. */
+.source {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .badge,
+  .badge[data-up="true"] {
+    right: calc(-6px + env(safe-area-inset-right));
+    bottom: calc(8px + env(safe-area-inset-bottom));
+    transform: scale(0.72);
+  }
+  .pill,
+  .badge[data-up="true"] .pill {
+    transform: translate(-50%, -50%) scale(1.389);
+  }
+}
+@media (max-width: 389px) {
+  .badge,
+  .badge[data-up="true"] {
+    transform: scale(0.645);
+  }
+  .pill,
+  .badge[data-up="true"] .pill {
+    transform: translate(-50%, -50%) scale(1.378);
+  }
+}
+/* Below 360 px (down to 320): the ring holds 115 px, so ring and pill shrink together. */
+@media (max-width: 359px) {
+  .badge,
+  .badge[data-up="true"] {
+    transform: scale(0.55);
+  }
+  .pill,
+  .badge[data-up="true"] .pill {
+    transform: translate(-50%, -50%) scale(1.36);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge,
+  .person,
+  .pill {
+    transition: none;
+  }
+}

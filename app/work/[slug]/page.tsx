@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
 import { getProject, projects } from "@/content";
 import { CaseStudy } from "@/components/case/CaseStudy";
+import { Jun } from "@/features/jun/Jun";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -29,6 +30,8 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
       <main id="main-content" className="screen-light">
         <CaseStudy project={p} />
       </main>
+      {/* No project list in the page: a classified case page must not carry other projects' names. Jun fetches it. */}
+      <Jun where="page" />
     </ViewTransition>
   );
 }

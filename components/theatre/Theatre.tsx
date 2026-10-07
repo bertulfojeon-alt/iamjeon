@@ -22,6 +22,7 @@ import { useCinematic } from "@/hooks/useCinematic";
 import { coverTransform, mapQuad, rectToQuadMatrix, toCssMatrix3d, type Quad } from "@/lib/homography";
 import theatre from "@/content/theatre.json";
 import { Screen, type ScreenProps } from "@/components/screen/Screen";
+import { Jun } from "@/features/jun/Jun";
 import { Welcome } from "./Welcome";
 import styles from "./Theatre.module.css";
 
@@ -476,6 +477,8 @@ export function Theatre(props: ScreenProps) {
             ↑
           </button>
         )}
+        {/* Jun lives at the desk only: never on the welcome, never during the film. */}
+        {phase === "desk" && <Jun items={props.items} where="desk" />}
       </div>
 
       {/* Target of the "Skip to the work" link; the hash handler takes it to the desk. */}

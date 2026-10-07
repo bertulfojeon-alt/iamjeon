@@ -86,6 +86,12 @@ export class JunSession {
     this.session?.sendClientContent({ turns: [{ role: "user", parts: [{ text: "(The visitor started the call.)" }] }], turnComplete: true });
   }
 
+  /** Tells Jun something the visitor did (closing the presentation), without prompting a reply. */
+  note(text: string): void {
+    if (this.stopped) return;
+    this.session?.sendClientContent({ turns: [{ role: "user", parts: [{ text }] }], turnComplete: false });
+  }
+
   setMuted(muted: boolean): void {
     // Disabling the track is what stops audio leaving the device.
     for (const track of this.mic?.getAudioTracks() ?? []) track.enabled = !muted;
