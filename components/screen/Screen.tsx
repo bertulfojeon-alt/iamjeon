@@ -44,6 +44,8 @@ export interface ScreenItem {
   role: string;
   poster: string;
   loop?: string;
+  /** A scrolling recording of the public landing page, shown first when there is one. */
+  landing?: { loop: string; poster: string };
   showcase?: ShowcaseId;
   live: { label: string; href: string }[];
   shots: Shot[];

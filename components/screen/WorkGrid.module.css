@@ -217,12 +217,13 @@
 .tools {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px 16px;
   margin-top: 18px;
 }
+/* Desktop filters from the sidebar; the chips are for phones, where it sits below the grid. */
 .chips {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   gap: 6px;
   flex: 1;
@@ -271,6 +272,7 @@
   align-items: center;
   gap: 8px;
   width: 260px;
+  margin-left: auto;
   min-height: 38px;
   padding: 0 14px;
   border: 1px solid var(--line);
@@ -297,13 +299,13 @@
   color: var(--screen);
 }
 .status {
-  margin: 12px 0 0;
+  margin: 0;
   font-size: 13px;
   color: var(--dim);
 }
 .cards {
   list-style: none;
-  margin: 10px 0 0;
+  margin: 16px 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
@@ -494,6 +496,7 @@
     display: grid;
   }
   .chips {
+    display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;

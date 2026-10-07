@@ -3,7 +3,8 @@
 /**
  * Everything about one project, in the monitor's main pane, like a product
  * dashboard: the problem and result up top with a link to the live site, the
- * product's video, then sections the visitor scrolls through or jumps to with the
+ * product's video (a scroll through its landing page when it has one, with the
+ * product demo just below), then sections the visitor scrolls through or jumps to with the
  * text buttons (Screens, Features, Numbers, Built with). The long write-up waits
  * behind "Read the story". The pane scrolls on its own inside the monitor.
  */
@@ -75,7 +76,13 @@ export function ProjectPane({ item, groupTitle, still, onZoom, onBack }: Props) 
       </header>
 
       <figure className={styles.proof}>
-        {Showcase ? (
+        {item.landing ? (
+          still ? (
+            <img src={item.landing.poster} alt={`${item.title} landing page`} decoding="async" />
+          ) : (
+            <video key={`${item.slug}-landing`} src={item.landing.loop} poster={item.landing.poster} muted loop playsInline autoPlay aria-hidden="true" />
+          )
+        ) : Showcase ? (
           <Showcase />
         ) : item.loop && !still ? (
           <video key={item.slug} src={item.loop} poster={item.poster} muted loop playsInline autoPlay aria-hidden="true" />
@@ -84,6 +91,15 @@ export function ProjectPane({ item, groupTitle, still, onZoom, onBack }: Props) 
         )}
         {item.classified && <span className={styles.privacy} aria-hidden="true" />}
       </figure>
+
+      {item.landing && Showcase && (
+        <section className={styles.inside} aria-labelledby={`${item.slug}-inside`}>
+          <h3 id={`${item.slug}-inside`}>Inside the product</h3>
+          <figure className={styles.proof}>
+            <Showcase />
+          </figure>
+        </section>
+      )}
 
       {sections.length > 0 && (
         <nav className={styles.tabs} aria-label="Sections" data-tabs>

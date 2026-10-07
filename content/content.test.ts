@@ -127,10 +127,18 @@ describe("project content", () => {
   it("points every screen, loop and media item at a file that exists", () => {
     const missing: string[] = [];
     for (const p of projects) {
-      const refs = [p.screen.poster, p.screen.loop, p.coldOpen?.src, p.coldOpen?.poster, ...p.beats.flatMap((b) => (b.media ?? []).flatMap((m) => [m.src, m.poster]))];
+      const refs = [p.screen.poster, p.screen.loop, p.screen.landing?.loop, p.screen.landing?.poster, p.coldOpen?.src, p.coldOpen?.poster, ...p.beats.flatMap((b) => (b.media ?? []).flatMap((m) => [m.src, m.poster]))];
       for (const r of refs) if (r && !existsSync(path.join(process.cwd(), "public", r))) missing.push(`${p.slug}: ${r}`);
     }
     expect(missing).toEqual([]);
+  });
+});
+
+describe("landing pages", () => {
+  it("leads every product that has a public landing page with a recording of it, never a classified one", () => {
+    const withLanding = projects.filter((p) => p.screen.landing).map((p) => p.slug).sort();
+    expect(withLanding).toEqual(["247aisupports", "ezvibe", "jeonscraper", "tg-auto-trader", "unified-cx"]);
+    for (const p of projects) if (p.redacted) expect(p.screen.landing, p.slug).toBeUndefined();
   });
 });
 

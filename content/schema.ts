@@ -91,6 +91,8 @@ export const projectSchema = z
     screen: z.object({
       poster: z.string().startsWith("/"),
       loop: z.string().startsWith("/").optional(),
+      /** A scrolling recording of the product's public landing page; leads the project on the monitor. */
+      landing: z.object({ loop: z.string().startsWith("/"), poster: z.string().startsWith("/") }).optional(),
     }),
     /** The opening shot of the case study. */
     coldOpen: media.optional(),

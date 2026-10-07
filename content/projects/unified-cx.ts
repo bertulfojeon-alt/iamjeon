@@ -25,7 +25,7 @@ export default {
     "Tailwind CSS",
     "Vitest",
   ],
-  screen: { poster: "/media/projects/unified-cx/screen.webp", loop: "/media/projects/unified-cx/loop.mp4" },
+  screen: { poster: "/media/projects/unified-cx/screen.webp", loop: "/media/projects/unified-cx/loop.mp4", landing: { loop: "/media/projects/unified-cx-landing/loop.mp4", poster: "/media/projects/unified-cx-landing/screen.webp" } },
   showcase: "voice-router",
   pitch: {
     track: "calls",

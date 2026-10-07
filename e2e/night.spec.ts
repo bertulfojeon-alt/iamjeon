@@ -190,14 +190,18 @@ test.describe("the desk dashboard", () => {
     await expect(grid(page).getByRole("listitem").filter({ has: page.getByRole("link", { name: "Project Payday", exact: true }) })).toContainText("NDA");
   });
 
-  test("category filters narrow the grid and show how many projects each holds", async ({ page }) => {
+  test("category filters narrow the grid and show how many projects each holds", async ({ page }, info) => {
     await toDesk(page);
-    await chips(page).getByRole("button", { name: /^Trading/ }).click();
+    const phone = info.project.name === "phone";
+    // Desktop filters from the sidebar alone; phones, where the sidebar sits below the grid, keep chips above it.
+    await expect(chips(page)).toHaveCount(phone ? 1 : 0);
+    const filters = phone ? chips(page) : page.locator("#desk").getByRole("complementary", { name: "Browse" });
+    await filters.getByRole("button", { name: /^Trading\s*\d/ }).click();
     await expect(grid(page).getByRole("listitem")).toHaveCount(5);
-    await expect(chips(page).getByRole("button", { name: /^Trading/ })).toHaveAttribute("aria-pressed", "true");
-    await chips(page).getByRole("button", { name: /^Side projects/ }).click();
+    await expect(filters.getByRole("button", { name: /^Trading\s*\d/ })).toHaveAttribute("aria-pressed", "true");
+    await filters.getByRole("button", { name: /^Side projects\s*\d/ }).click();
     await expect(grid(page).getByRole("listitem")).toHaveCount(7);
-    await chips(page).getByRole("button", { name: /^All/ }).click();
+    await filters.getByRole("button", { name: /^All( projects)?\s*\d/ }).click();
     await expect(grid(page).getByRole("listitem")).toHaveCount(21);
   });
 
@@ -240,6 +244,14 @@ test.describe("the desk dashboard", () => {
     await expect(p.getByText("Signals arrive faster than hands")).toBeHidden();
     await story.click();
     await expect(p.getByText("Signals arrive faster than hands")).toBeVisible();
+  });
+
+  test("products with a landing page lead with a scrolling recording of it; the product demo follows", async ({ page }) => {
+    await toDesk(page);
+    await openProject(page, "247Aisupports");
+    const p = pane(page, "247Aisupports");
+    await expect(p.locator("figure video").first()).toHaveAttribute("src", /247aisupports-landing\/loop\.mp4$/);
+    await expect(p.getByRole("region", { name: "Inside the product" })).toBeVisible();
   });
 
   test("live products link to their site; classified ones never link out", async ({ page }) => {
@@ -295,7 +307,8 @@ test.describe("the desk dashboard", () => {
   test("the screen is light and readable", async ({ page }) => {
     await toDesk(page);
     expect(await contrast(card(page, "TG Auto Trader"))).toBeGreaterThanOrEqual(4.5);
-    expect(await contrast(chips(page).getByRole("button", { name: /^Trading/ }))).toBeGreaterThanOrEqual(4.5);
+    const browse = page.locator("#desk").getByRole("complementary", { name: "Browse" });
+    if (test.info().project.name !== "phone") expect(await contrast(browse.getByRole("button", { name: /^Trading\s*\d/ }))).toBeGreaterThanOrEqual(4.5);
     const bg = await page.locator("#desk [data-screen]").evaluate((el) => getComputedStyle(el).backgroundColor);
     expect(bg).toBe("rgb(245, 241, 234)");
   });

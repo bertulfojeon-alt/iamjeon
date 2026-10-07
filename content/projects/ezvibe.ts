@@ -25,7 +25,7 @@ export default {
     "Ed25519",
     "GitHub Actions",
   ],
-  screen: { poster: "/media/projects/ezvibe/screen.webp", loop: "/media/projects/ezvibe/loop.mp4" },
+  screen: { poster: "/media/projects/ezvibe/screen.webp", loop: "/media/projects/ezvibe/loop.mp4", landing: { loop: "/media/projects/ezvibe-landing/loop.mp4", poster: "/media/projects/ezvibe-landing/screen.webp" } },
   showcase: "ezvibe-terminal",
   pitch: {
     track: "other",

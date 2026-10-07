@@ -83,6 +83,41 @@ export const recipes = [
   publicSite("ezvibe-landing", "https://ezvibe.vercel.app/", { settle: 2500 }),
   // Unified CX runs locally (its hosting is paused): `npx next dev -p 3011` in its repo first.
   publicSite("unified-cx-landing", "http://localhost:3011/", { settle: 6000, hide: [...COOKIE_BANNERS, "nextjs-portal"] }),
+  publicSite("247aisupports-landing", "https://247aisupports.com/", { settle: 2500 }),
+  // The hero takes the mouse wheel to cycle its headline, so this one scrolls by script.
+  publicSite("jeonscraper-landing", "https://jeonscraper.vercel.app/", {
+    setup: async (page) => {
+      await page.evaluate(() => {
+        const match = (el) => /^Trusted by \d/.test(el.textContent?.trim() ?? "");
+        for (const el of document.querySelectorAll("body *")) {
+          if (match(el) && ![...el.children].some(match)) el.setAttribute("data-capture-hide", "");
+        }
+      });
+    },
+    hide: [...COOKIE_BANNERS, ".hero-stats", "[data-capture-hide]"],
+    loop: async (page) => {
+      await page.waitForTimeout(800);
+      await page.evaluate(
+        ({ px, ms }) =>
+          new Promise((done) => {
+            document.documentElement.style.scrollBehavior = "auto";
+            const t0 = performance.now();
+            const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
+            const step = (now) => {
+              const t = Math.min(1, (now - t0) / ms);
+              window.scrollTo(0, px * ease(t));
+              if (t < 1) requestAnimationFrame(step);
+              else done();
+            };
+            requestAnimationFrame(step);
+          }),
+        { px: 2600, ms: 9000 },
+      );
+      await page.waitForTimeout(800);
+    },
+  }),
+  // Run `npm run dev` in F:\TGAutoTrader\web-dashboard first (signed out, it shows the landing page).
+  publicSite("tg-auto-trader-landing", "http://localhost:3001/", { settle: 4000 }),
   // ── Local apps (start it first: Karaoke `npm start`) ──
   publicSite("karaoke", "http://localhost:5173/", {
     settle: 4000,

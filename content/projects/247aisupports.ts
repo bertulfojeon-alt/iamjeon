@@ -25,7 +25,7 @@ export default {
     "Cloudflare",
     "Turnstile",
   ],
-  screen: { poster: "/media/projects/247aisupports/screen.webp", loop: "/media/projects/247aisupports/loop.mp4" },
+  screen: { poster: "/media/projects/247aisupports/screen.webp", loop: "/media/projects/247aisupports/loop.mp4", landing: { loop: "/media/projects/247aisupports-landing/loop.mp4", poster: "/media/projects/247aisupports-landing/screen.webp" } },
   showcase: "support-call-desk",
   pitch: {
     track: "calls",

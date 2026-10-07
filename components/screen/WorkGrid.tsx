@@ -234,17 +234,16 @@ export function WorkGrid({ items, filter, query, ready, scrollRef, onFilter, onQ
           </div>
         )}
         {service && <h3 className={styles.sub}>Projects that show it</h3>}
+        <p className={styles.status} aria-live="polite">
+          {shown.length === 1 ? "1 project" : `${shown.length} projects`}
+          {scope}
+          {query.trim() && ` matching “${query.trim()}”`}
+        </p>
         <label className={styles.search}>
           <Svg d={ICON.search} />
           <input type="search" placeholder="Search projects…" aria-label="Search projects" value={query} onChange={(e) => onQuery(e.target.value)} />
         </label>
       </div>
-
-      <p className={styles.status} aria-live="polite">
-        {shown.length === 1 ? "1 project" : `${shown.length} projects`}
-        {scope}
-        {query.trim() && ` matching “${query.trim()}”`}
-      </p>
 
       <ul className={styles.cards}>
         {shown.map((i) => (

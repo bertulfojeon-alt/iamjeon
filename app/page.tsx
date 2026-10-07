@@ -29,6 +29,7 @@ function toItem(p: Project): ScreenItem {
     role: p.role,
     poster: p.screen.poster,
     loop: p.screen.loop,
+    landing: p.screen.landing,
     showcase: p.showcase,
     live: p.links.filter((l) => l.kind === "live" || l.kind === "demo" || l.kind === "waitlist").map((l) => ({ label: l.label, href: l.href })),
     shots,
