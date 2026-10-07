@@ -12,6 +12,7 @@
     "test:e2e": "playwright test",
     "leak-check": "node scripts/leak-check.mjs",
     "theatre": "node scripts/theatre-media.mjs",
+    "jun-media": "node scripts/jun-media.mjs",
     "capture": "node scripts/capture/run.mjs"
   },
   "dependencies": {
