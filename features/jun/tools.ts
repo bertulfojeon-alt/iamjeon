@@ -21,6 +21,8 @@ export type Channel = "email" | "whatsapp" | "viber";
 
 export type JunEffect =
   | { type: "present"; cmd: PresentationCommand }
+  /** Puts "Show me on the big screen" on the call card: the stage opens only on the visitor's tap. */
+  | { type: "offer-presentation" }
   | { type: "show-project"; slug: string }
   | { type: "contact"; summary: string; channel?: Channel };
 
@@ -32,6 +34,9 @@ export interface ToolResult {
 const fail = (error: string): ToolResult => ({ response: { error } });
 const ok = (effect?: JunEffect, extra: Record<string, unknown> = {}): ToolResult => ({ response: { ok: true, ...extra }, effect });
 const CHANNELS: readonly string[] = ["email", "whatsapp", "viber"];
+/** Sent with every project's facts: the live test caught Jun turning a calendar connector into "books appointments". */
+const ONLY_LISTED =
+  "This is everything the project does. Describe only these features and outcomes. Do not infer more: a connector to a tool is not a feature built on it, and the visitor's needs do not change what was built.";
 
 export function runTool(name: string, args: Record<string, unknown>, ctx: ToolContext): ToolResult {
   const bySlug = new Map(ctx.items.map((i) => [i.slug, i]));
@@ -50,11 +55,15 @@ export function runTool(name: string, args: Record<string, unknown>, ctx: ToolCo
 
     case "get_project": {
       const item = find(args.slug);
-      return item ? { response: { project: projectDetail(item) } } : unknown(args.slug);
+      return item ? { response: { project: projectDetail(item), note: ONLY_LISTED } } : unknown(args.slug);
     }
 
+    // The live test caught Jun asking "would you like to see it?" and opening it in the same
+    // breath, so consent is the page's job: the visitor taps to open.
     case "start_presentation":
-      return ctx.presenting ? ok(undefined, { note: "The presentation is already open." }) : ok({ type: "present", cmd: { type: "start" } });
+      return ctx.presenting
+        ? ok(undefined, { note: "The presentation is already open." })
+        : ok({ type: "offer-presentation" }, { note: "The visitor now sees a button to open the big screen. Wait: you will be told when they open it or decline. Do not call show_slide before then." });
 
     case "end_presentation":
       return ctx.presenting ? ok({ type: "present", cmd: { type: "end" } }) : ok(undefined, { note: "No presentation is open." });

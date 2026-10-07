@@ -154,9 +154,24 @@ test.describe("a call with Jun (mock Live service)", () => {
     await expect.poll(() => live.toolResponses.at(-1)?.response.error).toBeTruthy();
     await expect(page.getByRole("dialog", { name: "Jun's presentation" })).toHaveCount(0);
 
+    // Jun only offers the big screen; the visitor opens it with a tap.
     live.call("start_presentation");
     const stage = page.getByRole("dialog", { name: "Jun's presentation" });
+    await expect(page.locator("[data-jun-offer]")).toBeVisible();
+    await expect(stage).toHaveCount(0);
+    await page.getByRole("button", { name: "Show me on the big screen" }).click();
     await expect(stage).toBeVisible();
+    await expect(page.locator("[data-jun-offer]")).toHaveCount(0);
+    // The stage covers everything, the site's top bar included.
+    const topmost = await page.evaluate(() => {
+      const close = [...document.querySelectorAll(`[aria-label="Jun's presentation"] button`)].find((b) => b.textContent === "Close")!;
+      const r = close.getBoundingClientRect();
+      const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      const who = document.querySelector(`[aria-label="Jun's presentation"] header span`)!.getBoundingClientRect();
+      const hit2 = document.elementFromPoint(who.left + 4, who.top + who.height / 2);
+      return [close.contains(hit), !!hit2?.closest(`[aria-label="Jun's presentation"]`)];
+    });
+    expect(topmost).toEqual([true, true]);
 
     live.call("show_slide", { kind: "hero", slug: p.slug });
     await expect(stage.getByRole("heading", { name: p.title })).toBeVisible();

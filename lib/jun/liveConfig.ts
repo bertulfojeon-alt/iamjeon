@@ -31,7 +31,8 @@ const DECLARATIONS = [
   },
   {
     name: "start_presentation",
-    description: "Open the full-screen presentation. Only after the visitor says yes or asks to be shown something; never on your own, never twice.",
+    description:
+      "Offer the full-screen presentation: the visitor sees a button and opens it with a tap, or declines. You are told which. Call it once, when it would help or when they ask to see something; never again after a no. Do not call show_slide until you are told it is open.",
     parameters: none,
   },
   {

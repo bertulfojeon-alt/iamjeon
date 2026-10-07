@@ -39,7 +39,10 @@ export function stageReducer(world: StageWorld) {
       case "grid":
         return state.kind === "grid" ? state : { kind: "grid" };
       case "show":
-        return slugs.has(command.slug) ? { kind: "project", slug: command.slug } : state;
+        if (!slugs.has(command.slug)) return state;
+        // The address catching up with the project a panel was opened over keeps the panel.
+        if (state.kind === "panel" && state.back.kind === "project" && state.back.slug === command.slug) return state;
+        return { kind: "project", slug: command.slug };
       case "panel": {
         if (!panels.has(command.panel)) return state;
         const view: StageView = { kind: "panel", panel: command.panel, back: place(state) };

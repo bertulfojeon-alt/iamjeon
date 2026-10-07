@@ -49,6 +49,14 @@ describe("Jun's system instruction", () => {
     }
   });
 
+  it("never adds a capability the work does not show", () => {
+    expect(instruction).toMatch(/never add a capability/i);
+  });
+
+  it("waits for a yes before presenting: offering and opening are never in the same turn", () => {
+    expect(instruction).toMatch(/stop and wait for their answer/i);
+  });
+
   it("forbids linking classified work to any named company", () => {
     expect(instruction).toMatch(/never connect a classified project to any company/i);
   });

@@ -40,6 +40,9 @@ export interface CallCardProps {
   failure: JunFailure | null;
   /** Jun's note to Jeon, once Jun has written one. */
   note: string;
+  /** Jun has offered the big screen: the visitor opens it here. */
+  offer: boolean;
+  onOffer: (yes: boolean) => void;
   onStart: () => void;
   onClose: () => void;
   onMute: () => void;
@@ -76,7 +79,7 @@ function Note({ note }: { note: string }) {
   );
 }
 
-export function CallCard({ view, status, subtitle, muted, failure, note, onStart, onClose, onMute, onEnd }: CallCardProps) {
+export function CallCard({ view, status, subtitle, muted, failure, note, offer, onOffer, onStart, onClose, onMute, onEnd }: CallCardProps) {
   return (
     <section className={styles.card} role="dialog" aria-label="Talk to Jun" data-jun-card={view}>
       {view === "intro" && (
@@ -107,6 +110,16 @@ export function CallCard({ view, status, subtitle, muted, failure, note, onStart
           <p className={styles.subtitle} data-jun-subtitle>
             {subtitle || (status === "connecting" ? "" : " ")}
           </p>
+          {offer && (
+            <div className={styles.offer} data-jun-offer>
+              <button type="button" className={styles.primary} onClick={() => onOffer(true)}>
+                Show me on the big screen
+              </button>
+              <button type="button" className={styles.secondary} onClick={() => onOffer(false)}>
+                Not now
+              </button>
+            </div>
+          )}
           {note && (
             <>
               <Note note={note} />

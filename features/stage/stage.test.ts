@@ -51,4 +51,12 @@ describe("stage", () => {
     const plain = reduce(reduce(contact, { type: "back" }), { type: "panel", panel: "contact" });
     expect(plain).not.toHaveProperty("summary");
   });
+  it("keeps a panel when the address catches up with the project it was opened over", () => {
+    // Jun opens a project (the address changes to /work/trade-a), then Contact; the address
+    // effect lands after and sends "show trade-a": the panel must stay.
+    const shown = reduce(initialStage(world), { type: "show", slug: "trade-a" });
+    const contact = reduce(shown, { type: "panel", panel: "contact", summary: "note" });
+    expect(reduce(contact, { type: "show", slug: "trade-a" })).toBe(contact);
+    expect(reduce(contact, { type: "show", slug: "calls-a" })).toEqual({ kind: "project", slug: "calls-a" });
+  });
 });

@@ -17,6 +17,12 @@ describe("look-ups", () => {
     expect(runTool("list_projects", { group: "crypto" }, ctx()).response.error).toBeTruthy();
   });
 
+  it("reminds Jun, with the facts, to describe only what is listed", () => {
+    const note = runTool("get_project", { slug: withAll.slug }, ctx()).response.note as string;
+    expect(note).toMatch(/only/i);
+    expect(note).toMatch(/connector/i);
+  });
+
   it("returns a project's detail, and an error for an unknown slug", () => {
     const r = runTool("get_project", { slug: withAll.slug }, ctx());
     expect((r.response.project as { slug: string }).slug).toBe(withAll.slug);
@@ -30,8 +36,10 @@ describe("look-ups", () => {
 });
 
 describe("the presentation", () => {
-  it("opens once", () => {
-    expect(runTool("start_presentation", {}, ctx()).effect).toEqual({ type: "present", cmd: { type: "start" } });
+  it("only offers the presentation: the visitor opens it with a tap", () => {
+    const r = runTool("start_presentation", {}, ctx());
+    expect(r.effect).toEqual({ type: "offer-presentation" });
+    expect(r.response.note).toMatch(/wait/i);
     expect(runTool("start_presentation", {}, ctx(true)).effect).toBeUndefined();
   });
 
