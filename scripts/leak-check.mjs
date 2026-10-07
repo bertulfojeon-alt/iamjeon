@@ -16,30 +16,16 @@
  *   node scripts/leak-check.mjs --self-test  plant a guarded term and prove it is caught
  */
 
-import { createHash } from "node:crypto";
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { findHits, loadDenylist } from "./leak-hits.mjs";
+
+export { findHits };
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const denylist = JSON.parse(await readFile(path.join(root, "scripts", "leak-denylist.json"), "utf8"));
-const GLOBAL = new Set([...denylist.banned, ...denylist.redacted]);
-const CLASSIFIED = new Set(denylist.classifiedOnly);
+const { global: GLOBAL, classifiedOnly: CLASSIFIED } = await loadDenylist();
 const TEXT_EXT = new Set([".html", ".rsc", ".body", ".js", ".json", ".txt", ".svg", ".xml", ".webmanifest", ".css", ".meta"]);
-
-const sha256 = (s) => createHash("sha256").update(s).digest("hex");
-
-export function findHits(text, list) {
-  const tokens = text.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
-  const hits = new Set();
-  for (let n = 1; n <= 3; n++) {
-    for (let i = 0; i + n <= tokens.length; i++) {
-      const h = sha256(tokens.slice(i, i + n).join(" "));
-      if (list.has(h)) hits.add(h.slice(0, 12));
-    }
-  }
-  return [...hits];
-}
 
 async function* walk(dir) {
   let entries;

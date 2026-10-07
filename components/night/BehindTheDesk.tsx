@@ -4,22 +4,8 @@
  */
 
 import { WarmTitle } from "@/components/ui/WarmTitle";
+import { ABOUT_LEAD, ABOUT_STORY, KIT, PATH } from "@/content/about";
 import styles from "./BehindTheDesk.module.css";
-
-const PATH = [
-  { years: "2015 – 2017", role: "Data entry", where: "Bureau of Customs, Sub-Port Mactan", lesson: "Accuracy at volume. It is the habit behind every schema I design." },
-  { years: "2015 – 2017", role: "Graphic designer", where: "Kwayyu Tailoring & Printing", lesson: "Layout, type and deadlines. That training shapes every interface I build." },
-  { years: "2017 – 2019", role: "Customer service", where: "Teleperformance", lesson: "Hundreds of real support calls. They are why my voice agents sound like people who listen." },
-  { years: "2020 – now", role: "Full-stack developer", where: "Independent", lesson: "Trading platforms, AI voice agents and SaaS for clients, plus products of my own." },
-];
-
-const KIT = [
-  { area: "Interfaces", tools: "Next.js, React, TypeScript, Tailwind, GSAP, canvas, Tauri" },
-  { area: "Systems", tools: "Node.js, Postgres / Supabase, SQLite, Rust, Python, WebSockets" },
-  { area: "AI & voice", tools: "Gemini Live, real-time voice, RAG, tool calling, Twilio / SIP" },
-  { area: "Trading", tools: "MetaTrader 5, MQL5, Pine Script, Telegram automation, backtesting" },
-  { area: "Shipping", tools: "Vercel, Railway, Cloudflare, Playwright, Vitest, CI" },
-];
 
 export function BehindTheDesk() {
   return (
@@ -33,16 +19,8 @@ export function BehindTheDesk() {
           <WarmTitle as="h2" className={styles.title}>
             <span id="about-title">Behind the desk</span>
           </WarmTitle>
-          <p className={styles.lead}>
-            I&rsquo;m Jeon. I build the whole thing (interface, backend, data, AI and deployment), and I stay until it
-            works for the people using it.
-          </p>
-          <p className="dim">
-            I didn&rsquo;t start in software. I started in a customs office keying records, in a print shop drawing
-            logos, and on a phone headset solving other people&rsquo;s problems. Every one of those jobs is still in the
-            work: careful data, clean screens, and patience for real users. I trade Forex myself, which is why so many of
-            these screens are for traders.
-          </p>
+          <p className={styles.lead}>{ABOUT_LEAD}</p>
+          <p className="dim">{ABOUT_STORY}</p>
 
           <ol className={styles.path}>
             {PATH.map((p) => (
