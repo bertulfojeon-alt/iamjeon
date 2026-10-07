@@ -10,6 +10,7 @@
  */
 
 import { INPUT_SAMPLE_RATE, OUTPUT_SAMPLE_RATE, base64ToBytes, bufferToBase64, pcm16ToFloat32 } from "./audio";
+import { CALL_MINUTES } from "../limits";
 import { isQuotaError } from "./quota";
 
 export type JunStatus = "connecting" | "listening" | "speaking" | "ended" | "capped";
@@ -23,8 +24,8 @@ export interface JunCallbacks {
   onFailure: (kind: JunFailure) => void;
 }
 
-export const CALL_LIMIT_MS = 5 * 60_000;
-export const WRAP_UP_MS = 4.5 * 60_000;
+export const CALL_LIMIT_MS = CALL_MINUTES * 60_000;
+export const WRAP_UP_MS = CALL_LIMIT_MS - 30_000;
 const SETUP_TIMEOUT_MS = 10_000;
 const WRAP_UP = "(About thirty seconds of the call are left. Wrap up in one or two sentences and offer to pass a note to Jeon.)";
 

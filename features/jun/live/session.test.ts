@@ -1,5 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
-import { JunSession } from "./session";
+import { CALL_LIMIT_MS, JunSession, WRAP_UP_MS } from "./session";
+
+describe("call length", () => {
+  it("lasts ten minutes, the owner's setting, with a wrap-up nudge thirty seconds before", () => {
+    expect(CALL_LIMIT_MS).toBe(10 * 60_000);
+    expect(CALL_LIMIT_MS - WRAP_UP_MS).toBe(30_000);
+  });
+});
 
 describe("JunSession", () => {
   it("reports a browser without Web Audio as unsupported instead of hanging", async () => {

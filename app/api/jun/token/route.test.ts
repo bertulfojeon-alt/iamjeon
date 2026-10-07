@@ -34,8 +34,9 @@ describe("POST /api/jun/token", () => {
     expect(sent.bidiGenerateContentSetup.model).toBe("models/gemini-3.8-live");
     expect(sent.fieldMask).toBeUndefined();
     const gap = Date.parse(sent.expireTime) - Date.parse(sent.newSessionExpireTime);
-    expect(gap).toBeGreaterThan(4.5 * 60_000);
-    expect(gap).toBeLessThan(5.5 * 60_000);
+    // A ten-minute call, plus margin.
+    expect(gap).toBeGreaterThan(10 * 60_000);
+    expect(gap).toBeLessThan(11.5 * 60_000);
   });
 
   it("uses the fallback model on request", async () => {

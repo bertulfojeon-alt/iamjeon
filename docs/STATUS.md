@@ -102,7 +102,7 @@ Plan and record: `docs/superpowers/plans/2026-10-07-jun-voice-twin.md`.
 - `lib/jun/instruction.ts`: the persona, the rules and the project index. A unit test runs the leak check's
   denylists over it, because the build check skips server code.
 - `features/jun/`: the tool bridge (`tools.ts`, every call checked), the presentation reducer, the live
-  session (mic worklet, quota fallback, 5-minute cap), and `Jun.tsx`.
+  session (mic worklet, quota fallback, 10-minute cap (owner's setting, `features/jun/limits.ts`)), and `Jun.tsx`.
 - `components/jun/`: the badge, the call card and the presentation stage.
 - `/work` pages do not embed the project list: a classified case page may not carry other projects'
   names. Jun fetches `/api/jun/items` when the card opens.

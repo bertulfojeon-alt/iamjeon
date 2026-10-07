@@ -1,14 +1,15 @@
 /**
  * Mints a single-use Gemini Live token so the visitor's browser can open its own
  * voice session with Jun. The key never leaves the server; the token locks the model,
- * voice, instruction and tools, and expires a minute after minting if unused (six
- * minutes once connected: the 5-minute call cap plus margin). The browser connects with
+ * voice, instruction and tools, and expires a minute after minting if unused (and a
+ * minute after a full-length call that started at the last moment). The browser connects with
  * exactly the config returned here.
  *
  * The only server code on the site. Abuse is bounded by the origin check, the token's
  * single use, the call cap and a Vercel WAF rate limit on this path.
  */
 
+import { CALL_MINUTES } from "@/features/jun/limits";
 import { buildInstruction } from "@/lib/jun/instruction";
 import { FALLBACK_MODEL, LIVE_MODEL, buildLiveConfig, toBidiSetup } from "@/lib/jun/liveConfig";
 
@@ -64,7 +65,7 @@ export async function POST(req: Request) {
       headers: { "x-goog-api-key": key, "content-type": "application/json" },
       body: JSON.stringify({
         uses: 1,
-        expireTime: new Date(now + 6 * 60_000).toISOString(),
+        expireTime: new Date(now + (CALL_MINUTES + 2) * 60_000).toISOString(),
         newSessionExpireTime: new Date(now + 60_000).toISOString(),
         bidiGenerateContentSetup: toBidiSetup(model, instruction),
       }),

@@ -122,6 +122,7 @@ test.describe("starting a call", () => {
     await expect(page.locator("[data-jun-card=intro]")).toBeVisible();
     await expect(page.locator("[data-jun-card=intro]")).toContainText(/Jeon.s AI twin/);
     await expect(page.locator("[data-jun-card=intro]")).not.toContainText("Google");
+    await expect(page.locator("[data-jun-card=intro]")).toContainText("up to 10 minutes");
     await page.getByRole("button", { name: "Not now" }).click();
     await expect(page.locator("[data-jun-card]")).toHaveCount(0);
   });

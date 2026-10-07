@@ -8,6 +8,7 @@
  */
 
 import { useState } from "react";
+import { CALL_MINUTES } from "@/features/jun/limits";
 import type { JunFailure, JunStatus } from "@/features/jun/live/session";
 import { EMAIL, VIBER, WHATSAPP, mailtoHref, viberHref, whatsappHref } from "@/lib/contact";
 import styles from "./CallCard.module.css";
@@ -29,7 +30,7 @@ const STATE: Record<JunStatus, string> = {
   listening: "Listening",
   speaking: "Speaking",
   ended: "Call ended",
-  capped: "That's our five minutes",
+  capped: `That's our ${CALL_MINUTES} minutes`,
 };
 
 export interface CallCardProps {
@@ -90,7 +91,7 @@ export function CallCard({ view, status, subtitle, muted, failure, note, offer, 
           <h2 className={styles.title}>I&rsquo;m Jeon&rsquo;s AI twin.</h2>
           <p>
             I talk by voice, so I&rsquo;ll need your microphone. Ask me anything about Jeon&rsquo;s work, or I can walk you through it, in
-            whatever language you&rsquo;re most comfortable with.
+            whatever language you&rsquo;re most comfortable with. Calls last up to {CALL_MINUTES} minutes.
           </p>
           <div className={styles.actions}>
             <button type="button" className={styles.primary} onClick={onStart}>
@@ -158,7 +159,7 @@ export function CallCard({ view, status, subtitle, muted, failure, note, offer, 
 
       {view === "after" && (
         <>
-          <p className={styles.title}>{status === "capped" ? "That's our five minutes. Thanks for talking." : "Thanks for talking."}</p>
+          <p className={styles.title}>{status === "capped" ? `That's our ${CALL_MINUTES} minutes. Thanks for talking.` : "Thanks for talking."}</p>
           {note ? <Note note={note} /> : <p>Want to tell Jeon about your project? He replies personally.</p>}
           <Links note={note} />
           <div className={styles.actions}>

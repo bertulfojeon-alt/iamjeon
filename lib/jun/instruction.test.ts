@@ -64,6 +64,10 @@ describe("Jun's system instruction", () => {
     expect(instruction).toMatch(/stop and wait for their answer/i);
   });
 
+  it("tells the visitor in the greeting that Jeon set calls to ten minutes", () => {
+    expect(instruction).toMatch(/Jeon set calls to last up to ten minutes/);
+  });
+
   it("mentions the button only once it is on screen", () => {
     expect(instruction).toMatch(/never mention the button before you call start_presentation/i);
   });
