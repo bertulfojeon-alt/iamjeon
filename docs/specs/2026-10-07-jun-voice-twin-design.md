@@ -113,7 +113,7 @@ The look was settled on a working prototype built from the owner's clip.
   |---|---|---|
   | `hero` | the project's landing loop or video (poster in still mode), title, the problem and what changed | `screen.landing` / `loop` / `poster`, `pitch` |
   | `feature` | the project's screen with one feature's spotlight lit, and its label | `spotlights`, `screen.poster` |
-  | `numbers` | the metrics, large, each with its source line | `metrics` |
+  | `numbers` | the metrics, large, value and label as the dashboard shows them (sources are never rendered) | `metrics` |
   | `screens` | the screenshot gallery | `shots` |
   | `stack` | the tech used, as closing credits | `stack` |
   | `about` | Jeon: photo, role, location, services | About copy, `services` |
@@ -139,7 +139,7 @@ screen.
   `content/resume.md`).
 - **Through tools, answered in the browser** from the same project data the dashboard renders, with no
   server round-trip: `get_project(slug)` returns its public fields (pitch, features, spotlight labels,
-  metrics with sources, stack, story, public links, role) and which slides it can show. So detail
+  metrics as value and label, stack, story, public links, role) and which slides it can show. So detail
   costs tokens only when a visitor asks about that project, which keeps each turn small on the free tier's
   65K tokens per minute.
 - The instruction is built on the server, but it is sent to the browser (in the token and in the returned
