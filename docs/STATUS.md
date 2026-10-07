@@ -115,22 +115,37 @@ Plan and record: `docs/superpowers/plans/2026-10-07-jun-voice-twin.md`.
   call through the whole presentation, quota fallback and busy.
 
 **Waiting on the owner:**
-1. `GEMINI_API_KEY`:
-   - in `.env.local` (then run `npm run jun:audition` and `npm run jun:eval`);
-   - in Vercel (Production and Preview).
-
-   Without it the call card says it could not connect.
+1. `GEMINI_API_KEY` in Vercel (Production and Preview). It is in `.env.local` locally as of 2026-10-07.
 2. The voice pick from `media-src/jun/audition/`, which becomes `JUN_VOICE`.
 3. A Vercel WAF rule: `/api/jun/token`, 5 requests per 10 minutes per IP, answered with 429.
 4. Read the eval transcript (`test-results/jun-eval.md`) before Jun goes further.
 5. Billing, before Jun moves to `main`. On the free tier Google may use what visitors say to train its
    models; the call card says so.
 
-**Not verified yet:**
-- a real call against Google (no key yet);
-- `gemini-3.8-live` accepting the locked setup;
-- Safari and iPhone audio. Playwright's Windows WebKit has no Web Audio; there the card says the
-  browser cannot hold a call.
+**Live test with Gemini (2026-10-07, local `next start`, owner's free-tier key):**
+- `gemini-3.8-live` accepts the locked setup.
+- In a scripted 10-question call, Jun:
+  - greets as Jeon's AI twin;
+  - finds 247Aisupports for a dental clinic and TG Auto Trader for traders;
+  - presents the hero, feature and numbers slides with accurate narration;
+  - keeps PROJECT PAYDAY's client under NDA;
+  - gives no price;
+  - says honestly that appointment booking is not in the work;
+  - writes a correct contact note.
+- Fixed from the test:
+  - Jun asked "would you like to see it?" and opened the stage in the same breath, so the visitor now
+    opens it with a tap;
+  - the stage sat under the site's top bar, so Jun's UI is now a portal on the page body;
+  - Jun stretched a calendar connector into "books appointments", so get_project now carries a
+    describe-only-what-is-listed note;
+  - a race could lose the Contact panel;
+  - the production build refused localhost.
+- Minor, left as is: Jun sometimes adds a purpose to a bare metric ("31 tables to manage secure access").
+- The live harness is not in the repo. It relays the real Live socket through Playwright and injects text
+  turns.
+
+**Not verified yet:** Safari and iPhone audio (Playwright's Windows WebKit has no Web Audio), and token use
+per minute on the free tier.
 
 - **Also open:** a check on a real Mac (the iPhone was checked on 2026-10-07). The automated Safari runs
   use WebKit on Windows, which cannot reproduce touch momentum, Low Power Mode or iOS toolbar resizing,
