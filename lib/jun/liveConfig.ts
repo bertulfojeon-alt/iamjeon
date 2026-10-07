@@ -11,8 +11,8 @@ import { SLIDE_KINDS } from "@/features/jun/knowledge";
 
 export const LIVE_MODEL = process.env.JUN_LIVE_MODEL || "gemini-3.8-live";
 export const FALLBACK_MODEL = process.env.JUN_FALLBACK_MODEL || "gemini-2.5-flash-native-audio-preview-12-2025";
-/** A calm male prebuilt voice; the owner picks the final one from the audition. */
-export const VOICE = process.env.JUN_VOICE || "Charon";
+/** The owner picked Schedar (calm male) from the audition on 2026-10-07. */
+export const VOICE = process.env.JUN_VOICE || "Schedar";
 
 const str = (description: string, extra: Record<string, unknown> = {}) => ({ type: "STRING", description, ...extra });
 const none = { type: "OBJECT", properties: {} };

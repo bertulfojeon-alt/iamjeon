@@ -13,7 +13,7 @@ describe("Jun's live config", () => {
   it("has defaults for the models and the voice", () => {
     expect(LIVE_MODEL).toBe("gemini-3.8-live");
     expect(FALLBACK_MODEL).toBe("gemini-2.5-flash-native-audio-preview-12-2025");
-    expect(VOICE).toBe("Charon");
+    expect(VOICE).toBe("Schedar");
   });
 
   it("gives the browser and the token the same voice, instruction and tools", () => {

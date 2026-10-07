@@ -92,7 +92,7 @@ Plan and record: `docs/superpowers/plans/2026-10-07-jun-voice-twin.md`.
 **Owner decisions:**
 - **name:** shown to visitors as **Jeon's AI twin** (renamed from Jun on 2026-10-07; code and files keep `jun`);
 - **persona:** first person as Jeon's AI twin, always says it is an AI;
-- **voice:** calm male; `Charon` until the owner picks from the audition;
+- **voice:** Schedar (calm male), picked by the owner from the audition on 2026-10-07;
 - **tier:** free for development, with `gemini-3.8-live` first and the native-audio model as fallback;
 - **résumé:** as is (`content/resume.md`).
 
