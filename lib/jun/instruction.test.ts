@@ -64,6 +64,11 @@ describe("Jun's system instruction", () => {
     expect(instruction).toMatch(/stop and wait for their answer/i);
   });
 
+  it("says Jeon's name the way he does: JAY-on, never like the French Jean", () => {
+    expect(instruction).toMatch(/pronounced "JAY-on"/);
+    expect(instruction).toMatch(/never like the French name Jean/);
+  });
+
   it("tells the visitor in the greeting that Jeon set calls to ten minutes", () => {
     expect(instruction).toMatch(/Jeon set calls to last up to ten minutes/);
   });
