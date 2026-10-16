@@ -79,7 +79,7 @@
   .long {
     display: none;
   }
-  .link:nth-child(-n + 3) {
+  .link:nth-child(-n + 4) {
     display: none;
   }
   .toggle {

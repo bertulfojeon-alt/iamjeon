@@ -36,6 +36,12 @@ Design records: `docs/specs/2026-10-05-night-shift-design.md` (the site) and
      - a landing-page scroll recording first when the project has one (`screen.landing`);
      - the coded demo under "Inside the product";
      - then Screens, Features with spotlights, Numbers, Built with, and the story behind a button.
+   - **What I build** (`CapabilitiesView.tsx`, content in `content/capabilities.ts`, added 2026-10-16): twelve
+     features a client can ask for, apart from the projects (AI voice receptionist, AI chat on Messenger/WhatsApp,
+     receipts read by OCR, face verification, ask your data, AI presentations, dashboards, automation, price
+     monitoring, SaaS with payments, Philippine payroll, trading tools). Each shows a demo, the projects that prove
+     it, and "Ask me for this" (Contact with the visitor's note filled in); the voice ones offer a try of the AI twin.
+     "See what I'd build for you" lands the desk here after the film. Jun's instruction carries the same list.
    - About and Contact are panels. Contact: bertulfojeon@gmail.com, WhatsApp +63 968 4333 479,
      Viber +63474660563, the owner's photo and the résumé PDF.
    - The stage reducer (`features/stage/stage.ts`) has the commands `grid`, `show(slug)`,

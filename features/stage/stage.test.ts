@@ -31,6 +31,7 @@ describe("stage", () => {
   it("opens panels and only known ones", () => {
     const s0 = initialStage(world);
     expect(reduce(s0, { type: "panel", panel: "contact" })).toEqual({ kind: "panel", panel: "contact", back: { kind: "grid" } });
+    expect(reduce(s0, { type: "panel", panel: "build" })).toEqual({ kind: "panel", panel: "build", back: { kind: "grid" } });
     expect(reduce(s0, { type: "panel", panel: "nope" as never })).toBe(s0);
   });
 

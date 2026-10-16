@@ -1,11 +1,11 @@
 /**
  * What the monitor shows, as a pure reducer: the All work grid, one project in the
- * dashboard pane, or a panel (About, Contact). Every change is a command, the same
+ * dashboard pane, or a panel (What I build, About, Contact). Every change is a command, the same
  * commands the assistant will send in Phase 2. Unknown slugs and panels are ignored
  * (the state is returned unchanged), so a bad command can never break the screen.
  */
 
-export const PANELS = ["about", "contact"] as const;
+export const PANELS = ["build", "about", "contact"] as const;
 export type Panel = (typeof PANELS)[number];
 
 /** A place in the work: the grid of every project, or one project. */

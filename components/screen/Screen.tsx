@@ -3,7 +3,8 @@
 /**
  * The monitor's screen, light like a bright display in a dark room. It opens on
  * All work: a sidebar to browse by business problem, service or skill, and a grid
- * of project cards. A card opens the project in full in the main pane at its own
+ * of project cards. What I build lists the features a client can ask for, apart
+ * from the projects. A card opens the project in full in the main pane at its own
  * address (/work/<slug>), so it can be shared and Back returns to the grid. What
  * the screen shows is owned by the stage reducer, so the assistant (Phase 2) can
  * drive the same commands.
@@ -18,6 +19,7 @@ import type { ShowcaseId } from "@/components/showcase";
 import { useCinematic } from "@/hooks/useCinematic";
 import { clockLine } from "@/lib/clock";
 import { ProjectPane } from "./ProjectPane";
+import { CapabilitiesView } from "./CapabilitiesView";
 import { ContactView } from "./ContactView";
 import { ALL, Browse, WorkGrid, type Filter } from "./WorkGrid";
 import styles from "./Screen.module.css";
@@ -101,8 +103,14 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
       const d = (e as CustomEvent<Panel | { panel: Panel; summary?: string }>).detail;
       dispatch(typeof d === "string" ? { type: "panel", panel: d } : { type: "panel", panel: d.panel, summary: d.summary });
     };
+    // "See what I'd build for you" plays the film; the desk it lands on shows What I build.
+    const onPlay = () => dispatch({ type: "panel", panel: "build" });
     window.addEventListener("ns:open", onOpen);
-    return () => window.removeEventListener("ns:open", onOpen);
+    window.addEventListener("ns:play", onPlay);
+    return () => {
+      window.removeEventListener("ns:open", onOpen);
+      window.removeEventListener("ns:play", onPlay);
+    };
   }, []);
 
   // Esc closes the enlarged screenshot.
@@ -149,6 +157,9 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
           <button type="button" aria-current={view.kind !== "panel" ? "page" : undefined} onClick={toGrid}>
             All work
           </button>
+          <button type="button" aria-current={panelCurrent("build")} onClick={() => dispatch({ type: "panel", panel: "build" })}>
+            What I build
+          </button>
           <button type="button" aria-current={panelCurrent("about")} onClick={() => dispatch({ type: "panel", panel: "about" })}>
             About
           </button>
@@ -168,6 +179,14 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
         {view.kind === "panel" ? (
           view.panel === "contact" ? (
             <ContactView summary={view.summary} />
+          ) : view.panel === "build" ? (
+            <CapabilitiesView
+              items={items}
+              ready={ready}
+              onOpen={open}
+              onAsk={(summary) => dispatch({ type: "panel", panel: "contact", summary })}
+              onTwin={() => window.dispatchEvent(new Event("ns:twin"))}
+            />
           ) : (
             <section className={styles.panel} aria-label="About Jeon" data-screen-view data-lenis-prevent>
               {about}

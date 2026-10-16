@@ -357,6 +357,46 @@ test.describe("the desk dashboard", () => {
     }
   });
 
+  test("What I build shows the features apart from the projects, each with a demo and the projects that prove it", async ({ page }) => {
+    await toDesk(page);
+    const desk = page.locator("#desk");
+    await screenNav(page).getByRole("button", { name: "What I build" }).click();
+    const build = desk.getByRole("region", { name: "What I build" });
+    await expect(build.getByRole("heading", { name: "What I can build for you" })).toBeVisible();
+    const features = build.getByRole("navigation", { name: "Features" });
+    await expect(features.getByRole("button")).toHaveCount(12);
+    // Face verification: the liveness demo plays, and the truth about what is live is on the card.
+    await features.getByRole("button", { name: "Face verification a photo can't fool" }).click();
+    const card = build.getByRole("article", { name: "Face verification a photo can't fool" });
+    await expect(card.getByText(/liveness bench in Project Facegate is research and development/)).toBeVisible();
+    await expect(card.locator("figure [class*='stage']")).toBeVisible();
+    await expect(card.locator("figcaption")).toHaveText("A coded demo of Project Facegate, with demo data.");
+    // A proof opens the project at its own address.
+    await card.getByRole("link", { name: /Project Payday/ }).click();
+    await expect(page).toHaveURL(/\/work\/project-payday$/);
+    await expect(desk.getByRole("region", { name: "Project Payday" })).toBeVisible();
+  });
+
+  test("Ask me for this opens Contact with the visitor's note filled in", async ({ page }) => {
+    await toDesk(page);
+    await screenNav(page).getByRole("button", { name: "What I build" }).click();
+    const build = page.locator("#desk").getByRole("region", { name: "What I build" });
+    await build.getByRole("navigation", { name: "Features" }).getByRole("button", { name: "Receipts and documents read for you" }).click();
+    await build.getByRole("button", { name: "Ask me for this" }).click();
+    const c = page.locator("#desk").getByRole("region", { name: "Contact" });
+    await expect(c.locator("[data-jun-note]")).toContainText("receipts or documents read automatically");
+    await expect(c.getByRole("link", { name: /Email/ }).first()).toHaveAttribute("href", /receipts%20or%20documents/);
+  });
+
+  test("'See what I'd build for you' lands the desk on What I build", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "See what I'd build for you" }).click();
+    await expect(phase(page)).toHaveAttribute("data-phase", "film", { timeout: 8000 });
+    await page.keyboard.press("Escape");
+    await expect(phase(page)).toHaveAttribute("data-phase", "desk");
+    await expect(page.locator("#desk").getByRole("region", { name: "What I build" })).toBeVisible();
+  });
+
   test("Contact offers email, WhatsApp and Viber with the right links, next to Jeon's photo", async ({ page }) => {
     await toDesk(page);
     await page.locator("#desk").getByRole("navigation", { name: "Screen" }).getByRole("button", { name: "Contact" }).click();
@@ -530,7 +570,7 @@ test.describe("case pages", () => {
     const main = page.getByRole("main");
     await expect(main.getByText("Calls, chats and emails come in after hours", { exact: false })).toBeVisible();
     const features = main.getByRole("region", { name: "What it does" });
-    await expect(features.getByRole("listitem")).toHaveCount(14);
+    await expect(features.getByRole("listitem")).toHaveCount(15);
     await expect(main.getByRole("region", { name: "What changed" })).toBeVisible();
     await expect(main.getByRole("region", { name: "Credits" })).toContainText("Role");
   });

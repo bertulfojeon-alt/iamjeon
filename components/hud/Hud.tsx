@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * The always-reachable controls: home, Work / About / Contact, résumé, Sound and
+ * The always-reachable controls: home, Work / What I build / About / Contact, résumé, Sound and
  * Pause motion. On the home page the links act on the desk (events); elsewhere
  * they lead home. Kept small and quiet — the picture is the interface.
  */
@@ -34,6 +34,9 @@ export function Hud() {
           <>
             <button type="button" className={styles.link} onClick={act("ns:work")}>
               Work
+            </button>
+            <button type="button" className={styles.link} onClick={act("ns:open", "build")}>
+              What I build
             </button>
             <button type="button" className={styles.link} onClick={act("ns:open", "about")}>
               About

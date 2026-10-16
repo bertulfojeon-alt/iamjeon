@@ -53,6 +53,9 @@ DOM projected onto the monitor with a homography (`lib/homography.ts`, `content/
   2–3 `spotlights` positioned on `screen.poster`.
 - Content: one file per project in `content/projects/`; registry and ordering in `content/index.ts`.
 - Services (`content/services.ts`) each name the projects that prove them; no figures in service copy.
+- What I build (`content/capabilities.ts`, the desk's `build` panel): features a client can ask for, apart from the
+  projects. Each is drawn from features its proof projects list, has a demo (showcase or real screen), says plainly
+  what is not live (`note`), and carries no figures. Jun reads the same list.
 - After replacing the film, re-run `npm run theatre` and update the monitor corners in `content/theatre.json`.
 - Classified captures: masking rules and addresses live in `F:\ME\portfolio-private\capture.json`; every
   classified image is reviewed by the owner before it is committed.

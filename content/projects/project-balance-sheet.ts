@@ -80,13 +80,13 @@ export default {
     },
   ],
   spotlights: [
-    { feature: "Receipt scanning with input-VAT eligibility rules and supplier matching by TIN", x: 87, y: 3, label: "Receipts scanned with VAT rules" },
+    { feature: "Receipt scanning (OCR) with input-VAT eligibility rules and supplier matching by TIN", x: 87, y: 3, label: "Receipts scanned with VAT rules" },
     { feature: "Printable reports derived from the journal, from P&L to trial balance", x: 45, y: 55, label: "Reports from the journal" },
     { feature: "Bank and e-wallet feed review and reconciliation", x: 55, y: 90, label: "Bank feed reconciliation" },
   ],
   features: [
     "Invoices, estimates, bills, purchase orders and payments on a double-entry engine",
-    "Receipt scanning with input-VAT eligibility rules and supplier matching by TIN",
+    "Receipt scanning (OCR) with input-VAT eligibility rules and supplier matching by TIN",
     "Bank and e-wallet feed review and reconciliation",
     "Printable reports derived from the journal, from P&L to trial balance",
     "Quarterly VAT and a BIR forms calendar",

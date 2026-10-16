@@ -151,6 +151,16 @@ export function Jun({ items, where }: JunProps) {
     sessionRef.current?.note("(The visitor closed the presentation. Do not call show_slide unless they ask to see more.)");
   }, [closePresentation]);
 
+  // "Try it: talk to my AI twin" on What I build opens the call card, as a tap on the badge does.
+  useEffect(() => {
+    const onTwin = () => {
+      loadItems();
+      setCard((c) => c ?? "intro");
+    };
+    window.addEventListener("ns:twin", onTwin);
+    return () => window.removeEventListener("ns:twin", onTwin);
+  }, [loadItems]);
+
   // Leaving the page ends the call: the mic must never stay open behind the visitor's back.
   useEffect(() => {
     const onHide = () => sessionRef.current?.stop();

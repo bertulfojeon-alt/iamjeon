@@ -47,6 +47,7 @@ export default {
     "Shop tools: product search, proof-gated order lookup, requests and handoff to a human",
     "Messenger, Instagram, WhatsApp and Viber webhooks, tested with signed simulated traffic",
     "Shared inbox where staff take over a thread and hand it back to the AI",
+    "Books appointments into the business's Google Calendar",
     "Connectors for Shopify, WooCommerce, HubSpot, Notion, Airtable and Google Calendar",
     "Origin-bound widget keys exchanged for short-lived signed tokens",
     "Server-side entitlement check on every path that can spend on the model",
