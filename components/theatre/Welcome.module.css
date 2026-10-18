@@ -127,6 +127,13 @@
   color: var(--screen);
   font-weight: 600;
 }
+.pitch {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 1.12em;
+  line-height: 1.4;
+  color: var(--screen);
+}
 /* Opening titles: each line arrives in turn, then holds. */
 .inner > * {
   animation: title-in 0.9s var(--ease-camera) both;

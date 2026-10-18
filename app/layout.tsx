@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s | Jeon",
   },
   description:
-    "Systems for businesses everywhere, built in Cebu after dark. Trading platforms, AI voice agents and SaaS, designed, engineered and shipped by one developer.",
+    "I help businesses automate the work they do by hand and cut what it costs them: AI voice receptionists, chat assistants, receipt reading, face verification, dashboards and payroll, built by one developer in Cebu.",
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   openGraph: {
     type: "website",
-    title: "Jeon | Night Shift",
-    description: "Systems for businesses everywhere, built in Cebu after dark.",
+    title: "Jeon | AI automation for businesses",
+    description: "I help businesses automate the work they do by hand and cut what it costs them.",
     images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Jeon on a seawall bench at night, typing on a laptop" }],
   },
   twitter: { card: "summary_large_image", images: ["/og.jpg"] },

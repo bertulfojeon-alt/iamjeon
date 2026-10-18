@@ -1,12 +1,19 @@
 "use client";
 
-/** "…answering your calls." typed and retyped like the laptop in the shot. Static in still mode. */
+/** "…answering your calls." typed and retyped like the laptop in the shot: the features clients ask for most. Static in still mode. */
 
 import { useEffect, useState } from "react";
 import styles from "./Welcome.module.css";
 
-const PHRASES = ["answering your calls.", "placing your trades.", "running your payroll."];
-const SENTENCE = "…answering your calls, placing your trades, running your payroll.";
+const PHRASES = [
+  "answering your calls.",
+  "answering your chats.",
+  "reading your receipts.",
+  "checking faces at clock-in.",
+  "running your payroll.",
+  "explaining your sales.",
+];
+const SENTENCE = "…answering your calls and chats, reading your receipts, checking faces at clock-in, running your payroll and explaining your sales.";
 
 export function RotatingLine({ still }: { still: boolean }) {
   const [i, setI] = useState(0);

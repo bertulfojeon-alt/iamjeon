@@ -60,7 +60,8 @@ test.describe("welcome", () => {
   test("opens on the promise, the visitor's time and the name as a credit", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("While your office sleeps, your systems keep working.");
-    await expect(page.getByText(/A night shift by .*Saquilabon Jr\./)).toBeVisible();
+    await expect(page.getByText("I help businesses automate the work they do by hand and cut what it costs them.")).toBeVisible();
+    await expect(page.getByText(/Saquilabon Jr\. · Full-stack developer/)).toBeVisible();
     await expect(page.getByText(/in Lapu-Lapu City/).first()).toBeVisible();
     await expect(phase(page)).toHaveAttribute("data-phase", "welcome");
   });
@@ -529,7 +530,7 @@ test.describe("reduced motion", () => {
   test("the rotating line is a static sentence", async ({ page }) => {
     await page.goto("/");
     // .last(): the first match is the screen-reader copy of the same sentence.
-    await expect(page.getByText("…answering your calls, placing your trades, running your payroll.").last()).toBeVisible();
+    await expect(page.getByText("…answering your calls and chats, reading your receipts, checking faces at clock-in, running your payroll and explaining your sales.").last()).toBeVisible();
   });
 
   test("no autoplay and no film: scrolling goes straight to the desk", async ({ page }) => {

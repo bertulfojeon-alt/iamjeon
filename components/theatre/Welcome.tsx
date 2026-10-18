@@ -2,7 +2,7 @@
 
 /**
  * The welcome copy, arriving like a film's opening titles over the bench shot:
- * the location card, the promise, the rotating line, then Jeon's name as a credit.
+ * the location card, the promise, the rotating line, then what Jeon does for a business and his name.
  * Inert once the visitor has left the welcome, so Tab never lands on scrolled-away buttons.
  */
 
@@ -46,8 +46,8 @@ export function Welcome({ active }: { active: boolean }) {
         <h1 className={`display ${styles.headline}`}>While your office sleeps, your systems keep working.</h1>
         <RotatingLine still={ready && mode === "still"} />
         <p className={styles.credit}>
-          A night shift by <strong>Loreto “Jeon” Saquilabon Jr.</strong> · Full-stack developer &amp; AI automation
-          engineer
+          <span className={styles.pitch}>I help businesses automate the work they do by hand and cut what it costs them.</span>
+          <strong>Loreto “Jeon” Saquilabon Jr.</strong> · Full-stack developer &amp; AI automation engineer
         </p>
         <div className={styles.actions}>
           <button type="button" className={styles.primary} onClick={() => window.dispatchEvent(new Event("ns:play"))}>
