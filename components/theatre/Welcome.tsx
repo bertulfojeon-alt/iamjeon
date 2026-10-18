@@ -47,7 +47,8 @@ export function Welcome({ active }: { active: boolean }) {
         <RotatingLine still={ready && mode === "still"} />
         <p className={styles.credit}>
           <span className={styles.pitch}>I help businesses automate the work they do by hand and cut what it costs them.</span>
-          <strong>Loreto “Jeon” Saquilabon Jr.</strong> · Full-stack developer &amp; AI automation engineer
+          <strong>Loreto “Jeon” Saquilabon Jr.</strong>
+          <span className={styles.role}>Full-stack developer &amp; AI automation engineer</span>
         </p>
         <div className={styles.actions}>
           <button type="button" className={styles.primary} onClick={() => window.dispatchEvent(new Event("ns:play"))}>

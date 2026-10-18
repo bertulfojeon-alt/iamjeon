@@ -61,7 +61,8 @@ test.describe("welcome", () => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("While your office sleeps, your systems keep working.");
     await expect(page.getByText("I help businesses automate the work they do by hand and cut what it costs them.")).toBeVisible();
-    await expect(page.getByText(/Saquilabon Jr\. · Full-stack developer/)).toBeVisible();
+    await expect(page.getByText("Loreto “Jeon” Saquilabon Jr.", { exact: true })).toBeVisible();
+    await expect(page.getByText("Full-stack developer & AI automation engineer", { exact: true })).toBeVisible();
     await expect(page.getByText(/in Lapu-Lapu City/).first()).toBeVisible();
     await expect(phase(page)).toHaveAttribute("data-phase", "welcome");
   });
