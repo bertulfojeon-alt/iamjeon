@@ -162,32 +162,6 @@
   color: var(--dim);
   max-width: 62ch;
 }
-.points {
-  list-style: none;
-  margin: 6px 0 0;
-  padding: 0;
-  display: grid;
-  gap: 5px;
-  font-size: 14.5px;
-}
-.points li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.points svg {
-  width: 17px;
-  height: 17px;
-  flex: none;
-  color: var(--sodium);
-}
-.headActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-.primary,
 .ghost {
   font: inherit;
   font-size: 14px;
@@ -196,14 +170,6 @@
   padding: 0 16px;
   border-radius: 99px;
   cursor: pointer;
-}
-.primary {
-  border: 0;
-  background: var(--sodium);
-  color: #fff;
-}
-.primary:hover {
-  background: #7d3906;
 }
 .ghost {
   border: 1px solid var(--line);
@@ -256,14 +222,6 @@
 }
 .chips button[aria-pressed="true"] span {
   color: rgba(255, 255, 255, 0.85);
-}
-.sub {
-  flex: 1;
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 800;
-  text-transform: uppercase;
-  font-size: 22px;
 }
 .search {
   display: flex;

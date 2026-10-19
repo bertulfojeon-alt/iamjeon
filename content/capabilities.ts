@@ -2,8 +2,8 @@
  * What I can build for you: the features a client can ask for, separate from the
  * projects. Each one is drawn from features the projects already list, names the
  * projects that prove it (`proof`), and shows it working: a coded demo
- * (components/showcase) or a real screen. No figures here, as in the services:
- * numbers live on the projects, where each one has a source.
+ * (components/showcase) or a real screen. No figures here: numbers live on the
+ * projects, where each one has a source.
  * Kept free of project data so client components can import it.
  */
 
@@ -226,6 +226,25 @@ export const CAPABILITIES: Capability[] = [
     },
     proof: ["project-payday", "project-balance-sheet"],
     ask: "I'd like payroll or bookkeeping software that follows Philippine rules.",
+  },
+  {
+    id: "websites",
+    title: "Websites and web apps",
+    line: "Company sites, landing pages and full web apps, designed, built and launched by the same developer.",
+    points: [
+      "A voice assistant on your site that answers visitors and captures leads",
+      "Ticket tiers, contact forms and newsletter sign-ups",
+      "Cinematic motion that falls back to a still page on slower phones",
+      "Layouts checked on phones, tablets and desktops",
+    ],
+    demo: {
+      kind: "image",
+      src: "/media/projects/resolute-ai-site/screen.webp",
+      alt: "Resolute AI's corporate site: a cinematic hero with the company's AI systems",
+      caption: "Resolute AI: corporate site, live.",
+    },
+    proof: ["resolute-ai-site", "midnight-vibes", "tradesbymerc", "jeonscraper"],
+    ask: "I'd like a website or web app for my business.",
   },
   {
     id: "trading-tools",

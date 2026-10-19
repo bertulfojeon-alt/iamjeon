@@ -2,7 +2,7 @@
 
 /**
  * The monitor's screen, light like a bright display in a dark room. It opens on
- * All work: a sidebar to browse by business problem, service or skill, and a grid
+ * All work: a sidebar to browse by business problem or skill, and a grid
  * of project cards. What I build lists the features a client can ask for, apart
  * from the projects. A card opens the project in full in the main pane at its own
  * address (/work/<slug>), so it can be shared and Back returns to the grid. What
@@ -139,7 +139,6 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
   };
   const browse = (f: Filter) => {
     setFilter(f);
-    if (f.kind === "service") setQuery("");
     gridScroll.current = 0;
     toGrid();
   };
@@ -214,7 +213,6 @@ export function Screen({ items, about, ready = true }: ScreenProps) {
                   gridScroll.current = 0;
                 }}
                 onOpen={open}
-                onContact={contact}
               />
             )}
           </div>

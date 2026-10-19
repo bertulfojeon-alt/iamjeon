@@ -3,7 +3,7 @@
 Cinematic portfolio for Loreto "Jeon" Saquilabon Jr. Welcome loop (Jeon on a seawall bench at night, copy
 aimed at business owners) → every scroll down from the welcome plays one 7 s film → the monitor wakes up
 as a **light project dashboard** that opens on All work: a Browse sidebar (project groups by business problem
-from `content/tracks.ts`, services and skills from `content/services.ts`, a get-in-touch card) and a grid of
+from `content/tracks.ts`, skills from `content/skills.ts`, a get-in-touch card) and a grid of
 project cards with category chips and search. A card opens the project in full in the pane (video, screens,
 features with spotlights, numbers, stack, story behind a button); About / Contact are panels. Opening a project
 pushes /work/<slug> (shareable; direct visits get the full page); "All projects" and Back return to the grid. At the desk, scrolling never returns to the hero — the ↑ button does.
@@ -52,8 +52,7 @@ DOM projected onto the monitor with a homography (`lib/homography.ts`, `content/
 - Every case study needs a `pitch` (track, problem, outcome; no digits); calls/trading/admin projects need
   2–3 `spotlights` positioned on `screen.poster`.
 - Content: one file per project in `content/projects/`; registry and ordering in `content/index.ts`.
-- Services (`content/services.ts`) each name the projects that prove them; no figures in service copy.
-- What I build (`content/capabilities.ts`, the desk's `build` panel): features a client can ask for, apart from the
+- What I build (`content/capabilities.ts`, the desk's `build` panel; it replaced the sidebar's Services on 2026-10-19): features a client can ask for, apart from the
   projects. Each is drawn from features its proof projects list, has a demo (showcase or real screen), says plainly
   what is not live (`note`), and carries no figures. Jun reads the same list.
 - After replacing the film, re-run `npm run theatre` and update the monitor corners in `content/theatre.json`.

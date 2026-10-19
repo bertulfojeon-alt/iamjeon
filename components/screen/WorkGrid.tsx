@@ -1,15 +1,14 @@
 "use client";
 
 /**
- * All work: the monitor's landing view. A sidebar to browse by business problem,
- * service or skill (with a nudge to get in touch), and a grid of project cards
- * with category chips and search. A service swaps the page header for what the
- * service covers, and the grid for the projects that show it.
+ * All work: the monitor's landing view. A sidebar to browse by business problem
+ * or skill (with a nudge to get in touch), and a grid of project cards with
+ * category chips and search. What Jeon offers is on What I build.
  */
 
 import { useEffect, useRef, type MutableRefObject } from "react";
 import { GROUP_ORDER, GROUP_TITLES, type Group } from "@/content/tracks";
-import { SERVICES, SKILLS, skillMatches } from "@/content/services";
+import { SKILLS, skillMatches } from "@/content/skills";
 import { STATUS_SHORT } from "@/components/case/labels";
 import type { ScreenItem } from "./Screen";
 import styles from "./WorkGrid.module.css";
@@ -17,7 +16,6 @@ import styles from "./WorkGrid.module.css";
 export type Filter =
   | { kind: "all" }
   | { kind: "group"; group: Group }
-  | { kind: "service"; id: string }
   | { kind: "skill"; label: string };
 
 export const ALL: Filter = { kind: "all" };
@@ -26,7 +24,6 @@ const same = (a: Filter, b: Filter) => JSON.stringify(a) === JSON.stringify(b);
 
 export function matches(item: ScreenItem, filter: Filter, query: string): boolean {
   if (filter.kind === "group" && item.group !== filter.group) return false;
-  if (filter.kind === "service" && !SERVICES.find((s) => s.id === filter.id)?.proof.includes(item.slug)) return false;
   if (filter.kind === "skill") {
     const skill = SKILLS.find((s) => s.label === filter.label);
     if (!skill || !skillMatches(skill, item.stack)) return false;
@@ -52,11 +49,9 @@ const GROUP_ICON: Record<Group | "all", string> = {
 };
 const ICON = {
   projects: "M3 7h7l2 2h9v10H3z",
-  services: "M4 12h4l3-7 2 14 3-7h4",
   skills: "M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16",
   spark: "M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6",
   search: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14ZM20 20l-4-4",
-  check: "M5 12.5l4.5 4.5L19 7.5",
   arrow: "M5 12h13M13 6l6 6-6 6",
   mail: "M3 6h18v12H3zM3.5 6.5 12 13l8.5-6.5",
 };
@@ -88,23 +83,6 @@ export function Browse({ items, filter, onFilter, onContact }: BrowseProps) {
                 <Svg d={GROUP_ICON[key]} />
                 <span>{f.kind === "group" ? GROUP_TITLES[f.group] : "All projects"}</span>
                 <span className={styles.count}>{count}</span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-
-      <h2 className={styles.sideTitle}>
-        <Svg d={ICON.services} />
-        Services
-      </h2>
-      <ul className={styles.sideList}>
-        {SERVICES.map((s) => {
-          const f: Filter = { kind: "service", id: s.id };
-          return (
-            <li key={s.id}>
-              <button type="button" className={styles.sideLink} aria-pressed={pressed(f)} title={s.line} onClick={() => onFilter(f)}>
-                {s.title}
               </button>
             </li>
           );
@@ -152,16 +130,12 @@ interface GridProps {
   onFilter: (f: Filter) => void;
   onQuery: (q: string) => void;
   onOpen: (slug: string) => void;
-  onContact: () => void;
 }
 
-export function WorkGrid({ items, filter, query, ready, scrollRef, onFilter, onQuery, onOpen, onContact }: GridProps) {
+export function WorkGrid({ items, filter, query, ready, scrollRef, onFilter, onQuery, onOpen }: GridProps) {
   const root = useRef<HTMLElement>(null);
-  const service = filter.kind === "service" ? SERVICES.find((s) => s.id === filter.id) : undefined;
   const groups = GROUP_ORDER.filter((g) => items.some((i) => i.group === g));
   const shown = items.filter((i) => matches(i, filter, query));
-  // A service lists its proof in the order the service names it.
-  if (service) shown.sort((a, b) => service.proof.indexOf(a.slug) - service.proof.indexOf(b.slug));
 
   // Coming back from a project lands where the visitor left the grid.
   useEffect(() => {
@@ -185,55 +159,28 @@ export function WorkGrid({ items, filter, query, ready, scrollRef, onFilter, onQ
       data-lenis-prevent
       onScroll={(e) => (scrollRef.current = e.currentTarget.scrollTop)}
     >
-      {service ? (
-        <header className={styles.head}>
-          <p className={styles.kicker}>Service</p>
-          <h2 className={`display ${styles.title}`}>{service.title}</h2>
-          <p className={styles.lead}>{service.lead}</p>
-          <ul className={styles.points}>
-            {service.points.map((p) => (
-              <li key={p}>
-                <Svg d={ICON.check} />
-                {p}
-              </li>
-            ))}
-          </ul>
-          <div className={styles.headActions}>
-            <button type="button" className={styles.primary} onClick={onContact}>
-              Talk to me about this
-            </button>
-            <button type="button" className={styles.ghost} onClick={() => onFilter(ALL)}>
-              See all projects
-            </button>
-          </div>
-        </header>
-      ) : (
-        <header className={styles.head}>
-          <p className={styles.kicker}>My work</p>
-          <h2 className={`display ${styles.title}`}>Projects</h2>
-          <p className={styles.lead}>
-            Software I have designed, built and shipped: AI agents that answer customers, platforms for traders, and back-office
-            systems for growing businesses. Open any project to see it running.
-          </p>
-        </header>
-      )}
+      <header className={styles.head}>
+        <p className={styles.kicker}>My work</p>
+        <h2 className={`display ${styles.title}`}>Projects</h2>
+        <p className={styles.lead}>
+          Software I have designed, built and shipped: AI agents that answer customers, platforms for traders, and back-office
+          systems for growing businesses. Open any project to see it running.
+        </p>
+      </header>
 
       <div className={styles.tools}>
-        {!service && (
-          <div className={styles.chips} role="group" aria-label="Filter by category">
-            {chips.map((f) => {
-              const key = f.kind === "group" ? f.group : "all";
-              const count = f.kind === "group" ? items.filter((i) => i.group === f.group).length : items.length;
-              return (
-                <button key={key} type="button" aria-pressed={same(filter, f)} onClick={() => onFilter(f)}>
-                  {f.kind === "group" ? GROUP_TITLES[f.group] : "All"}
-                  <span>{count}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
-        {service && <h3 className={styles.sub}>Projects that show it</h3>}
+        <div className={styles.chips} role="group" aria-label="Filter by category">
+          {chips.map((f) => {
+            const key = f.kind === "group" ? f.group : "all";
+            const count = f.kind === "group" ? items.filter((i) => i.group === f.group).length : items.length;
+            return (
+              <button key={key} type="button" aria-pressed={same(filter, f)} onClick={() => onFilter(f)}>
+                {f.kind === "group" ? GROUP_TITLES[f.group] : "All"}
+                <span>{count}</span>
+              </button>
+            );
+          })}
+        </div>
         <p className={styles.status} aria-live="polite">
           {shown.length === 1 ? "1 project" : `${shown.length} projects`}
           {scope}

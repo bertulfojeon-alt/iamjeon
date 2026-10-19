@@ -239,16 +239,16 @@ test.describe("the desk dashboard", () => {
     await expect(grid(page).getByText(/No projects match/)).toBeVisible();
   });
 
-  test("a service explains what it covers, lists the projects behind it, and leads to Contact", async ({ page }, info) => {
-    test.skip(/phone/.test(info.project.name), "services sit below the grid on phones; covered by the phone test");
+  test("the sidebar browses projects by group and skill; what Jeon offers is on What I build, not a second list", async ({ page }, info) => {
+    test.skip(/phone/.test(info.project.name), "the sidebar sits below the grid on phones");
     await toDesk(page);
     const browse = page.locator("#desk").getByRole("complementary", { name: "Browse" });
-    await browse.getByRole("button", { name: "Back-office systems" }).click();
-    await expect(grid(page).getByRole("heading", { level: 2 })).toHaveText("Back-office systems");
+    await expect(browse.getByRole("heading", { name: "Projects" })).toBeVisible();
+    await expect(browse.getByRole("heading", { name: "Skills" })).toBeVisible();
+    await expect(browse.getByRole("heading", { name: "Services" })).toHaveCount(0);
+    await browse.getByRole("button", { name: "Admin & back-office" }).click();
     await expect(grid(page).getByRole("listitem").filter({ has: page.getByRole("link") })).toHaveCount(3);
     await expect(card(page, "Project Payday")).toBeVisible();
-    await grid(page).getByRole("button", { name: "Talk to me about this" }).click();
-    await expect(page.locator("#desk").getByRole("region", { name: "Contact" })).toBeVisible();
   });
 
   test("the pane holds everything: text buttons jump to sections, the story waits behind a button", async ({ page }) => {
@@ -321,7 +321,7 @@ test.describe("the desk dashboard", () => {
     await page.mouse.move(box.x + box.width / 2, Math.min(box.y + box.height / 2, box.y + 200));
     await page.mouse.wheel(0, 500);
     await page.waitForTimeout(600);
-    // Desktop scrolls the grid itself; phones scroll the grid and the services below it together.
+    // Desktop scrolls the grid itself; phones scroll the grid and the sidebar below it together.
     expect(await g.evaluate((el) => Math.max(el.scrollTop, el.parentElement!.scrollTop))).toBeGreaterThan(0);
     await expect(phase(page)).toHaveAttribute("data-phase", "desk");
   });
@@ -366,7 +366,7 @@ test.describe("the desk dashboard", () => {
     const build = desk.getByRole("region", { name: "What I build" });
     await expect(build.getByRole("heading", { name: "What I can build for you" })).toBeVisible();
     const features = build.getByRole("navigation", { name: "Features" });
-    await expect(features.getByRole("button")).toHaveCount(12);
+    await expect(features.getByRole("button")).toHaveCount(13);
     // Face verification: the liveness demo plays, and the truth about what is live is on the card.
     await features.getByRole("button", { name: "Face verification a photo can't fool" }).click();
     const card = build.getByRole("article", { name: "Face verification a photo can't fool" });
@@ -696,7 +696,7 @@ test.describe("final review fixes", () => {
     expect(await page.locator("#desk").evaluate((el) => getComputedStyle(el).borderTopLeftRadius)).toBe("0px");
   });
 
-  test("phones: category chips sit above a one-column grid, services follow it, and a card opens the project", async ({ page }, info) => {
+  test("phones: category chips sit above a one-column grid, the sidebar follows it, and a card opens the project", async ({ page }, info) => {
     test.skip(!/phone/.test(info.project.name), "phone layout");
     await toDesk(page);
     const grid = page.locator("#desk").getByRole("region", { name: "All work" });
@@ -705,9 +705,7 @@ test.describe("final review fixes", () => {
     expect(b.y).toBeGreaterThan(a.y + a.height - 1);
     const vw = page.viewportSize()!.width;
     expect(a.x + a.width).toBeLessThanOrEqual(vw);
-    const browse = page.locator("#desk").getByRole("complementary", { name: "Browse" });
-    await browse.getByRole("button", { name: "Back-office systems" }).click();
-    await expect(grid.getByRole("heading", { level: 2 })).toHaveText("Back-office systems");
+    await grid.getByRole("group", { name: "Filter by category" }).getByRole("button", { name: /Admin & back-office/ }).click();
     await grid.getByRole("link", { name: "Project Payday", exact: true }).click();
     await expect(page.locator("#desk").getByRole("region", { name: "Project Payday" })).toBeVisible();
   });

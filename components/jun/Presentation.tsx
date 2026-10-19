@@ -12,7 +12,7 @@ import { useEffect, useRef } from "react";
 import type { ScreenItem } from "@/components/screen/Screen";
 import { Spotlights } from "@/components/screen/Spotlights";
 import { ABOUT_LEAD } from "@/content/about";
-import { SERVICES } from "@/content/services";
+import { CAPABILITIES } from "@/content/capabilities";
 import { GROUP_TITLES } from "@/content/tracks";
 import type { PresentationState, Slide } from "@/features/jun/presentation";
 import { EMAIL, VIBER, WHATSAPP, mailtoHref, viberHref, whatsappHref } from "@/lib/contact";
@@ -123,8 +123,9 @@ function About() {
         <h2 className={`display ${styles.heading}`}>Jeon</h2>
         <p className={styles.problem}>{ABOUT_LEAD}</p>
         <ul className={styles.services}>
-          {SERVICES.map((s) => (
-            <li key={s.id}>{s.title}</li>
+          {/* The AI features lead What I build; the first six fit the slide. */}
+          {CAPABILITIES.slice(0, 6).map((c) => (
+            <li key={c.id}>{c.title}</li>
           ))}
         </ul>
       </div>
