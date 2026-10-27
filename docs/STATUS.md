@@ -1,20 +1,22 @@
 # Status and handoff — read this first
 
-Last updated 2026-10-07. The owner is Loreto "Jeon" Saquilabon Jr. (repo `bertulfojeon-alt/iamjeon`).
+Last updated 2026-10-27. The owner is Loreto "Jeon" Saquilabon Jr. (repo `bertulfojeon-alt/iamjeon`).
 
 ## Where things stand
 
-- **Live:** https://iamjeon.vercel.app serves `main`, pushed 2026-10-07 on the owner's explicit
-  "push to main". The last code change is `2fa72cc` (iOS video fixes, below). `main` and `night-shift`
-  point at the same commit.
+- **Live:** https://iamjeon.vercel.app serves `main` at `d349ec5` (2026-10-19, on the owner's "go merge"). Since
+  2026-10-07 it gained What I build (13 client features, item 3 below), the business-first welcome ("I help
+  businesses automate the work they do by hand and cut what it costs them."), and the sidebar's Services was
+  removed in favour of What I build. The AI twin has been live since 2026-10-07.
 - **Work branch:** `night-shift` gets a Vercel preview on every push. Production changes only when `main`
   moves, and only on the owner's explicit say-so.
 - **Push** (the default credential helper is not logged in to this account):
   `git -c credential.helper= -c 'credential.helper=!gh auth git-credential' -c credential.username=bertulfojeon-alt push origin <branch>`
   Then poll `gh api repos/bertulfojeon-alt/iamjeon/commits/<sha>/status` until the state is `success`.
-- **Gates** (all green at `6019f2f`): `npm test` 109 passed · `npm run build` with leak check "clean" ·
-  `npx playwright test` 193 passed, 55 skipped by design, across Edge desktop, Edge phone, WebKit
-  iPhone 15 and WebKit MacBook.
+- **Gates** (all green at `d349ec5`): `npm test` 193 passed · `npm run build` with leak check "clean" ·
+  `npx playwright test` 254 passed, 86 skipped by design, across Edge desktop, Edge phone, WebKit
+  iPhone 15 and WebKit MacBook. Playwright reuses any server already on port 3737: make sure none is left
+  running from a manual `next start` before the suite.
 
 ## What is built (Phase 1 of the assistant spec, plus everything asked for since)
 
